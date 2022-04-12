@@ -1,7 +1,7 @@
 const Footer = () => {
   return (
     <>
-      <h1>Footer</h1>
+      <div className="text-secondary">footer</div>
     </>
   );
 };

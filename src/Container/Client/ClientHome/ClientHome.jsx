@@ -1,7 +1,9 @@
+import ClientProduct from "../ClientProduct/ClientProduct";
+
 const ClientHome = () => {
   return (
     <>
-      <h1>home</h1>
+      <ClientProduct />
     </>
   );
 };
