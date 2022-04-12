@@ -4,12 +4,12 @@ import { Outlet } from "react-router-dom";
 import React from "react";
 import NavBar from "../Component/NavBar";
 export default function ClientLayout() {
-  return (
-    <>
-      <Header />
-      <NavBar />
-      <Outlet />
-      <Footer />
-    </>
-  );
+    return (
+        <>
+            <Header />
+            <NavBar />
+            <Outlet />
+            <Footer />
+        </>
+    );
 }
