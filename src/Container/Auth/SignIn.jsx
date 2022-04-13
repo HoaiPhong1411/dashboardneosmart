@@ -20,7 +20,12 @@ const Signin = () => {
     return (
         <div>
             <div className="border-[1px] border-[#808080] shadow-lg mx-auto w-[50%] mt-5 py-10 px-5 rounded-3xl">
-                <h1 className="text-center text-3xl font-bold mb-8">Login</h1>
+                <div className="flex items-center justify-around">
+                    {" "}
+                    <h1 className=" text-3xl font-bold mb-8">Login</h1>
+                    <Link to="/">Home</Link>
+                </div>
+
                 <form
                     className="flex flex-col  px-3 gap-8"
                     onSubmit={formik.handleSubmit}
