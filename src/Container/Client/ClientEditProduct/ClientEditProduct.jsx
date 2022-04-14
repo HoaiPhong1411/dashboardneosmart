@@ -126,7 +126,7 @@ const ClientEditProduct = () => {
     const dataEdit = [];
     data?.forEach((item, i) => {
       const idItem = item.id;
-      if (idItem == id) {
+      if (idItem === id) {
         return dataEdit.push(item);
       }
       setProduct(dataEdit);
