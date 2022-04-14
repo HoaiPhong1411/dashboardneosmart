@@ -16,6 +16,7 @@ const ClientEditProduct = () => {
   const [load, setLoad] = useState(false);
   // get File Image
   const [file, setFile] = useState();
+  const [img, setImg] = useState();
   // get data edited
   const [title, setTitle] = useState();
   const [des, setDes] = useState();
@@ -50,6 +51,16 @@ const ClientEditProduct = () => {
   const handleChangePrice = (e) => {
     setPrice(e.target.value);
   };
+  const handleChangeImage = (e) => {
+    setFile(e.target.files[0]);
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setImg(reader.result);
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  };
   // End Onchange data update
 
   //   showDropDown
@@ -68,15 +79,11 @@ const ClientEditProduct = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const id = document.querySelector(".id").innerHTML;
-    const title = document.querySelector(".title").innerHTML;
-    const description = document.querySelector(".description").innerHTML;
-    const price = document.querySelector(".price").innerHTML;
-    const photo = document.getElementById("photo").files[0];
     const dataUpdate = new FormData();
     dataUpdate.append("title", title);
-    dataUpdate.append("description", description);
+    dataUpdate.append("description", des);
     dataUpdate.append("price", price);
-    dataUpdate.append("photo", photo);
+    dataUpdate.append("photo", file);
 
     updateProduct(id, dataUpdate);
     setProduct([]);
@@ -99,7 +106,7 @@ const ClientEditProduct = () => {
     const handleSearch = async () => {
       try {
         let dataSearch = [];
-        const res = await data?.forEach((item, i) => {
+        const res = data?.forEach((item, i) => {
           if (
             item.title.toLowerCase().includes(value.trim().toLowerCase(), 0)
           ) {
@@ -124,10 +131,6 @@ const ClientEditProduct = () => {
       }
       setProduct(dataEdit);
     });
-  };
-
-  const handleChangeImage = (e) => {
-    setFile(e.target.files);
   };
 
   return (
@@ -174,7 +177,7 @@ const ClientEditProduct = () => {
                  gap-5"
                 >
                   <img
-                    src={`http://localhost:8000/images/${item.photo}`}
+                    src={img ?? `http://localhost:8000/images/${item.photo}`}
                     alt=""
                     className="w-[60%] bg-cover border-2 border-secondary"
                   />
