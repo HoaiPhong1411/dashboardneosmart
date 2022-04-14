@@ -3,3 +3,16 @@ table td {
     /* border: 1px solid rgba(136, 136, 136, 0.395); */
     text-align: center;
 }
+
+label {
+    font-size: 1rem;
+    font-weight: normal;
+}
+
+input,textarea {
+    color:#fff;
+    padding: 0.5rem 0.75rem;
+    outline: none;
+    font-size: 1rem;
+    font-weight: 400;
+}

@@ -147,6 +147,7 @@ const ClientAddProduct = () => {
               type="file"
               name="photo"
               id="photo"
+              accept="image/*"
               files={image}
               onChange={(e) => handleImage(e)}
               // onChange={(e) => handleImage(e)}
