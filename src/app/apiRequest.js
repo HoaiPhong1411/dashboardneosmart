@@ -20,6 +20,7 @@ export const loginUser = async (user, dispath, navigate) => {
         const url = "http://localhost:8000/api/auth/login";
         const res = await axios.post(url, user);
         dispath(loginSuccess(res.data));
+
         navigate("/");
     } catch (error) {
         dispath(loginFailed());
@@ -39,11 +40,11 @@ export const registerUser = async (user, dispath, navigate) => {
         console.log(error);
     }
 };
-export const getAllUser = async (access_token, dispath) => {
+export const getAllUser = async (access_token, dispath, axiosJWT) => {
     dispath(getAllUserStart());
     try {
         const urlGetAll = "http://localhost:8000/api/getalluser";
-        const res = await axios.get(urlGetAll, {
+        const res = await axiosJWT.get(urlGetAll, {
             headers: {
                 token: `Bearer ${access_token}`,
             },

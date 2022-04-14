@@ -3,23 +3,53 @@ import { FaUserAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getAllUser } from "../../../app/apiRequest";
+import axios from "axios";
+import jwt_decode from "jwt-decode";
+import { loginSuccess } from "../../../app/authSlice";
 
 const ClientHome = () => {
-    const handleDelete = (id) => {
-        console.log(id);
-    };
     const user = useSelector((state) => state.auth.login?.currentUser);
     const userList = useSelector((state) => state.users.users.allUsers);
-    console.log(userList);
+    let axiosJWT = axios.create();
     const dispath = useDispatch();
     const navigate = useNavigate();
 
+    const refreshToken = async () => {
+        try {
+            const urlRefresh = "http://localhost:8000/api/auth/refresh";
+            const res = await axios.post(urlRefresh, {
+                withCredentials: true,
+            });
+            return res.data;
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    axiosJWT.interceptors.request.use(
+        async (config) => {
+            let date = new Date();
+            const decodedToken = jwt_decode(user?.access_token);
+            if (decodedToken.exp < date.getTime() / 1000) {
+                const data = await refreshToken();
+                const refreshUser = {
+                    ...user,
+                    access_token: data.access_token,
+                };
+                dispath(loginSuccess(refreshUser));
+                config.headers["token"] = "Bearer" + data.access_token;
+            }
+            return config;
+        },
+        (error) => {
+            return Promise.reject(error);
+        }
+    );
     useEffect(() => {
         if (!user) {
             navigate("/signin");
         }
         if (user?.access_token) {
-            getAllUser(user?.access_token, dispath);
+            getAllUser(user?.access_token, dispath, axiosJWT);
         }
     }, []);
     return (
@@ -48,14 +78,6 @@ const ClientHome = () => {
                             {" "}
                             <button className="text-[white] bg-[blue] p-2 rounded-xl   ">
                                 Edit Role
-                            </button>
-                        </div>
-                        <div className="w-1/5">
-                            <button
-                                className="text-[white] bg-[red] p-2 rounded-xl "
-                                onClick={() => handleDelete(user.id)}
-                            >
-                                Delete User
                             </button>
                         </div>
                     </div>

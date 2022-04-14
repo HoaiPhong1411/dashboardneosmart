@@ -7,9 +7,9 @@ import { logOut } from "../app/apiRequest";
 
 const Header = () => {
     const user = useSelector((state) => state.auth.login.currentUser);
-    const dispath = useDispatch();
-    const navigate = useNavigate();
-    const accessToken = user?.access_token;
+    // const dispath = useDispatch();
+    // const navigate = useNavigate();
+    // const accessToken = user?.access_token;
     const [inputValue, setInputValue] = useState();
     const [show, setShow] = useState(false);
     const handleChange = (e) => {
@@ -20,7 +20,8 @@ const Header = () => {
         console.log(show);
     };
     const handleLogOut = () => {
-        logOut(dispath, navigate, accessToken);
+        localStorage.clear();
+        window.location.href = "/signin";
     };
 
     return (
