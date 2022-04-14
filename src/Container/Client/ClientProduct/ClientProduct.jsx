@@ -2,6 +2,7 @@ import axios from "axios";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 import "./ClientProduct.css";
 
@@ -38,14 +39,20 @@ const ClientProduct = () => {
   return (
     <>
       <div className="flex flex-row gap-5 w-full bg-primary py-3 px-5 rounded-xl">
-        <div className="w-[14%] p-2 rounded-lg cursor-pointer hover:bg-[#e64141] text-[#fff] bg-secondary flex flex-row items-center">
+        <Link
+          to="/product/add"
+          className="w-[14%] p-2 rounded-lg cursor-pointer hover:bg-[#e64141] text-[#fff] bg-secondary flex flex-row items-center"
+        >
           <IoIosAddCircleOutline className="mr-4 text-xl" />
           Add Product
-        </div>
-        <div className="w-[14%] p-2 rounded-lg cursor-pointer hover:bg-[#e64141] text-[#fff] bg-secondary flex flex-row items-center">
+        </Link>
+        <Link
+          to="/product/edit"
+          className="w-[14%] p-2 rounded-lg cursor-pointer hover:bg-[#e64141] text-[#fff] bg-secondary flex flex-row items-center"
+        >
           <AiFillEdit className="mr-4 text-xl" />
           Edit Product
-        </div>
+        </Link>
       </div>
       <div className="w-full bg-primary px-5 py-5 rounded-xl my-7">
         {/* <div className="w-full flex flex-col">
@@ -108,7 +115,17 @@ const ClientProduct = () => {
                 <td>{item.price}</td>
                 <td>{item.detail}</td>
                 <td>{item.content}</td>
-                <td>{item.photo}</td>
+                <td
+                  style={{
+                    display: "block",
+                    width: "100px",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {item.photo}
+                </td>
                 <td>{item.display}</td>
                 <td>{item.position}</td>
                 <td>{item.category_id}</td>
