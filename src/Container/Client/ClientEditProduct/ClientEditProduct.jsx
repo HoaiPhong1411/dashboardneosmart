@@ -171,7 +171,7 @@ const ClientEditProduct = () => {
               <div className="w-full flex flex-col gap-5 justify-between items-center text-[#fff]">
                 <div
                   className="flex flex-col w-full justify-between items-center
-                 gap-5"
+                  gap-5"
                 >
                   <img
                     src={`http://localhost:8000/images/${item.photo}`}
@@ -182,7 +182,7 @@ const ClientEditProduct = () => {
                     type="file"
                     name="photo"
                     accept="image/*"
-                    className="w-[12%]"
+                    className="w-[60%]"
                     onChange={(e) => handleChangeImage(e)}
                   />
                 </div>
