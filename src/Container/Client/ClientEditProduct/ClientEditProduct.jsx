@@ -4,13 +4,22 @@ import axios from "axios";
 import "./ClientEditProduct.css";
 
 const ClientEditProduct = () => {
+  // getApi
   const [data, setData] = useState([]);
   const [dataNew, setDataNew] = useState(null);
+  //  value input search
   const [value, setValue] = useState();
+  // showDropDown
   const [dropDown, setDropDown] = useState(false);
+  // show Product Choose
   const [product, setProduct] = useState([]);
   const [load, setLoad] = useState(false);
+  // get File Image
   const [file, setFile] = useState();
+  // get data edited
+  const [title, setTitle] = useState();
+  const [des, setDes] = useState();
+  const [price, setPrice] = useState();
 
   //   Lấy product từ database
   useEffect(() => {
@@ -30,6 +39,18 @@ const ClientEditProduct = () => {
   const handleChange = (e) => {
     setValue(e.target.value);
   };
+
+  // onChange data update
+  const handleChangeTitle = (e) => {
+    setTitle(e.target.value);
+  };
+  const handleChangeDes = (e) => {
+    setDes(e.target.value);
+  };
+  const handleChangePrice = (e) => {
+    setPrice(e.target.value);
+  };
+  // End Onchange data update
 
   //   showDropDown
   const handleDropDown = (e) => {
@@ -122,7 +143,7 @@ const ClientEditProduct = () => {
             type="text"
             value={value}
             className="w-full outline-none py-2 rounded-sm px-4 bg-primary text-[#fff] border-[1px] border-secondary"
-            placeholder="nhập tên sản phẩm cần chỉnh sửa"
+            placeholder="Nhập tên sản phẩm cần chỉnh sửa"
           />
           {/* End input */}
 
@@ -147,42 +168,63 @@ const ClientEditProduct = () => {
         <form className="w-full" action="" onSubmit={(e) => handleSubmit(e)}>
           {product?.map((item) => (
             <table className="w-full text-secondary flex flex-col gap-5">
-              <div className="w-full flex flex-row justify-between items-center">
-                <div className="flex flex-col justify-between items-center gap-5">
+              <div className="w-full flex flex-col gap-5 justify-between items-center text-[#fff]">
+                <div
+                  className="flex flex-col w-full justify-between items-center
+                 gap-5"
+                >
                   <img
                     src={`http://localhost:8000/images/${item.photo}`}
                     alt=""
-                    className="w-[20%] bg-cover"
+                    className="w-[60%] bg-cover border-2 border-secondary"
                   />
-                  <input type="file" name="photo" />
+                  <input
+                    type="file"
+                    name="photo"
+                    accept="image/*"
+                    className="w-[12%]"
+                    onChange={(e) => handleChangeImage(e)}
+                  />
                 </div>
-                <div>
-                  <div>
-                    <span>Id</span>
-                    <p>{item.id}</p>
-                  </div>
-                  <div>
-                    <span>Title</span>
-                    <input type="text" value={item.title} />
-                  </div>
-                </div>
-                <div>
-                  <div>
-                    <span>Description</span>
-                    <input type="text" value={item.description} />
-                  </div>
-                  <div>
-                    <span>Price</span>
-                    <input type="number" value={item.price} />
-                  </div>
-                </div>
+              </div>
+              <div className="hidden">
+                <label className="id">{item.id}</label>
+              </div>
+              <div className="w-full flex flex-row justify-between items-center">
+                <label htmlFor="title">Title</label>
+                <input
+                  type="text"
+                  value={title ?? item.title}
+                  className="w-[85%] border-[1px] border-secondary bg-primary focus:border-[#e0ed2e]"
+                  onChange={(e) => handleChangeTitle(e)}
+                />
+              </div>
+              <div className="w-full flex flex-row justify-between items-center">
+                <label htmlFor="description">Description</label>
+                <textarea
+                  rows="3"
+                  type="text"
+                  value={des ?? item.description}
+                  className="w-[85%] border-[1px] border-secondary bg-primary focus:border-[#e0ed2e]"
+                  onChange={(e) => handleChangeDes(e)}
+                />
+              </div>
+              <div className="w-full flex flex-row justify-between items-center">
+                <label htmlFor="price">Price</label>
+                <input
+                  type="text"
+                  value={price ?? item.price}
+                  className="w-[85%] border-[1px] border-secondary bg-primary focus:border-[#e0ed2e]"
+                  onChange={(e) => handleChangePrice(e)}
+                />
               </div>
               <div className="flex justify-center items-center">
                 <button
                   type="submit"
-                  className="p-2 rounded-[50%] cursor-pointer bg-[#3d3d3d] mr-3 hover:bg-secondary hover:text-[#41b7ea]"
+                  className="w-[14%] flex flex-row justify-center items-center p-2 rounded-lg cursor-pointer hover:bg-[#e64141] text-[#fff] bg-secondary"
                 >
-                  <FiSave className="mx-auto text-lg" />
+                  <FiSave className="text-lg mr-4" />
+                  Save
                 </button>
               </div>
             </table>
