@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { MdOutlineSmartToy } from "react-icons/md";
 import { BiCategory } from "react-icons/bi";
 import { FaMicroblog } from "react-icons/fa";
-
 const nav = [
   {
     name: "Product",
@@ -21,6 +20,7 @@ const nav = [
   },
 ];
 const NavBar = () => {
+
   const handleActive = (e) => {
     const elementLi = document.querySelectorAll("li");
     elementLi.forEach((li) => {
@@ -30,11 +30,11 @@ const NavBar = () => {
   };
   return (
     <>
-      <div className="flex flex-col ">
+      <div className="flex flex-col">
         <div className="p-5 text-[1.5rem] font-semibold tracking-widest text-[#fff]">
           Dashboard
         </div>
-        <div className="px-5 flex flex-row justify-center items-center">
+        <div className="px-5 flex flex-row justify-center items-center mt-3">
           <img
             src="https://www.bootstrapdash.com/demo/corona-react-free/template/demo_1/preview/static/media/face15.736ec0d9.jpg"
             alt=""
@@ -53,7 +53,7 @@ const NavBar = () => {
                   <span className="block w-8 h-8 rounded-[50%] bg-[#3d3d3d] mr-3 flex justify-center items-center">
                     {item.icon}
                   </span>
-                  {item.name}
+                  <span>{item.name}</span>
                 </li>
               </Link>
             ))}
