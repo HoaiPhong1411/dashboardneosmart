@@ -4,7 +4,10 @@ import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+import { urlImg } from "../../../Component/Variable";
 import "./ClientProduct.css";
+import ButtonDelete from "../../../Component/ButtonDelete";
+import ButtonSwitch from "../../../Component/ButtonSwitch";
 
 const ClientProduct = () => {
   const [data, setData] = useState();
@@ -95,22 +98,30 @@ const ClientProduct = () => {
   return (
     <>
       <div className="flex flex-row gap-5 w-full bg-primary py-3 px-5 rounded-xl">
+        {/* button add */}
         <Link
           to="/product/add"
-          className="w-[14%] p-2 rounded-lg cursor-pointer hover:bg-[#e64141] text-[#fff] bg-secondary flex flex-row items-center"
+          className="w-[15%] px-2 py-2 rounded-lg cursor-pointer hover:bg-[#e64141] text-[#fff] bg-secondary flex flex-row items-center"
         >
           <IoIosAddCircleOutline className="mr-4 text-xl" />
           Add Product
         </Link>
+
+        {/* End button add */}
+
+        {/* Button Edit */}
         <Link
           to="/product/edit"
-          className="w-[14%] p-2 rounded-lg cursor-pointer hover:bg-[#e64141] text-[#fff] bg-secondary flex flex-row items-center"
+          className="w-[15%] px-2 py-2 rounded-lg cursor-pointer hover:bg-[#e64141] text-[#fff] bg-secondary flex flex-row items-center"
         >
           <AiFillEdit className="mr-4 text-xl" />
           Edit Product
         </Link>
+
+        {/* End button edit */}
       </div>
       <div className="w-full bg-primary px-5 py-5 rounded-xl my-7">
+        {/* Table show product */}
         <table className="w-full text-secondary border-[1px] border-[#777]">
           <thead>
             <td>Id</td>
@@ -125,6 +136,7 @@ const ClientProduct = () => {
             <td>CategoryId</td>
             <td>Actions</td>
           </thead>
+          {/* show data Product */}
           <tbody className="text-[#ffffff9e]">
             {data?.map((item) => (
               <tr key={item.id}>
@@ -134,61 +146,40 @@ const ClientProduct = () => {
                 <td>{item.price}</td>
                 <td>{item.detail}</td>
                 <td>{item.content}</td>
-                <td
-                  style={{
-                    display: "block",
-                    width: "100px",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                  }}
-                >
-                  {item.photo}
-                </td>
-                {/* <td>{item.display}</td> */}
                 <td>
-                  <label
-                    htmlFor={item.id}
-                    style={
-                      item.display == 1
-                        ? { backgroundColor: "#e64141" }
-                        : { backgroundColor: "#6c7293" }
-                    }
-                    className="flex items-center w-[2.2rem] h-[1.25rem] rounded-2xl bg-secondary border-2 border-[#fff]"
-                  >
-                    <input
-                      type="checkbox"
-                      name="display"
-                      id={item.id}
-                      className="hidden"
-                      defaultChecked={item.display == 1 ? true : false}
-                      onChange={(e, product) => handleDisplay(e, item)}
-                    />
-                    <span
-                      id={item.id}
-                      style={
-                        item.display == 1
-                          ? { transform: "translateX(105%)" }
-                          : { transform: "translateX(15%)" }
-                      }
-                      className="btn-display block h-[0.9rem] w-[0.9rem] translate-x-[20%] rounded-[50%] bg-[#fff] shadow-md transition-transform"
-                    ></span>
-                  </label>
+                  <img
+                    src={urlImg + item.photo}
+                    alt=""
+                    width="50px"
+                    height="50px"
+                  />
                 </td>
+                {/* switched display */}
+                <td>
+                  <ButtonSwitch
+                    id={item.id}
+                    name={item.display}
+                    handleChange={(e, product) => handleDisplay(e, item)}
+                  />
+                </td>
+                {/* End switched display */}
+
                 <td>{item.position}</td>
                 <td>{item.category_id}</td>
+
+                {/* Button delete */}
                 <td>
-                  <span
-                    onClick={(id) => handleRemove(item.id)}
-                    className=" mx-auto w-8 h-8 rounded-[50%] cursor-pointer bg-[#3d3d3d] mr-3 flex justify-center items-center hover:bg-[#e64141] hover:text-[#fff]"
-                  >
-                    <AiFillDelete />
-                  </span>
+                  <ButtonDelete handleClick={(id) => handleRemove(item.id)} />
                 </td>
+
+                {/* End button delete */}
               </tr>
             ))}
           </tbody>
+          {/* End show data product */}
         </table>
+
+        {/* End table show product */}
       </div>
     </>
   );

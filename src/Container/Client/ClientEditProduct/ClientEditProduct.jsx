@@ -1,7 +1,13 @@
 import { FiSave } from "react-icons/fi";
 import { useEffect, useState, useLayoutEffect } from "react";
 import axios from "axios";
+import { BsCheckLg } from "react-icons/bs";
+
+import { urlImg } from "../../../Component/Variable";
 import "./ClientEditProduct.css";
+import ButtonCheck from "../../../Component/ButtonCheck";
+import ButtonUpload from "../../../Component/ButtonUpload";
+import ButtonSwitch from "../../../Component/ButtonSwitch";
 
 const ClientEditProduct = () => {
   // getApi
@@ -22,6 +28,7 @@ const ClientEditProduct = () => {
   const [des, setDes] = useState();
   const [price, setPrice] = useState();
   const [display, setDisplay] = useState();
+  const [position, setPosition] = useState();
 
   //   Lấy product từ database
   useEffect(() => {
@@ -63,9 +70,32 @@ const ClientEditProduct = () => {
     reader.readAsDataURL(e.target.files[0]);
   };
 
-  const handleChangeDiplay = (e) => {};
+  // button display
+  const handleChangeDiplay = (e) => {
+    setDisplay(e.target.checked);
+    let check = e.target.checked;
+    const btnCheck = document.getElementById("btn-display");
+    if (check) {
+      btnCheck.style.color = "#04f604";
+    } else {
+      btnCheck.style.color = "#fff";
+    }
+  };
+  // End button display
 
-  const handleChangePosition = (e) => {};
+  // button position
+  const handleChangePosition = (e) => {
+    setPosition(e.target.checked);
+    let check = e.target.checked;
+    const btnCheck = document.getElementById("btn-position");
+    if (check) {
+      btnCheck.style.color = "#04f604";
+    } else {
+      btnCheck.style.color = "#fff";
+    }
+  };
+  // End button position
+
   // End Onchange data update
 
   //   showDropDown
@@ -85,10 +115,20 @@ const ClientEditProduct = () => {
     e.preventDefault();
     const id = document.querySelector(".id").innerHTML;
     const dataUpdate = new FormData();
-    dataUpdate.append("title", title);
-    dataUpdate.append("description", des);
-    dataUpdate.append("price", price);
-    dataUpdate.append("photo", file);
+    dataUpdate.append("title", title ?? product[0].title);
+    dataUpdate.append("description", des ?? product[0].description);
+    dataUpdate.append("price", price ?? product[0].price);
+    dataUpdate.append("photo", file ?? product[0].photo);
+    if (display) {
+      dataUpdate.append("display", +1);
+    } else {
+      dataUpdate.append("display", +0);
+    }
+    if (position) {
+      dataUpdate.append("position", +1);
+    } else {
+      dataUpdate.append("position", +0);
+    }
 
     updateProduct(id, dataUpdate);
     setProduct([]);
@@ -134,10 +174,10 @@ const ClientEditProduct = () => {
       if (idItem == id) {
         return dataEdit.push(item);
       }
-      setProduct(dataEdit);
     });
+    setProduct(dataEdit);
+    setValue(dataEdit[0].title);
   };
-
   return (
     <>
       <div className="flex flex-row gap-5 w-full bg-primary py-5 px-10 rounded-xl">
@@ -158,7 +198,7 @@ const ClientEditProduct = () => {
           {/* dropdown */}
           <ul
             style={dropDown ? { display: "block" } : { display: "none" }}
-            className=" w-full h-80 bg-primary absolute top-[100%] left-0"
+            className=" w-full h-80 bg-primary absolute top-[100%] left-0 overflow-hidden"
           >
             {dataNew?.map((item) => (
               <li
@@ -182,7 +222,7 @@ const ClientEditProduct = () => {
                  gap-5"
                 >
                   <img
-                    src={img ?? `http://localhost:8000/images/${item.photo}`}
+                    src={img ?? urlImg + item.photo}
                     alt=""
                     className="w-[60%] bg-cover border-2 border-secondary"
                   />
@@ -194,7 +234,7 @@ const ClientEditProduct = () => {
                     className="hidden"
                     onChange={(e) => handleChangeImage(e)}
                   />
-                  <label htmlFor="photo"></label>
+                  <ButtonUpload htmlFor="photo" />
                 </div>
               </div>
               <div className="hidden">
@@ -229,27 +269,55 @@ const ClientEditProduct = () => {
                 />
               </div>
               <div className="w-full flex flex-row justify-between items-center">
-                <label htmlFor="price">Display</label>
+                <label htmlFor="display">Display</label>
+                <div className="w-[85%] ">
+                  <ButtonCheck
+                    htmlFor="display"
+                    idIcon="btn-display"
+                    style={
+                      item.display !== 1
+                        ? { color: "#fff" }
+                        : { color: "#04f604" }
+                    }
+                  />
+                </div>
                 <input
                   type="checkbox"
                   defaultChecked={item.display == 1 ? true : false}
-                  className="w-[85%] border-[1px] border-secondary bg-primary focus:border-[#e0ed2e]"
+                  id="display"
+                  className="hidden"
                   onChange={(e) => handleChangeDiplay(e)}
                 />
               </div>
               <div className="w-full flex flex-row justify-between items-center">
-                <label htmlFor="price">Position</label>
+                <label htmlFor="position">Position</label>
+                <div className="w-[85%] ">
+                  <ButtonCheck
+                    htmlFor="position"
+                    idIcon="btn-position"
+                    style={
+                      item.position !== 1
+                        ? { color: "#fff" }
+                        : { color: "#04f604" }
+                    }
+                  />
+                </div>
                 <input
                   type="checkbox"
-                  defaultChecked={item.position == 1 ? true : false}
-                  className="w-[85%] border-[1px] border-secondary bg-primary focus:border-[#e0ed2e]"
+                  id="position"
+                  className="hidden"
+                  style={
+                    item.position !== 1
+                      ? { color: "#fff" }
+                      : { color: "#04f604" }
+                  }
                   onChange={(e) => handleChangePosition(e)}
                 />
               </div>
               <div className="flex justify-center items-center">
                 <button
                   type="submit"
-                  className="w-[14%] flex flex-row justify-center items-center p-2 rounded-lg cursor-pointer hover:bg-[#e64141] text-[#fff] bg-secondary"
+                  className="w-[14%] flex flex-row justify-center items-center p-2 rounded-lg cursor-pointer hover:bg-[#2a7ffe] text-[#fff] bg-secondary"
                 >
                   <FiSave className="text-lg mr-4" />
                   Save
