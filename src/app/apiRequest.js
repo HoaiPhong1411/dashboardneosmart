@@ -34,7 +34,7 @@ export const registerUser = async (user, dispath, navigate) => {
         const urlRegis = "http://localhost:8000/api/auth/register";
         await axios.post(urlRegis, user);
         dispath(registerSuccess());
-        navigate("/login");
+        navigate("/signin");
     } catch (error) {
         dispath(registerFailed());
         console.log(error);

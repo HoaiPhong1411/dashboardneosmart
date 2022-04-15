@@ -13,7 +13,7 @@ const Signin = () => {
             name: "",
             email: "",
             password: "",
-            c_password: "",
+            password_confirmation: "",
         },
         // validationSchema: Yup.object({
         //     name: Yup.string()
@@ -122,7 +122,7 @@ const Signin = () => {
                         <input
                             type="text"
                             id="confirmedPassword"
-                            name="c_password"
+                            name="password_confirmation"
                             value={formik.values.confirmedPassword}
                             onChange={formik.handleChange}
                             placeholder="Confirm your password"
