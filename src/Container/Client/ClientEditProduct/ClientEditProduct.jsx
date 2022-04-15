@@ -21,6 +21,7 @@ const ClientEditProduct = () => {
   const [title, setTitle] = useState();
   const [des, setDes] = useState();
   const [price, setPrice] = useState();
+  const [display, setDisplay] = useState();
 
   //   Lấy product từ database
   useEffect(() => {
@@ -61,6 +62,10 @@ const ClientEditProduct = () => {
     };
     reader.readAsDataURL(e.target.files[0]);
   };
+
+  const handleChangeDiplay = (e) => {};
+
+  const handleChangePosition = (e) => {};
   // End Onchange data update
 
   //   showDropDown
@@ -184,10 +189,12 @@ const ClientEditProduct = () => {
                   <input
                     type="file"
                     name="photo"
+                    id="photo"
                     accept="image/*"
-                    className="w-[12%]"
+                    className="hidden"
                     onChange={(e) => handleChangeImage(e)}
                   />
+                  <label htmlFor="photo"></label>
                 </div>
               </div>
               <div className="hidden">
@@ -221,6 +228,24 @@ const ClientEditProduct = () => {
                   onChange={(e) => handleChangePrice(e)}
                 />
               </div>
+              <div className="w-full flex flex-row justify-between items-center">
+                <label htmlFor="price">Display</label>
+                <input
+                  type="checkbox"
+                  defaultChecked={item.display == 1 ? true : false}
+                  className="w-[85%] border-[1px] border-secondary bg-primary focus:border-[#e0ed2e]"
+                  onChange={(e) => handleChangeDiplay(e)}
+                />
+              </div>
+              <div className="w-full flex flex-row justify-between items-center">
+                <label htmlFor="price">Position</label>
+                <input
+                  type="checkbox"
+                  defaultChecked={item.position == 1 ? true : false}
+                  className="w-[85%] border-[1px] border-secondary bg-primary focus:border-[#e0ed2e]"
+                  onChange={(e) => handleChangePosition(e)}
+                />
+              </div>
               <div className="flex justify-center items-center">
                 <button
                   type="submit"
@@ -232,49 +257,6 @@ const ClientEditProduct = () => {
               </div>
             </table>
           ))}
-
-          {/* <thead>
-              <td>Id</td>
-              <td>Title</td>
-              <td>Description</td>
-              <td>Price</td>
-              <td>Photo</td>
-              <td>Actions</td>
-            </thead>
-            <tbody className="text-[#ffffff9e]">
-              show product edit
-              {product?.map((item) => (
-                <tr>
-                  <td className="id">{item.id}</td>
-                  <td className="title" contentEditable="true">
-                    {item.title}
-                  </td>
-                  <td className="description" contentEditable="true">
-                    {item.description}
-                  </td>
-                  <td className="price" contentEditable="true">
-                    {item.price}
-                  </td>
-                  <td className="photo" contentEditable="true">
-                    <input
-                      type="file"
-                      name="photo"
-                      id="photo"
-                      files={file ?? item.photo}
-                      onChange={(e) => handleChangeImage(e)}
-                    />
-                  </td>
-                  <td>
-                    <button
-                      type="submit"
-                      className=" mx-auto p-2 rounded-[50%] cursor-pointer bg-[#3d3d3d] mr-3 hover:bg-secondary hover:text-[#41b7ea]"
-                    >
-                      <FiSave className="mx-auto text-lg" />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody> */}
         </form>
       </div>
     </>

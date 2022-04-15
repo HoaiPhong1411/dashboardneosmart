@@ -9,6 +9,8 @@ import "./ClientProduct.css";
 const ClientProduct = () => {
   const [data, setData] = useState();
   const [render, setRender] = useState(false);
+
+  // get data Product
   useEffect(() => {
     const fecth = async () => {
       try {
@@ -23,6 +25,10 @@ const ClientProduct = () => {
     fecth();
   }, [render]);
 
+  // End data Product
+
+  // delete Product
+
   const handleRemove = (id) => {
     const remove = async () => {
       try {
@@ -36,6 +42,56 @@ const ClientProduct = () => {
     };
     remove();
   };
+  // End delete Product
+
+  // Handle display
+  const handleDisplay = (e, product) => {
+    // On off button display
+    const check = e.target.checked;
+    const spanElement = e.target.parentElement;
+    const btn = document.querySelectorAll(".btn-display");
+    btn.forEach((item) => {
+      if (item.id == product.id) {
+        if (check) {
+          item.style.transform = "translateX(105%)";
+          spanElement.style.backgroundColor = "#e64141";
+        } else {
+          item.style.transform = "translateX(15%)";
+          spanElement.style.backgroundColor = "#6c7293";
+        }
+      }
+    });
+
+    // End On off button display
+
+    // Update display
+    const updateDisplay = async (id, data) => {
+      try {
+        const res = await axios.post(
+          `http://localhost:8000/api/product/update/${id}`,
+          data
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const dataDisplay = new FormData();
+    dataDisplay.append("title", product.title);
+    dataDisplay.append("photo", product.photo);
+    dataDisplay.append("price", product.price);
+    dataDisplay.append("description", product.description);
+    dataDisplay.append("position", product.position);
+    if (check) {
+      dataDisplay.append("display", 1);
+      updateDisplay(product.id, dataDisplay);
+    } else {
+      dataDisplay.append("display", 0);
+      updateDisplay(product.id, dataDisplay);
+    }
+    // End Update display
+  };
+  // End handle display
+
   return (
     <>
       <div className="flex flex-row gap-5 w-full bg-primary py-3 px-5 rounded-xl">
@@ -55,43 +111,6 @@ const ClientProduct = () => {
         </Link>
       </div>
       <div className="w-full bg-primary px-5 py-5 rounded-xl my-7">
-        {/* <div className="w-full flex flex-col">
-            <ul className="flex flex-row justify-between items-center text-secondary">
-              <li>Id</li>
-              <li>Title</li>
-              <li>Description</li>
-              <li>Price</li>
-              <li>Detail</li>
-              <li>Content</li>
-              <li>Photo</li>
-              <li>Display</li>
-              <li>Position</li>
-              <li>CategoryId</li>
-              <li>Actions</li>
-            </ul>
-            {data?.map((item) => (
-              <ul className="flex flex-row justify-between items-center mt-2 text-[#fff]">
-                <li>{item.id}</li>
-                <li>{item.title}</li>
-                <li>{item.description}</li>
-                <li>{item.price}</li>
-                <li>{item.detail}</li>
-                <li>{item.content}</li>
-                <li>{item.photo}</li>
-                <li>{item.display}</li>
-                <li>{item.position}</li>
-                <li>{item.category_id}</li>
-                <li>
-                  <span
-                    onClick={() => handleRemove(item.id)}
-                    className=" mx-auto w-8 h-8 rounded-[50%] cursor-pointer bg-[#3d3d3d] mr-3 flex justify-center items-center"
-                  >
-                    <AiFillDelete />
-                  </span>
-                </li>
-              </ul>
-            ))}
-          </div> */}
         <table className="w-full text-secondary border-[1px] border-[#777]">
           <thead>
             <td>Id</td>
@@ -126,13 +145,42 @@ const ClientProduct = () => {
                 >
                   {item.photo}
                 </td>
-                <td>{item.display}</td>
+                {/* <td>{item.display}</td> */}
+                <td>
+                  <label
+                    htmlFor={item.id}
+                    style={
+                      item.display == 1
+                        ? { backgroundColor: "#e64141" }
+                        : { backgroundColor: "#6c7293" }
+                    }
+                    className="flex items-center w-[2.2rem] h-[1.25rem] rounded-2xl bg-secondary border-2 border-[#fff]"
+                  >
+                    <input
+                      type="checkbox"
+                      name="display"
+                      id={item.id}
+                      className="hidden"
+                      defaultChecked={item.display == 1 ? true : false}
+                      onChange={(e, product) => handleDisplay(e, item)}
+                    />
+                    <span
+                      id={item.id}
+                      style={
+                        item.display == 1
+                          ? { transform: "translateX(105%)" }
+                          : { transform: "translateX(15%)" }
+                      }
+                      className="btn-display block h-[0.9rem] w-[0.9rem] translate-x-[20%] rounded-[50%] bg-[#fff] shadow-md transition-transform"
+                    ></span>
+                  </label>
+                </td>
                 <td>{item.position}</td>
                 <td>{item.category_id}</td>
                 <td>
                   <span
-                    onClick={() => handleRemove(item.id)}
-                    className=" mx-auto w-8 h-8 rounded-[50%] cursor-pointer bg-[#3d3d3d] mr-3 flex justify-center items-center"
+                    onClick={(id) => handleRemove(item.id)}
+                    className=" mx-auto w-8 h-8 rounded-[50%] cursor-pointer bg-[#3d3d3d] mr-3 flex justify-center items-center hover:bg-[#e64141] hover:text-[#fff]"
                   >
                     <AiFillDelete />
                   </span>
