@@ -1,6 +1,6 @@
     import React from 'react'
     import { FiSave } from "react-icons/fi";
-    import { useEffect, useState, useLayoutEffect } from "react";
+    import { useEffect, useState } from "react";
     import axios from "axios";
     const ClientEditBlog = () => {
     // getApi
