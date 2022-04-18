@@ -5,9 +5,10 @@ import { BsCheckLg } from "react-icons/bs";
 
 import { urlImg } from "../../../Component/Variable";
 import "./ClientEditProduct.css";
-import ButtonCheck from "../../../Component/ButtonCheck";
-import ButtonUpload from "../../../Component/ButtonUpload";
-import ButtonSwitch from "../../../Component/ButtonSwitch";
+import ButtonCheck from "../../../Component/Button/ButtonCheck";
+import ButtonUpload from "../../../Component/Button/ButtonUpload";
+import ButtonSwitch from "../../../Component/Button/ButtonSwitch";
+import { useSelector } from "react-redux";
 
 const ClientEditProduct = () => {
   // getApi
@@ -29,6 +30,9 @@ const ClientEditProduct = () => {
   const [price, setPrice] = useState();
   const [display, setDisplay] = useState();
   const [position, setPosition] = useState();
+
+  const getEdit = useSelector((state) => state.product.pro);
+  console.log(getEdit);
 
   //   Lấy product từ database
   useEffect(() => {
@@ -180,8 +184,8 @@ const ClientEditProduct = () => {
   };
   return (
     <>
-      <div className="flex flex-row gap-5 w-full bg-primary py-5 px-10 rounded-xl">
-        <h1 className="text-[#fff] text-[1.5rem]">Edit Product</h1>
+      <div className="flex flex-row gap-5 w-full items-center bg-primary py-5 px-10 rounded-xl">
+        <h1 className="text-[#fff] text-[1.4rem]">Edit Product</h1>
         <div className="w-[40%] relative">
           {/* input */}
           <input
@@ -190,7 +194,7 @@ const ClientEditProduct = () => {
             onChange={(e) => handleChange(e)}
             type="text"
             value={value}
-            className="w-full outline-none py-2 rounded-sm px-4 bg-primary text-[#fff] border-[1px] border-secondary"
+            className="w-full outline-none py-[0.4rem] text-sm rounded-md px-4 bg-primary text-[#ffffff] border-[1px] border-secondary"
             placeholder="Nhập tên sản phẩm cần chỉnh sửa"
           />
           {/* End input */}
@@ -198,12 +202,12 @@ const ClientEditProduct = () => {
           {/* dropdown */}
           <ul
             style={dropDown ? { display: "block" } : { display: "none" }}
-            className=" w-full h-80 bg-primary absolute top-[100%] left-0 overflow-hidden"
+            className=" w-full h-[19rem] bg-primary absolute top-[100%] left-0 overflow-hidden overflow-y-scroll"
           >
             {dataNew?.map((item) => (
               <li
                 onClick={() => handleGetProduct(item.id)}
-                className="text-[#fff] text-[1.2rem] px-3 py-2 hover:bg-[#414141] cursor-pointer"
+                className="text-[#fff] text-[0.9rem] px-3 py-2 hover:bg-[#414141] cursor-pointer"
               >
                 {item.title}
               </li>
@@ -240,35 +244,35 @@ const ClientEditProduct = () => {
               <div className="hidden">
                 <label className="id">{item.id}</label>
               </div>
-              <div className="w-full flex flex-row justify-between items-center">
+              <div className="w-full flex flex-col justify-between gap-2 items-start text-[#fff]">
                 <label htmlFor="title">Title</label>
                 <input
                   type="text"
                   value={title ?? item.title}
-                  className="w-[85%] border-[1px] border-secondary bg-primary focus:border-[#e0ed2e]"
+                  className="w-full border-[1px] border-secondary bg-primary focus:border-[#e0ed2e] font-light"
                   onChange={(e) => handleChangeTitle(e)}
                 />
               </div>
-              <div className="w-full flex flex-row justify-between items-center">
+              <div className="w-full flex flex-col justify-between gap-2 items-start text-[#fff]">
                 <label htmlFor="description">Description</label>
                 <textarea
                   rows="3"
                   type="text"
                   value={des ?? item.description}
-                  className="w-[85%] border-[1px] border-secondary bg-primary focus:border-[#e0ed2e]"
+                  className="w-full border-[1px] border-secondary bg-primary focus:border-[#e0ed2e] font-light"
                   onChange={(e) => handleChangeDes(e)}
                 />
               </div>
-              <div className="w-full flex flex-row justify-between items-center">
+              <div className="w-full flex flex-col justify-between gap-2 items-start text-[#fff]">
                 <label htmlFor="price">Price</label>
                 <input
                   type="text"
                   value={price ?? item.price}
-                  className="w-[85%] border-[1px] border-secondary bg-primary focus:border-[#e0ed2e]"
+                  className="w-full border-[1px] border-secondary bg-primary focus:border-[#e0ed2e] font-light"
                   onChange={(e) => handleChangePrice(e)}
                 />
               </div>
-              <div className="w-full flex flex-row justify-between items-center">
+              <div className="w-full flex flex-row justify-between items-center text-[#fff]">
                 <label htmlFor="display">Display</label>
                 <div className="w-[85%] ">
                   <ButtonCheck
@@ -289,7 +293,7 @@ const ClientEditProduct = () => {
                   onChange={(e) => handleChangeDiplay(e)}
                 />
               </div>
-              <div className="w-full flex flex-row justify-between items-center">
+              <div className="w-full flex flex-row justify-between items-center text-[#fff]">
                 <label htmlFor="position">Position</label>
                 <div className="w-[85%] ">
                   <ButtonCheck

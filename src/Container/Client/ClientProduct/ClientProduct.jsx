@@ -4,23 +4,42 @@ import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+import ButtonDelete from "../../../Component/Button/ButtonDelete";
+import ButtonSwitch from "../../../Component/Button/ButtonSwitch";
+import { useDispatch, useSelector } from "react-redux";
+import { getFullProduct } from "../../../app/apiRequest";
+import { getProductEditSuccess } from "../../../app/productSlice";
 import { urlImg } from "../../../Component/Variable";
+
 import "./ClientProduct.css";
-import ButtonDelete from "../../../Component/ButtonDelete";
-import ButtonSwitch from "../../../Component/ButtonSwitch";
 
 const ClientProduct = () => {
-  const [data, setData] = useState();
+  const getProduct = useSelector((state) => state.products.product.product);
+
+  const dispath = useDispatch();
   const [render, setRender] = useState(false);
+  const [dataCategory, setDataCategory] = useState();
+
+  const handleEdit = (e, product) => {
+    dispath(getProductEditSuccess(product));
+    console.log(product);
+  };
 
   // get data Product
+
+  useEffect(() => {
+    getFullProduct(dispath);
+  }, []);
+  // End data Product
+
+  // get data Category
   useEffect(() => {
     const fecth = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/product/index"
+          "http://localhost:8000/api/category/index"
         );
-        setData(response.data);
+        setDataCategory(response.data);
       } catch (error) {
         console.log(error);
       }
@@ -28,16 +47,14 @@ const ClientProduct = () => {
     fecth();
   }, [render]);
 
-  // End data Product
+  // End data Category
 
   // delete Product
 
   const handleRemove = (id) => {
     const remove = async () => {
       try {
-        const response = await axios.delete(
-          `http://localhost:8000/api/product/delete/${id}`
-        );
+        await axios.delete(`http://localhost:8000/api/product/delete/${id}`);
         setRender(!render);
       } catch (error) {
         console.log(error);
@@ -46,6 +63,8 @@ const ClientProduct = () => {
     remove();
   };
   // End delete Product
+
+  // -------
 
   // Handle display
   const handleDisplay = (e, product) => {
@@ -94,14 +113,13 @@ const ClientProduct = () => {
     // End Update display
   };
   // End handle display
-
   return (
     <>
       <div className="flex flex-row gap-5 w-full bg-primary py-3 px-5 rounded-xl">
         {/* button add */}
         <Link
           to="/product/add"
-          className="w-[15%] px-2 py-2 rounded-lg cursor-pointer hover:bg-[#e64141] text-[#fff] bg-secondary flex flex-row items-center"
+          className="px-2 py-2 rounded-lg cursor-pointer hover:bg-[#e64141] text-[#fff] bg-secondary flex flex-row items-center"
         >
           <IoIosAddCircleOutline className="mr-4 text-xl" />
           Add Product
@@ -112,7 +130,7 @@ const ClientProduct = () => {
         {/* Button Edit */}
         <Link
           to="/product/edit"
-          className="w-[15%] px-2 py-2 rounded-lg cursor-pointer hover:bg-[#e64141] text-[#fff] bg-secondary flex flex-row items-center"
+          className=" px-2 py-2 rounded-lg cursor-pointer hover:bg-[#e64141] text-[#fff] bg-secondary flex flex-row items-center"
         >
           <AiFillEdit className="mr-4 text-xl" />
           Edit Product
@@ -124,36 +142,52 @@ const ClientProduct = () => {
         {/* Table show product */}
         <table className="w-full text-secondary border-[1px] border-[#777]">
           <thead>
-            <td>Id</td>
-            <td>Title</td>
-            <td>Description</td>
-            <td>Price</td>
-            <td>Detail</td>
-            <td>Content</td>
-            <td>Photo</td>
-            <td>Display</td>
-            <td>Position</td>
-            <td>CategoryId</td>
-            <td>Actions</td>
+            <tr>
+              <td>Id</td>
+              <td>Title</td>
+              <td>Description</td>
+              <td>Price</td>
+              <td>Detail</td>
+              <td>Content</td>
+              {/* <td>Photo</td> */}
+              <td>Display</td>
+              <td>Position</td>
+              <td>CategoryId</td>
+              <td>Actions</td>
+            </tr>
           </thead>
           {/* show data Product */}
           <tbody className="text-[#ffffff9e]">
-            {data?.map((item) => (
+            {getProduct?.map((item) => (
               <tr key={item.id}>
                 <td>{item.id}</td>
-                <td>{item.title}</td>
-                <td>{item.description}</td>
-                <td>{item.price}</td>
-                <td>{item.detail}</td>
-                <td>{item.content}</td>
-                <td>
+                <td className="flex flex-row justify-start gap-2 w-40 items-center">
                   <img
                     src={urlImg + item.photo}
                     alt=""
                     width="50px"
                     height="50px"
                   />
+                  <span
+                    onClick={(e, product) => handleEdit(e, item)}
+                    to="/product/edit"
+                    className="break-words hover:text-secondary"
+                  >
+                    {item.title}
+                  </span>
                 </td>
+                <td>{item.description}</td>
+                <td>{item.price}</td>
+                <td className="w-24 break-words">{item.detail}</td>
+                <td className="w-36 break-words">{item.content}</td>
+                {/* <td>
+                  <img
+                    src={urlImg + item.photo}
+                    alt=""
+                    width="50px"
+                    height="50px"
+                  />
+                </td> */}
                 {/* switched display */}
                 <td>
                   <ButtonSwitch
@@ -165,11 +199,17 @@ const ClientProduct = () => {
                 {/* End switched display */}
 
                 <td>{item.position}</td>
-                <td>{item.category_id}</td>
+                {dataCategory?.map((cate) =>
+                  item.category_id == cate.id ? (
+                    <td key={cate.id}>{cate.title}</td>
+                  ) : (
+                    ""
+                  )
+                )}
 
                 {/* Button delete */}
                 <td>
-                  <ButtonDelete handleClick={(id) => handleRemove(item.id)} />
+                  <ButtonDelete handleClick={(e) => handleRemove(e)} />
                 </td>
 
                 {/* End button delete */}

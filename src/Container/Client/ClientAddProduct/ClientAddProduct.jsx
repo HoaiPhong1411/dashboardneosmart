@@ -2,14 +2,21 @@ import { IoMdAddCircle } from "react-icons/io";
 import { useFormik, Field } from "formik";
 import axios from "axios";
 import { useState } from "react";
-import ButtonCheck from "../../../Component/ButtonCheck";
+import ButtonCheck from "../../../Component/Button/ButtonCheck";
+import ButtonUpload from "../../../Component/Button/ButtonUpload";
 import { useEffect } from "react";
+
+import notimg from "../../../assets/images/image-not.jpg";
 
 const ClientAddProduct = () => {
   const [image, setImage] = useState();
   const [display, setDisplay] = useState(true);
   const [position, setPosition] = useState(true);
+  const [img, setImg] = useState();
   const [dataCate, setDataCate] = useState([]);
+  const [categoryId, setCategoryId] = useState();
+
+  // ---------------------------------------
 
   useEffect(() => {
     const fecthCategory = async () => {
@@ -23,11 +30,14 @@ const ClientAddProduct = () => {
     fecthCategory();
   }, []);
 
+  // ---------------------------------------
+
   // Prevent event submit
   const handleSubmit = (e) => {
     e.preventDefault();
   };
   // End Prevent event submit
+  // ---------------------------------------
 
   // Formik handle
   const formik = useFormik({
@@ -52,7 +62,7 @@ const ClientAddProduct = () => {
       data.append("photo", image);
       data.append("display", display ? 1 : 0);
       data.append("position", position ? 1 : 0);
-      data.append("category_id", value.category_id);
+      data.append("category_id", categoryId);
       addProduct(data);
     },
   });
@@ -71,13 +81,22 @@ const ClientAddProduct = () => {
   };
 
   // End formik handle
+  // ---------------------------------------
 
   // Handle image
   const handleImage = (e) => {
     setImage(e.target.files[0]);
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setImg(reader.result);
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
   };
 
   // End handle Image
+  // ---------------------------------------
 
   // handle change display
 
@@ -97,6 +116,15 @@ const ClientAddProduct = () => {
 
   // End handle change position
 
+  // ---------------------------------------
+  // handle change Category
+
+  const handleChangeCategory = (e) => {
+    setCategoryId(e.target.value);
+  };
+
+  // End handle change Category
+
   return (
     <>
       <div className="flex flex-row gap-5 w-full bg-primary py-5 px-10 rounded-xl">
@@ -113,7 +141,6 @@ const ClientAddProduct = () => {
           className="text-[#fff]"
         >
           <div className="flex flex-col justify-between gap-2 items-start mb-5">
-            {/* title */}
             <label htmlFor="title" className="text-[1.25rem] font-normal">
               Name
             </label>
@@ -128,6 +155,8 @@ const ClientAddProduct = () => {
             />
           </div>
           {/* End title */}
+
+          {/* ------------------------------------ */}
 
           {/* Description */}
           <div className="flex flex-col justify-between gap-2 items-start mb-5">
@@ -147,6 +176,8 @@ const ClientAddProduct = () => {
           </div>
           {/* End Description */}
 
+          {/* ------------------------------------ */}
+
           {/* Price */}
           <div className="flex flex-col justify-between gap-2 items-start mb-5">
             <label htmlFor="price" className="text-[1.25rem] font-normal">
@@ -164,6 +195,8 @@ const ClientAddProduct = () => {
           </div>
 
           {/* End Price */}
+
+          {/* ------------------------------------ */}
 
           {/* Detail */}
           <div className="flex flex-col justify-between gap-2 items-start mb-5">
@@ -184,6 +217,8 @@ const ClientAddProduct = () => {
 
           {/* End Detail */}
 
+          {/* ------------------------------------ */}
+
           {/* Content */}
           <div className="flex flex-col justify-between gap-2 items-start mb-5">
             <label htmlFor="content" className="text-[1.25rem] font-normal">
@@ -202,25 +237,7 @@ const ClientAddProduct = () => {
           </div>
           {/* End Content */}
 
-          {/* Photo */}
-          <div className="flex flex-row justify-between items-center mb-5">
-            <label htmlFor="photo" className="text-[1.25rem] font-normal">
-              Photo
-            </label>
-
-            <input
-              type="file"
-              name="photo"
-              id="photo"
-              accept="image/*"
-              files={image}
-              onChange={(e) => handleImage(e)}
-              // onChange={(e) => handleImage(e)}
-              className="w-[85%] px-3 py-2 border-[1px] font-light border-secondary outline-none bg-primary focus:border-[#e0ed2e]"
-            />
-          </div>
-
-          {/* End Photo */}
+          {/* ------------------------------------ */}
 
           {/* Display */}
           <div className="flex flex-row justify-between items-center mb-5">
@@ -246,6 +263,8 @@ const ClientAddProduct = () => {
 
           {/* End Display */}
 
+          {/* ------------------------------------ */}
+
           {/* Position */}
           <div className="flex flex-row justify-between items-center mb-5">
             <label htmlFor="position" className="text-[1.25rem] font-normal">
@@ -270,34 +289,59 @@ const ClientAddProduct = () => {
 
           {/* End Position */}
 
+          {/* ------------------------------------ */}
+
           {/* Category id */}
           <div className="flex flex-row justify-between gap-2 items-start mb-5">
             <label htmlFor="category_id" className="text-[1.25rem] font-normal">
               Category
             </label>
-            {/* <input
-              type="number"
-              name="category_id"
-              id="category_id"
-              placeholder="Category Id"
-              value={formik.values.category_id}
-              onChange={formik.handleChange}
-              className="w-full px-3 py-2 border-[1px] font-light border-secondary outline-none bg-primary focus:border-[#e0ed2e]"
-            /> */}
             <div className="w-[85%] flex justify-start items-center">
               <select
+                onChange={(e) => handleChangeCategory(e)}
                 name="category_id"
                 id="category_id"
                 className="text-[#333] outline-none px-2 py-1"
               >
                 {dataCate?.map((item) => (
-                  <option value={item.id}>{item.title}</option>
+                  <option value={item.id} key={item.id}>
+                    {item.title}
+                  </option>
                 ))}
               </select>
             </div>
           </div>
 
           {/* End category id */}
+
+          {/* ------------------------------------ */}
+
+          {/* Photo */}
+          <div className="flex flex-row justify-between items-center mb-5">
+            <label className="text-[1.25rem] font-normal">Photo</label>
+
+            <input
+              type="file"
+              name="photo"
+              id="photo"
+              accept="image/*"
+              files={image}
+              onChange={(e) => handleImage(e)}
+              className="hidden w-[85%] px-3 py-2 border-[1px] font-light border-secondary outline-none bg-primary focus:border-[#e0ed2e]"
+            />
+            <div className="w-[85%] flex flex-row items-center">
+              <ButtonUpload htmlFor="photo" />
+              <img
+                src={img ?? notimg}
+                alt=""
+                className="w-[300px] h-[300px] bg-cover border-2 border-secondary"
+              />
+            </div>
+          </div>
+
+          {/* End Photo */}
+
+          {/* ------------------------------------ */}
 
           {/* Button Add */}
           <div className="flex flex-row justify-center items-center">
@@ -308,6 +352,8 @@ const ClientAddProduct = () => {
           </div>
 
           {/* End Button Add */}
+
+          {/* ------------------------------------ */}
         </form>
         <p id="err" className="text-[red] text-[2rem] font-light"></p>
       </div>
