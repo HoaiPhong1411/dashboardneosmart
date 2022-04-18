@@ -19,7 +19,7 @@ const nav = [
     icon: <FaMicroblog />,
   },
 ];
-const NavBar = ({show}) => {
+const NavBar = () => {
   const handleActive = (e) => {
     const elementLi = document.querySelectorAll("li");
     elementLi.forEach((li) => {
@@ -34,10 +34,10 @@ const NavBar = ({show}) => {
           Dashboard
         </div>
         <div className="px-5 flex flex-row justify-center items-center mt-3">
-          <img onClick ={()=>show()}
+          <img
             src="https://www.bootstrapdash.com/demo/corona-react-free/template/demo_1/preview/static/media/face15.736ec0d9.jpg"
             alt=""
-            className="w-[2.25rem] h-[2.25rem] rounded-[50%] mr-5 cursor-pointer"
+            className="w-[2.25rem] h-[2.25rem] rounded-[50%] mr-5 mt-2"
           />
           <div className="text-[#fff] font-normal">Admin</div>
         </div>
