@@ -15,7 +15,6 @@ const ClientAddProduct = () => {
   const [img, setImg] = useState();
   const [dataCate, setDataCate] = useState([]);
   const [categoryId, setCategoryId] = useState();
-  const getToken = useSelector((state) => state.auth.login.currentUser);
 
   let toastSuccess;
   // ---------------------------------------
@@ -114,12 +113,7 @@ const ClientAddProduct = () => {
     try {
       const response = await axios.post(
         "http://localhost:8000/api/product/store",
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${getToken.access_token}`,
-          },
-        }
+        data
       );
     } catch (error) {
       alert("Vui Lòng Nhập Đầy Đủ !");

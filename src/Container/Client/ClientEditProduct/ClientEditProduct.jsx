@@ -33,7 +33,6 @@ const ClientEditProduct = () => {
   const [editPro, setEditPro] = useState([]);
   const dispath = useDispatch();
   const getEdit = useSelector((state) => state.product.product.product);
-  const getToken = useSelector((state) => state.auth.login.currentUser);
 
   useEffect(() => {
     setEditPro(getEdit);
@@ -162,11 +161,7 @@ const ClientEditProduct = () => {
   };
   const updateProduct = async (id, data) => {
     try {
-      await axios.post(`http://localhost:8000/api/product/update/${id}`, data, {
-        headers: {
-          Authorization: `Bearer ${getToken.access_token}`,
-        },
-      });
+      await axios.post(`http://localhost:8000/api/product/update/${id}`, data);
     } catch (error) {
       console.log(error);
     }

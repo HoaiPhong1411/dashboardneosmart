@@ -16,7 +16,6 @@ import Toast from "../../../Component/Toast";
 
 const ClientProduct = () => {
   const getProduct = useSelector((state) => state.products.product.product);
-  const getToken = useSelector((state) => state.auth.login.currentUser);
   const dispath = useDispatch();
   const [render, setRender] = useState(false);
   const [dataCategory, setDataCategory] = useState();
@@ -29,12 +28,7 @@ const ClientProduct = () => {
   // get data Product
 
   useEffect(() => {
-    if (!getToken.user) {
-      navigate("/login");
-    }
-    if (getToken?.access_token) {
-      getFullProduct(dispath, getToken?.access_token);
-    }
+    getFullProduct(dispath);
   }, [render]);
   // End data Product
 
@@ -60,11 +54,7 @@ const ClientProduct = () => {
   const handleRemove = (id) => {
     const remove = async () => {
       try {
-        await axios.delete(`http://localhost:8000/api/product/delete/${id}`, {
-          headers: {
-            Authorization: `Bearer ${getToken.access_token}`,
-          },
-        });
+        await axios.delete(`http://localhost:8000/api/product/delete/${id}`);
         setRender(!render);
       } catch (error) {
         console.log(error);

@@ -71,15 +71,11 @@ export const logOut = async (dispath, navigate, access_token) => {
     }
 };
 
-export const getFullProduct = async (dispath, access_token) => {
+export const getFullProduct = async (dispath) => {
     dispath(getALlProductStart())
     try {
         const urlProduct = "http://localhost:8000/api/product/index"
-        const res = await axios.get(urlProduct,{
-            headers: {
-                Authorization: `Bearer ${access_token}`,
-            },
-        });   
+        const res = await axios.get(urlProduct)   
         dispath(getAllProductSuccess(res.data))
     } catch (error) {
         dispath(getAllProductFailed())
