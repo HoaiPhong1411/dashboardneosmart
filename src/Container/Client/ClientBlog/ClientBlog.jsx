@@ -200,7 +200,7 @@ const ClientBlog = () => {
 
                 {/* Button delete */}
                 <td>
-                  <ButtonDelete handleClick={(e) => handleRemove(e)} />
+                  <ButtonDelete handleClick={(id) => handleRemove(item.id)} />
                 </td>
 
                 {/* End button delete */}
