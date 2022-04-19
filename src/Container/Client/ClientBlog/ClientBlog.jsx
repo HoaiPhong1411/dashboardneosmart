@@ -98,6 +98,7 @@ const ClientBlog = () => {
     dataDisplay.append("title", blog.title);
     dataDisplay.append("photo", blog.photo);
     dataDisplay.append("description", blog.description);
+    dataDisplay.append("content", blog.content);
     dataDisplay.append("position", blog.position);
     if (check) {
       dataDisplay.append("display", 1);
