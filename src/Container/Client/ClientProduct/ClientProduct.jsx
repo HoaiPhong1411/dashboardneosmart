@@ -8,7 +8,7 @@ import ButtonDelete from "../../../Component/Button/ButtonDelete";
 import ButtonSwitch from "../../../Component/Button/ButtonSwitch";
 import { useDispatch, useSelector } from "react-redux";
 import { getFullProduct } from "../../../app/apiRequest";
-import { getProductEditSuccess } from "../../../app/productSlice";
+import { getAllProductSuccess } from "../../../app/productSlice";
 import { urlImg } from "../../../Component/Variable";
 
 import "./ClientProduct.css";
@@ -21,8 +21,7 @@ const ClientProduct = () => {
   const [dataCategory, setDataCategory] = useState();
 
   const handleEdit = (e, product) => {
-    dispath(getProductEditSuccess(product));
-    console.log(product);
+    dispath(getAllProductSuccess(product));
   };
 
   // get data Product
@@ -168,13 +167,13 @@ const ClientProduct = () => {
                     width="50px"
                     height="50px"
                   />
-                  <span
+                  <Link
                     onClick={(e, product) => handleEdit(e, item)}
                     to="/product/edit"
                     className="break-words hover:text-secondary"
                   >
                     {item.title}
-                  </span>
+                  </Link>
                 </td>
                 <td>{item.description}</td>
                 <td>{item.price}</td>
