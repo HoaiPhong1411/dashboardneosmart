@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import { MdOutlineSmartToy } from "react-icons/md";
 import { BiCategory } from "react-icons/bi";
-import { FaMicroblog } from "react-icons/fa";
+import { FaMicroblog } from "react-icons/fa"
+// import { FaMicroblog, FaUserFriends } from "react-icons/fa";
+import { useSelector } from "react-redux";
+
 const nav = [
   {
     name: "Product",
@@ -20,6 +23,7 @@ const nav = [
   },
 ];
 const NavBar = () => {
+  const user = useSelector((state) => state.auth.login.currentUser);
   const handleActive = (e) => {
     const elementLi = document.querySelectorAll("li");
     elementLi.forEach((li) => {
@@ -39,7 +43,11 @@ const NavBar = () => {
             alt=""
             className="w-[2.25rem] h-[2.25rem] rounded-[50%] mr-5 mt-2"
           />
-          <div className="text-[#fff] font-normal">Admin</div>
+          {user ? (
+            <div className="text-[#fff] font-normal">{user.user.name}</div>
+          ) : (
+            <div> Login</div>
+          )}
         </div>
         <div>
           <ul className="text-secondary mt-5">

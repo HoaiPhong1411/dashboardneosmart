@@ -4,18 +4,41 @@ import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+import ButtonDelete from "../../../Component/Button/ButtonDelete";
+import ButtonSwitch from "../../../Component/Button/ButtonSwitch";
+import { useDispatch, useSelector } from "react-redux";
+import { getFullProduct } from "../../../app/apiRequest";
+import { getAllProductSuccess } from "../../../app/productSlice";
+import { urlImg } from "../../../Component/Variable";
+
 import "./ClientProduct.css";
 
 const ClientProduct = () => {
-  const [data, setData] = useState();
+  const getProduct = useSelector((state) => state.products.product.product);
+
+  const dispath = useDispatch();
   const [render, setRender] = useState(false);
+  const [dataCategory, setDataCategory] = useState();
+
+  const handleEdit = (e, product) => {
+    dispath(getAllProductSuccess(product));
+  };
+
+  // get data Product
+
+  useEffect(() => {
+    getFullProduct(dispath);
+  }, []);
+  // End data Product
+
+  // get data Category
   useEffect(() => {
     const fecth = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/product/index"
+          "http://localhost:8000/api/category/index"
         );
-        setData(response.data);
+        setDataCategory(response.data);
       } catch (error) {
         console.log(error);
       }
@@ -23,12 +46,14 @@ const ClientProduct = () => {
     fecth();
   }, [render]);
 
+  // End data Category
+
+  // delete Product
+
   const handleRemove = (id) => {
     const remove = async () => {
       try {
-        const response = await axios.delete(
-          `http://localhost:8000/api/product/delete/${id}`
-        );
+        await axios.delete(`http://localhost:8000/api/product/delete/${id}`);
         setRender(!render);
       } catch (error) {
         console.log(error);
@@ -36,111 +61,164 @@ const ClientProduct = () => {
     };
     remove();
   };
+  // End delete Product
+
+  // -------
+
+  // Handle display
+  const handleDisplay = (e, product) => {
+    // On off button display
+    const check = e.target.checked;
+    const spanElement = e.target.parentElement;
+    const btn = document.querySelectorAll(".btn-display");
+    btn.forEach((item) => {
+      if (item.id == product.id) {
+        if (check) {
+          item.style.transform = "translateX(105%)";
+          spanElement.style.backgroundColor = "#e64141";
+        } else {
+          item.style.transform = "translateX(15%)";
+          spanElement.style.backgroundColor = "#6c7293";
+        }
+      }
+    });
+
+    // End On off button display
+
+    // Update display
+    const updateDisplay = async (id, data) => {
+      try {
+        const res = await axios.post(
+          `http://localhost:8000/api/product/update/${id}`,
+          data
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const dataDisplay = new FormData();
+    dataDisplay.append("title", product.title);
+    dataDisplay.append("photo", product.photo);
+    dataDisplay.append("price", product.price);
+    dataDisplay.append("description", product.description);
+    dataDisplay.append("position", product.position);
+    if (check) {
+      dataDisplay.append("display", 1);
+      updateDisplay(product.id, dataDisplay);
+    } else {
+      dataDisplay.append("display", 0);
+      updateDisplay(product.id, dataDisplay);
+    }
+    // End Update display
+  };
+  // End handle display
   return (
     <>
       <div className="flex flex-row gap-5 w-full bg-primary py-3 px-5 rounded-xl">
+        {/* button add */}
         <Link
           to="/product/add"
-          className="w-[14%] p-2 rounded-lg cursor-pointer hover:bg-[#e64141] text-[#fff] bg-secondary flex flex-row items-center"
+          className="px-2 py-2 rounded-lg cursor-pointer hover:bg-[#e64141] text-[#fff] bg-secondary flex flex-row items-center"
         >
           <IoIosAddCircleOutline className="mr-4 text-xl" />
           Add Product
         </Link>
+
+        {/* End button add */}
+
+        {/* Button Edit */}
         <Link
           to="/product/edit"
-          className="w-[14%] p-2 rounded-lg cursor-pointer hover:bg-[#e64141] text-[#fff] bg-secondary flex flex-row items-center"
+          className=" px-2 py-2 rounded-lg cursor-pointer hover:bg-[#e64141] text-[#fff] bg-secondary flex flex-row items-center"
         >
           <AiFillEdit className="mr-4 text-xl" />
           Edit Product
         </Link>
+
+        {/* End button edit */}
       </div>
       <div className="w-full bg-primary px-5 py-5 rounded-xl my-7">
-        {/* <div className="w-full flex flex-col">
-            <ul className="flex flex-row justify-between items-center text-secondary">
-              <li>Id</li>
-              <li>Title</li>
-              <li>Description</li>
-              <li>Price</li>
-              <li>Detail</li>
-              <li>Content</li>
-              <li>Photo</li>
-              <li>Display</li>
-              <li>Position</li>
-              <li>CategoryId</li>
-              <li>Actions</li>
-            </ul>
-            {data?.map((item) => (
-              <ul className="flex flex-row justify-between items-center mt-2 text-[#fff]">
-                <li>{item.id}</li>
-                <li>{item.title}</li>
-                <li>{item.description}</li>
-                <li>{item.price}</li>
-                <li>{item.detail}</li>
-                <li>{item.content}</li>
-                <li>{item.photo}</li>
-                <li>{item.display}</li>
-                <li>{item.position}</li>
-                <li>{item.category_id}</li>
-                <li>
-                  <span
-                    onClick={() => handleRemove(item.id)}
-                    className=" mx-auto w-8 h-8 rounded-[50%] cursor-pointer bg-[#3d3d3d] mr-3 flex justify-center items-center"
-                  >
-                    <AiFillDelete />
-                  </span>
-                </li>
-              </ul>
-            ))}
-          </div> */}
+        {/* Table show product */}
         <table className="w-full text-secondary border-[1px] border-[#777]">
           <thead>
-            <td>Id</td>
-            <td>Title</td>
-            <td>Description</td>
-            <td>Price</td>
-            <td>Detail</td>
-            <td>Content</td>
-            <td>Photo</td>
-            <td>Display</td>
-            <td>Position</td>
-            <td>CategoryId</td>
-            <td>Actions</td>
+            <tr>
+              <td>Id</td>
+              <td>Title</td>
+              <td>Description</td>
+              <td>Price</td>
+              <td>Detail</td>
+              <td>Content</td>
+              {/* <td>Photo</td> */}
+              <td>Display</td>
+              <td>Position</td>
+              <td>CategoryId</td>
+              <td>Actions</td>
+            </tr>
           </thead>
+          {/* show data Product */}
           <tbody className="text-[#ffffff9e]">
-            {data?.map((item) => (
+            {getProduct?.map((item) => (
               <tr key={item.id}>
                 <td>{item.id}</td>
-                <td>{item.title}</td>
+                <td className="flex flex-row justify-start gap-2 w-40 items-center">
+                  <img
+                    src={urlImg + item.photo}
+                    alt=""
+                    width="50px"
+                    height="50px"
+                  />
+                  <Link
+                    onClick={(e, product) => handleEdit(e, item)}
+                    to="/product/edit"
+                    className="break-words hover:text-secondary"
+                  >
+                    {item.title}
+                  </Link>
+                </td>
                 <td>{item.description}</td>
                 <td>{item.price}</td>
-                <td>{item.detail}</td>
-                <td>{item.content}</td>
-                <td
-                  style={{
-                    display: "block",
-                    width: "100px",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                  }}
-                >
-                  {item.photo}
-                </td>
-                <td>{item.display}</td>
-                <td>{item.position}</td>
-                <td>{item.category_id}</td>
+                <td className="w-24 break-words">{item.detail}</td>
+                <td className="w-36 break-words">{item.content}</td>
+                {/* <td>
+                  <img
+                    src={urlImg + item.photo}
+                    alt=""
+                    width="50px"
+                    height="50px"
+                  />
+                </td> */}
+                {/* switched display */}
                 <td>
-                  <span
-                    onClick={() => handleRemove(item.id)}
-                    className=" mx-auto w-8 h-8 rounded-[50%] cursor-pointer bg-[#3d3d3d] mr-3 flex justify-center items-center"
-                  >
-                    <AiFillDelete />
-                  </span>
+                  <ButtonSwitch
+                    id={item.id}
+                    name={item.display}
+                    handleChange={(e, product) => handleDisplay(e, item)}
+                  />
                 </td>
+                {/* End switched display */}
+
+                <td>{item.position}</td>
+                {dataCategory?.map((cate) =>
+                  item.category_id == cate.id ? (
+                    <td key={cate.id}>{cate.title}</td>
+                  ) : (
+                    ""
+                  )
+                )}
+
+                {/* Button delete */}
+                <td>
+                  <ButtonDelete handleClick={(e) => handleRemove(e)} />
+                </td>
+
+                {/* End button delete */}
               </tr>
             ))}
           </tbody>
+          {/* End show data product */}
         </table>
+
+        {/* End table show product */}
       </div>
     </>
   );
