@@ -83,6 +83,5 @@ export const getFullProduct = async (dispath, access_token) => {
         dispath(getAllProductSuccess(res.data))
     } catch (error) {
         dispath(getAllProductFailed())
-        // console.log(error);
     }
 };
