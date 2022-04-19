@@ -45,10 +45,10 @@ export const registerUser = async (user, dispath, navigate) => {
 export const getAllUser = async (access_token, dispath, axiosJWT) => {
     dispath(getAllUserStart());
     try {
-        const urlGetAll = "http://localhost:8000/api/getalluser";
+        const urlGetAll = "http://localhost:8000/api/auth/getalluser";
         const res = await axiosJWT.get(urlGetAll, {
             headers: {
-                token: `Bearer ${access_token}`,
+                Authorization: `Bearer ${access_token}`,
             },
         });
         dispath(getAllUserSuccess(res.data));
@@ -62,7 +62,7 @@ export const logOut = async (dispath, navigate, access_token) => {
         const urlLogout = "http://localhost:8000/api/LogoutJTW";
         await axios.post(urlLogout, {
             headers: {
-                token: `Bearer ${access_token}`,
+                Authorization: `Bearer ${access_token}`,
             },
         });
         dispath(loginSuccess());
@@ -70,11 +70,16 @@ export const logOut = async (dispath, navigate, access_token) => {
         dispath(loginFailed());
     }
 };
-export const getFullProduct = async (dispath) => {
+
+export const getFullProduct = async (dispath, access_token) => {
     dispath(getALlProductStart())
     try {
         const urlProduct = "http://localhost:8000/api/product/index"
-        const res = await axios.get(urlProduct)   
+        const res = await axios.get(urlProduct,{
+            headers: {
+                Authorization: `Bearer ${access_token}`,
+            },
+        });   
         dispath(getAllProductSuccess(res.data))
     } catch (error) {
         dispath(getAllProductFailed())

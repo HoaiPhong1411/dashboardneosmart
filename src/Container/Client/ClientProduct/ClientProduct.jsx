@@ -2,7 +2,7 @@ import axios from "axios";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import ButtonDelete from "../../../Component/Button/ButtonDelete";
 import ButtonSwitch from "../../../Component/Button/ButtonSwitch";
@@ -16,10 +16,11 @@ import Toast from "../../../Component/Toast";
 
 const ClientProduct = () => {
   const getProduct = useSelector((state) => state.products.product.product);
-
+  const getToken = useSelector((state) => state.auth.login.currentUser);
   const dispath = useDispatch();
   const [render, setRender] = useState(false);
   const [dataCategory, setDataCategory] = useState();
+  const navigate = useNavigate();
 
   const handleEdit = (e, product) => {
     dispath(getAllProductSuccess(product));
@@ -28,7 +29,12 @@ const ClientProduct = () => {
   // get data Product
 
   useEffect(() => {
-    getFullProduct(dispath);
+    if (!getToken.user) {
+      navigate("/login");
+    }
+    if (getToken?.access_token) {
+      getFullProduct(dispath, getToken?.access_token);
+    }
   }, [render]);
   // End data Product
 
@@ -54,7 +60,11 @@ const ClientProduct = () => {
   const handleRemove = (id) => {
     const remove = async () => {
       try {
-        await axios.delete(`http://localhost:8000/api/product/delete/${id}`);
+        await axios.delete(`http://localhost:8000/api/product/delete/${id}`, {
+          headers: {
+            Authorization: `Bearer ${getToken.access_token}`,
+          },
+        });
         setRender(!render);
       } catch (error) {
         console.log(error);
