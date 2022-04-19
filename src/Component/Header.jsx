@@ -55,9 +55,9 @@ const Header = () => {
             >
               <BsLightbulbFill
                 onClick={toggleDarkMode}
-                className="text-[#f5d450]"
+                className="text-[#f5eec8be]"
               />
-              <p className="text-[#f5d450]">LightMode</p>
+              <p className="text-[#f5eec8be]">LightMode</p>
             </div>
           )}
         </div>
