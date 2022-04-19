@@ -7,6 +7,7 @@ import ButtonUpload from "../../../Component/Button/ButtonUpload";
 import { useEffect } from "react";
 
 import notimg from "../../../assets/images/image-not.jpg";
+import Toast from "../../../Component/Toast";
 
 const ClientAddProduct = () => {
   const [image, setImage] = useState();
@@ -15,7 +16,7 @@ const ClientAddProduct = () => {
   const [img, setImg] = useState();
   const [dataCate, setDataCate] = useState([]);
   const [categoryId, setCategoryId] = useState();
-
+  let toastSuccess;
   // ---------------------------------------
 
   useEffect(() => {
@@ -37,50 +38,6 @@ const ClientAddProduct = () => {
     e.preventDefault();
   };
   // End Prevent event submit
-  // ---------------------------------------
-
-  // Formik handle
-  const formik = useFormik({
-    initialValues: {
-      title: "",
-      description: "",
-      price: "",
-      detail: "",
-      content: "",
-      photo: "",
-      display: "",
-      position: "",
-      category_id: "",
-    },
-    onSubmit: (value) => {
-      const data = new FormData();
-      data.append("title", value.title);
-      data.append("description", value.description);
-      data.append("price", value.price);
-      data.append("detail", value.detail);
-      data.append("content", value.content);
-      data.append("photo", image);
-      data.append("display", display ? 1 : 0);
-      data.append("position", position ? 1 : 0);
-      data.append("category_id", categoryId);
-      addProduct(data);
-    },
-  });
-  const addProduct = async (data) => {
-    try {
-      const response = await axios.post(
-        "http://localhost:8000/api/product/store",
-        data
-      );
-      setTimeout(() => {
-        window.location.reload();
-      }, 200);
-    } catch (error) {
-      alert("Vui Lòng Nhập Đầy Đủ !");
-    }
-  };
-
-  // End formik handle
   // ---------------------------------------
 
   // Handle image
@@ -124,7 +81,47 @@ const ClientAddProduct = () => {
   };
 
   // End handle change Category
+  // ------------------------------------
+  // Formik handle
+  const formik = useFormik({
+    initialValues: {
+      title: "",
+      description: "",
+      price: "",
+      detail: "",
+      content: "",
+      photo: "",
+      display: "",
+      position: "",
+      category_id: "",
+    },
+    onSubmit: (value) => {
+      const data = new FormData();
+      data.append("title", value.title);
+      data.append("description", value.description);
+      data.append("price", value.price);
+      data.append("detail", value.detail);
+      data.append("content", value.content);
+      data.append("photo", image);
+      data.append("display", display ? 1 : 0);
+      data.append("position", position ? 1 : 0);
+      data.append("category_id", categoryId ?? dataCate[0].id);
+      addProduct(data);
+    },
+  });
+  const addProduct = async (data) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/product/store",
+        data
+      );
+    } catch (error) {
+      alert("Vui Lòng Nhập Đầy Đủ !");
+    }
+  };
 
+  // End formik handle
+  // ---------------------------------------
   return (
     <>
       <div className="flex flex-row gap-5 w-full bg-primary py-5 px-10 rounded-xl">

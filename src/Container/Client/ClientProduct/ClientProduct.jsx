@@ -12,6 +12,7 @@ import { getAllProductSuccess } from "../../../app/productSlice";
 import { urlImg } from "../../../Component/Variable";
 
 import "./ClientProduct.css";
+import Toast from "../../../Component/Toast";
 
 const ClientProduct = () => {
   const getProduct = useSelector((state) => state.products.product.product);
@@ -28,7 +29,7 @@ const ClientProduct = () => {
 
   useEffect(() => {
     getFullProduct(dispath);
-  }, []);
+  }, [render]);
   // End data Product
 
   // get data Category
@@ -208,7 +209,7 @@ const ClientProduct = () => {
 
                 {/* Button delete */}
                 <td>
-                  <ButtonDelete handleClick={(e) => handleRemove(e)} />
+                  <ButtonDelete handleClick={(id) => handleRemove(item.id)} />
                 </td>
 
                 {/* End button delete */}
