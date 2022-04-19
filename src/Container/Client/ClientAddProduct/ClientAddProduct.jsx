@@ -6,7 +6,7 @@ import ButtonCheck from "../../../Component/Button/ButtonCheck";
 import ButtonUpload from "../../../Component/Button/ButtonUpload";
 import { useEffect } from "react";
 
-import notimg from "../../../assets/images/image-not.jpg";
+import notimg from "../../../assets/images/No-image-found.jpg";
 import Toast from "../../../Component/Toast";
 
 const ClientAddProduct = () => {
@@ -81,7 +81,7 @@ const ClientAddProduct = () => {
   };
 
   // End handle change Category
-  // ------------------------------------
+
   // Formik handle
   const formik = useFormik({
     initialValues: {
@@ -122,9 +122,10 @@ const ClientAddProduct = () => {
 
   // End formik handle
   // ---------------------------------------
+
   return (
     <>
-      <div className="flex flex-row gap-5 w-full bg-primary py-5 px-10 rounded-xl">
+      <div className="flex flex-row gap-5 w-full dark:bg-[black] border-[1px] dark:border-[white] py-5 px-10 rounded-xl">
         <h1 className="text-[#fff] text-[1.4rem]">Add Product</h1>
       </div>
       <div
@@ -331,7 +332,7 @@ const ClientAddProduct = () => {
               <img
                 src={img ?? notimg}
                 alt=""
-                className="w-[300px] h-[300px] bg-cover border-2 border-secondary"
+                className="w-[350px] h-[300px] object-cover border-2 border-secondary"
               />
             </div>
           </div>

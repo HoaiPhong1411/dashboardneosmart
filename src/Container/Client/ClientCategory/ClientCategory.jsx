@@ -42,11 +42,11 @@ const ClientCategory = () => {
   // End delete Product
   return (
     <>
-      <div className="flex flex-row gap-5 w-full bg-primary py-3 px-5 rounded-xl">
+      <div className="flex flex-row gap-5 w-full bg-[#fefce8] shadow-lg py-3 px-5 rounded-xl">
         {/* button add */}
         <Link
           to="/category/add"
-          className=" px-2 py-2 rounded-lg cursor-pointer hover:bg-[#e64141] text-[#fff] bg-secondary flex flex-row items-center"
+          className=" px-2 py-2 rounded-lg cursor-pointer shadow-lg hover:bg-[#e64141] text-[#fff] bg-secondary flex flex-row items-center"
         >
           <IoIosAddCircleOutline className="mr-4 text-xl" />
           Add Category
@@ -57,7 +57,7 @@ const ClientCategory = () => {
         {/* Button Edit */}
         <Link
           to="/category/edit"
-          className=" px-2 py-2 rounded-lg cursor-pointer hover:bg-[#e64141] text-[#fff] bg-secondary flex flex-row items-center"
+          className=" px-2 py-2 rounded-lg cursor-pointer shadow-lg hover:bg-[#e64141] text-[#fff] bg-secondary flex flex-row items-center"
         >
           <AiFillEdit className="mr-4 text-xl" />
           Edit Category
@@ -65,9 +65,9 @@ const ClientCategory = () => {
 
         {/* End button edit */}
       </div>
-      <div className="w-full bg-primary px-5 py-5 rounded-xl my-7">
+      <div className="w-full bg-[#fefce8] shadow-lg rounded-xl my-7">
         {/* Table show product */}
-        <table className="w-full text-secondary border-[1px] border-[#777]">
+        <table className="w-full text-secondary font-medium">
           <thead>
             <tr>
               <td>Id</td>
@@ -77,7 +77,7 @@ const ClientCategory = () => {
             </tr>
           </thead>
           {/* show data Product */}
-          <tbody className="text-[#ffffff9e]">
+          <tbody className="text-[#333] font-light">
             {dataCategory?.map((item) => (
               <tr key={item.id}>
                 <td>{item.id}</td>

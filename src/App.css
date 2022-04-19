@@ -7,7 +7,7 @@ body{
 .active {
     background-color:#292929;
     color: #fff;
-    border-left-color: #007bff;
+    border-left-color: #fce355fb !important;
 }
 
 #error {

@@ -75,10 +75,10 @@ const ClientProduct = () => {
     btn.forEach((item) => {
       if (item.id == product.id) {
         if (check) {
-          item.style.transform = "translateX(105%)";
+          item.style.transform = "translateX(125%)";
           spanElement.style.backgroundColor = "#e64141";
         } else {
-          item.style.transform = "translateX(15%)";
+          item.style.transform = "translateX(20%)";
           spanElement.style.backgroundColor = "#6c7293";
         }
       }
@@ -115,11 +115,11 @@ const ClientProduct = () => {
   // End handle display
   return (
     <>
-      <div className="flex flex-row gap-5 w-full bg-primary py-3 px-5 rounded-xl">
+      <div className="flex flex-row gap-5 w-full bg-[#fefce8] shadow-lg py-3 px-5 rounded-xl">
         {/* button add */}
         <Link
           to="/product/add"
-          className="px-2 py-2 rounded-lg cursor-pointer hover:bg-[#e64141] text-[#fff] bg-secondary flex flex-row items-center"
+          className="px-2 py-2 rounded-lg cursor-pointer shadow-lg hover:bg-[#e64141] text-[#fff] bg-secondary flex flex-row items-center"
         >
           <IoIosAddCircleOutline className="mr-4 text-xl" />
           Add Product
@@ -130,7 +130,7 @@ const ClientProduct = () => {
         {/* Button Edit */}
         <Link
           to="/product/edit"
-          className=" px-2 py-2 rounded-lg cursor-pointer hover:bg-[#e64141] text-[#fff] bg-secondary flex flex-row items-center"
+          className=" px-2 py-2 rounded-lg cursor-pointer shadow-lg hover:bg-[#e64141] text-[#fff] bg-secondary flex flex-row items-center"
         >
           <AiFillEdit className="mr-4 text-xl" />
           Edit Product
@@ -138,9 +138,9 @@ const ClientProduct = () => {
 
         {/* End button edit */}
       </div>
-      <div className="w-full bg-primary px-5 py-5 rounded-xl my-7">
+      <div className="w-full bg-[#fefce8] shadow-lg rounded-xl my-7 ">
         {/* Table show product */}
-        <table className="w-full text-secondary border-[1px] border-[#777]">
+        <table className="w-full text-secondary font-medium">
           <thead>
             <tr>
               <td>Id</td>
@@ -157,7 +157,7 @@ const ClientProduct = () => {
             </tr>
           </thead>
           {/* show data Product */}
-          <tbody className="text-[#ffffff9e]">
+          <tbody className="text-[#333] font-light">
             {getProduct?.map((item) => (
               <tr key={item.id}>
                 <td>{item.id}</td>
