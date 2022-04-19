@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import Toast from "./Toast";
 
 const Footer = () => {
   return (

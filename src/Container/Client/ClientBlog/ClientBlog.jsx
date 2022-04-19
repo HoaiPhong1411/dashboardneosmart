@@ -26,10 +26,10 @@ const ClientBlog = () => {
 
   useEffect(() => {
     getFullBlog(dispath);
-  }, []);
+  }, [render]);
   // End data Blog
 
-  // get data Category
+  // get data listBlog
   useEffect(() => {
     const fecth = async () => {
       try {
@@ -70,12 +70,12 @@ const ClientBlog = () => {
     const spanElement = e.target.parentElement;
     const btn = document.querySelectorAll(".btn-display");
     btn.forEach((item) => {
-      if (item.id === blog.id) {
+      if (item.id == blog.id) {
         if (check) {
-          item.style.transform = "translateX(105%)";
+          item.style.transform = "translateX(125%)";
           spanElement.style.backgroundColor = "#e64141";
         } else {
-          item.style.transform = "translateX(15%)";
+          item.style.transform = "translateX(20%)";
           spanElement.style.backgroundColor = "#6c7293";
         }
       }
@@ -192,7 +192,7 @@ const ClientBlog = () => {
                 <td>{item.position}</td>
                 {dataListBlog?.map((listblog, index) =>
                   item.listblog_id === listblog.id ? (
-                    <td key={index}>{listblog.title}</td>
+                    <td key={listblog.id}>{listblog.title}</td>
                   ) : (
                     ""
                   )

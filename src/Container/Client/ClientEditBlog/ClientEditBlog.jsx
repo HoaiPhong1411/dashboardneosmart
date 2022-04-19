@@ -25,6 +25,7 @@ const ClientEditBLog = () => {
   // get data edited
   const [title, setTitle] = useState();
   const [des, setDes] = useState();
+  const [content, setContent] = useState();
   const [display, setDisplay] = useState();
   const [position, setPosition] = useState();
 
@@ -59,6 +60,9 @@ const ClientEditBLog = () => {
   };
   const handleChangeDes = (e) => {
     setDes(e.target.value);
+  };
+  const handleChangeContent = (e) => {
+    setContent(e.target.value);
   };
   const handleChangeImage = (e) => {
     setFile(e.target.files[0]);
@@ -119,6 +123,7 @@ const ClientEditBLog = () => {
     if (blog) {
       dataUpdate.append("title", title ?? blog[0].title);
       dataUpdate.append("description", des ?? blog[0].description);
+      dataUpdate.append("content", content ?? content[0].description);
       dataUpdate.append("photo", file ?? blog[0].photo);
       if (display ?? blog[0].display) {
         dataUpdate.append("display", 1);
@@ -134,6 +139,7 @@ const ClientEditBLog = () => {
       // update
       dataUpdate.append("title", title ?? editPro[0].title);
       dataUpdate.append("description", des ?? editPro[0].description);
+      dataUpdate.append("content", content ?? content[0].description);
       dataUpdate.append("photo", file ?? editPro[0].photo);
       if (display ?? editPro[0].display) {
         dataUpdate.append("display", 1);
@@ -190,7 +196,6 @@ const ClientEditBLog = () => {
     setBLog(dataEdit);
     setValue(dataEdit[0].title);
   };
-  console.log(display, position);
   return (
     <>
       <div className="flex flex-row gap-5 w-full items-center bg-primary py-5 px-10 rounded-xl">
@@ -274,6 +279,15 @@ const ClientEditBLog = () => {
                     onChange={(e) => handleChangeDes(e)}
                   />
                 </div>
+                <div className="w-full flex flex-col justify-between gap-2 items-start text-[#fff]">
+                  <label htmlFor="content">Content</label>
+                  <input
+                    type="text"
+                    value={content ?? item.content}
+                    className="w-full border-[1px] border-secondary bg-primary focus:border-[#e0ed2e] font-light"
+                    onChange={(e) => handleChangeContent(e)}
+                  />
+                </div>
 
                 {/* display */}
                 <div className="w-full flex flex-row justify-between items-center text-[#fff]">
@@ -335,7 +349,7 @@ const ClientEditBLog = () => {
                 </div>
               </table>
             )) ?? // End pick from input
-              // pick from product
+              // pick from blog
               getEdit?.map((item) => (
                 <table className="w-full text-secondary flex flex-col gap-5">
                   <div className="w-full flex flex-col gap-5 justify-between items-center text-[#fff]">
@@ -381,6 +395,15 @@ const ClientEditBLog = () => {
                       onChange={(e) => handleChangeDes(e)}
                     />
                   </div>
+                  <div className="w-full flex flex-col justify-between gap-2 items-start text-[#fff]">
+                  <label htmlFor="content">Content</label>
+                  <input
+                    type="text"
+                    value={content ?? item.content}
+                    className="w-full border-[1px] border-secondary bg-primary focus:border-[#e0ed2e] font-light"
+                    onChange={(e) => handleChangeContent(e)}
+                  />
+                </div>
 
                   <div className="w-full flex flex-row justify-between items-center text-[#fff]">
                     <label htmlFor="display">Display</label>

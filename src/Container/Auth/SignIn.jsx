@@ -32,7 +32,7 @@ const Signin = () => {
                 >
                     <div className="flex justify-start items-center gap-4">
                         <label className="font-semibold text-[14px]">
-                            Username
+                            Email
                         </label>
                         <input
                             type="text"

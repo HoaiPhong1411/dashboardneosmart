@@ -38,6 +38,45 @@ const ClientAddBlog = () => {
   };
   // End Prevent event submit
   // ---------------------------------------
+    // Handle image
+    const handleImage = (e) => {
+      setImage(e.target.files[0]);
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setImg(reader.result);
+        }
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    };
+  
+    // End handle Image
+    // ---------------------------------------
+  // handle change display
+
+  const handleChangeDisplay = (e) => {
+    setDisplay(e.target.checked);
+  };
+
+  // End handle change display
+// ---------------------------------------
+
+  // handle change position
+
+  const handleChangePosition = (e) => {
+    setPosition(e.target.checked);
+  };
+
+  // End handle change position
+
+  // ---------------------------------------
+    // handle change listBlog
+
+    const handleChangeListBlog = (e) => {
+      setListBlogId(e.target.value);
+    };
+  
+    // End handle change Category
 
   // Formik handle
   const formik = useFormik({
@@ -58,7 +97,7 @@ const ClientAddBlog = () => {
       data.append("photo", image);
       data.append("display", display ? 1 : 0);
       data.append("position", position ? 1 : 0);
-      data.append("listblog_id", listBlogId);
+      data.append("listblog_id", listBlogId ?? dataListBlog[0].id);
       addBlog(data);
     },
   });
@@ -78,48 +117,6 @@ const ClientAddBlog = () => {
 
   // End formik handle
   // ---------------------------------------
-
-  // Handle image
-  const handleImage = (e) => {
-    setImage(e.target.files[0]);
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setImg(reader.result);
-      }
-    };
-    reader.readAsDataURL(e.target.files[0]);
-  };
-
-  // End handle Image
-  // ---------------------------------------
-
-  // handle change display
-
-  const handleChangeDisplay = (e) => {
-    setDisplay(e.target.checked);
-  };
-
-  // End handle change display
-
-  // ---------------------------------------
-
-  // handle change position
-
-  const handleChangePosition = (e) => {
-    setPosition(e.target.checked);
-  };
-
-  // End handle change position
-
-  // ---------------------------------------
-  // handle change Category
-
-  const handleChangeListBlog = (e) => {
-    setListBlogId(e.target.value);
-  };
-
-  // End handle change ListBlog
 
   return (
     <>

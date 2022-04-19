@@ -58,7 +58,7 @@ const ClientHome = () => {
                 {userList?.map((user, index) => (
                     <div
                         key={index}
-                        className="flex items-center justify-between mb-6"
+                        className="flex items-center justify-between mb-6 border-2"
                     >
                         <div className="flex gap-4  w-1/5 ">
                             <FaUserAlt className="text-[white]" />

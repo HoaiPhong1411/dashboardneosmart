@@ -190,7 +190,7 @@ const ClientEditProduct = () => {
     const dataEdit = [];
     data?.forEach((item, i) => {
       const idItem = item.id;
-      if (idItem === id) {
+      if (idItem == id) {
         return dataEdit.push(item);
       }
     });
@@ -210,7 +210,7 @@ const ClientEditProduct = () => {
             onChange={(e) => handleChange(e)}
             type="text"
             value={value}
-            className="w-full outline-none py-[0.4rem] text-sm rounded-md px-4 bg-primary text-[#ffffff] border-[1px] border-secondary"
+            className="w-full outline-none py-[0.4rem] text-sm rounded-md px-4 text-[#ffffff] border-[1px] border-secondary"
             placeholder="Nhập tên sản phẩm cần chỉnh sửa"
           />
           {/* End input */}
@@ -267,7 +267,7 @@ const ClientEditProduct = () => {
                   <input
                     type="text"
                     value={title ?? item.title}
-                    className="w-full border-[1px] border-secondary bg-primary focus:border-[#e0ed2e] font-light"
+                    className="w-full border-[1px] border-secondary focus:border-[#e0ed2e] font-light"
                     onChange={(e) => handleChangeTitle(e)}
                   />
                 </div>
@@ -277,7 +277,7 @@ const ClientEditProduct = () => {
                     rows="3"
                     type="text"
                     value={des ?? item.description}
-                    className="w-full border-[1px] border-secondary bg-primary focus:border-[#e0ed2e] font-light"
+                    className="w-full border-[1px] border-secondary focus:border-[#e0ed2e] font-light"
                     onChange={(e) => handleChangeDes(e)}
                   />
                 </div>
@@ -286,7 +286,7 @@ const ClientEditProduct = () => {
                   <input
                     type="text"
                     value={price ?? item.price}
-                    className="w-full border-[1px] border-secondary bg-primary focus:border-[#e0ed2e] font-light"
+                    className="w-full border-[1px] border-secondary focus:border-[#e0ed2e] font-light"
                     onChange={(e) => handleChangePrice(e)}
                   />
                 </div>
@@ -382,7 +382,7 @@ const ClientEditProduct = () => {
                     <input
                       type="text"
                       value={title ?? item.title}
-                      className="w-full border-[1px] border-secondary bg-primary focus:border-[#e0ed2e] font-light"
+                      className="w-full border-[1px] border-secondary focus:border-[#e0ed2e] font-light"
                       onChange={(e) => handleChangeTitle(e)}
                     />
                   </div>
@@ -392,7 +392,7 @@ const ClientEditProduct = () => {
                       rows="3"
                       type="text"
                       value={des ?? item.description}
-                      className="w-full border-[1px] border-secondary bg-primary focus:border-[#e0ed2e] font-light"
+                      className="w-full border-[1px] border-secondary focus:border-[#e0ed2e] font-light"
                       onChange={(e) => handleChangeDes(e)}
                     />
                   </div>
@@ -401,7 +401,7 @@ const ClientEditProduct = () => {
                     <input
                       type="text"
                       value={price ?? item.price}
-                      className="w-full border-[1px] border-secondary bg-primary focus:border-[#e0ed2e] font-light"
+                      className="w-full border-[1px] border-secondary focus:border-[#e0ed2e] font-light"
                       onChange={(e) => handleChangePrice(e)}
                     />
                   </div>
