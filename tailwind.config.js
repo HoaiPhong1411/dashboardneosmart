@@ -10,7 +10,7 @@ module.exports = {
             lightSecondary:"#fefce8",
             bgButton: "#0f8f31",
             hoverButton: "#0e6726",
-            nightSecondary: "#410a6b",
+            nightSecondary: "#094418",
 
         },
     },

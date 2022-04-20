@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { MdOutlineSmartToy } from "react-icons/md";
 import { BiCategory, BiMailSend } from "react-icons/bi";
-import { FaMicroblog, FaUserFriends } from "react-icons/fa";
+import { FaMicroblog } from "react-icons/fa";
 import { HiOutlineUserGroup } from "react-icons/hi";
 import { useSelector } from "react-redux";
 
@@ -68,9 +68,9 @@ const NavBar = ({ show }) => {
               <Link to={item.path} key={index}>
                 <li
                   onClick={(e) => handleActive(e)}
-                  className="menu flex flex-row items-center px-5 py-2 hover:bg-[#292929] w-[90%] rounded-br-3xl rounded-tr-3xl hover:text-[#fff] border-l-4 border-[#fefce8] dark:border-[black] hover:border-[#fce355fb] dark:hover:border-[#fce355fb] cursor-pointer"
+                  className="menu flex flex-row items-center px-5 py-2 hover:bg-bgButton w-[90%] rounded-br-3xl rounded-tr-3xl hover:text-[#fff] border-l-4 border-[#fefce8] dark:border-[black] hover:border-[#fce355fb] dark:hover:border-[#fce355fb] cursor-pointer"
                 >
-                  <span className=" w-8 h-8 rounded-[50%] dark:bg-[black] bg-[#f5eec8f6] text-[#333] mr-3 flex justify-center items-center">
+                  <span className="p-2 rounded-[50%] dark:bg-[#135d26]  bg-[#f5eec8f6] dark:text-[#fff] text-[#333] mr-3 flex justify-center items-center">
                     {item.icon}
                   </span>
                   <span>{item.name}</span>
