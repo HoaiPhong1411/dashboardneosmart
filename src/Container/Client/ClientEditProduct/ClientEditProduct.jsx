@@ -33,6 +33,20 @@ const ClientEditProduct = () => {
   const [editPro, setEditPro] = useState([]);
   const dispath = useDispatch();
   const getEdit = useSelector((state) => state.product.product.product);
+  const [getTheme, setGetTheme] = useState();
+  const getChangeTheme = async () => {
+    try {
+      await window.addEventListener("click", (e) => {
+        setGetTheme(localStorage.getItem("theme"));
+      });
+      console.log(getTheme);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  getChangeTheme();
+
+  // --------------------------------
 
   useEffect(() => {
     setEditPro(getEdit);
@@ -198,11 +212,10 @@ const ClientEditProduct = () => {
     setProduct(dataEdit);
     setValue(dataEdit[0].title);
   };
-  console.log(display, position);
   return (
     <>
-      <div className="flex flex-row gap-5 w-full items-center bg-primary py-5 px-10 rounded-xl">
-        <h1 className="text-[#fff] text-[1.4rem]">Edit Product</h1>
+      <div className="flex flex-row gap-5 w-full items-center dark:bg-nightSecondary bg-lightSecondary shadow-lg py-5 px-10 rounded-xl">
+        <h1 className="text-bgButton text-[1.4rem]">Edit Product</h1>
         <div className="w-[40%] relative">
           {/* input */}
           <input
@@ -211,7 +224,7 @@ const ClientEditProduct = () => {
             onChange={(e) => handleChange(e)}
             type="text"
             value={value}
-            className="w-full outline-none py-[0.4rem] text-sm rounded-md px-4 text-[#ffffff] border-[1px] border-secondary"
+            className="w-full outline-none py-[0.4rem] text-sm rounded-md dark:bg-primary bg-[#fcfbf3] px-4 dark:text-[#fff] text-[#333] border-[1px] dark:border-[#fff] border-primary"
             placeholder="Nhập tên sản phẩm cần chỉnh sửa"
           />
           {/* End input */}
@@ -219,12 +232,12 @@ const ClientEditProduct = () => {
           {/* dropdown */}
           <ul
             style={dropDown ? { display: "block" } : { display: "none" }}
-            className=" w-full h-[19rem] bg-primary absolute top-[100%] left-0 overflow-hidden overflow-y-scroll"
+            className=" w-full h-[19rem] bg-[#f5eec8] dark:bg-[black] absolute top-[100%] shadow-lg left-0 overflow-hidden overflow-y-scroll"
           >
             {dataNew?.map((item) => (
               <li
                 onClick={() => handleGetProduct(item.id)}
-                className="text-[#fff] text-[0.9rem] px-3 py-2 hover:bg-[#414141] cursor-pointer"
+                className="text-[#333] dark:text-[#fff] text-[0.9rem] px-3 py-2 dark:hover:bg-primary hover:bg-[#cbbe72] cursor-pointer"
               >
                 {item.title}
               </li>
@@ -233,7 +246,7 @@ const ClientEditProduct = () => {
           {/* End dropdown */}
         </div>
       </div>
-      <div className="flex flex-row gap-5 w-full bg-primary py-5 px-10 rounded-xl mt-7">
+      <div className="flex flex-row gap-5 w-full dark:bg-nightSecondary bg-lightSecondary shadow-lg py-5 px-10 rounded-xl mt-7">
         <form className="w-full" action="" onSubmit={(e) => handleSubmit(e)}>
           {
             // pick from input
@@ -247,7 +260,7 @@ const ClientEditProduct = () => {
                     <img
                       src={img ?? urlImg + item.photo}
                       alt=""
-                      className="w-[60%] bg-cover border-2 border-secondary"
+                      className="w-[450px] h-[350px] bg-cover border-2 border-secondary"
                     />
                     <input
                       type="file"
@@ -268,7 +281,7 @@ const ClientEditProduct = () => {
                   <input
                     type="text"
                     value={title ?? item.title}
-                    className="w-full border-[1px] border-secondary focus:border-[#e0ed2e] font-light"
+                    className="w-full border-[1px] border-secondary dark:bg-primary dark:text-[#fff] focus:border-[#e0ed2e] font-light"
                     onChange={(e) => handleChangeTitle(e)}
                   />
                 </div>
@@ -278,7 +291,7 @@ const ClientEditProduct = () => {
                     rows="3"
                     type="text"
                     value={des ?? item.description}
-                    className="w-full border-[1px] border-secondary focus:border-[#e0ed2e] font-light"
+                    className="w-full border-[1px] border-secondary dark:bg-primary dark:text-[#fff] focus:border-[#e0ed2e] font-light"
                     onChange={(e) => handleChangeDes(e)}
                   />
                 </div>
@@ -287,7 +300,7 @@ const ClientEditProduct = () => {
                   <input
                     type="text"
                     value={price ?? item.price}
-                    className="w-full border-[1px] border-secondary focus:border-[#e0ed2e] font-light"
+                    className="w-full border-[1px] border-secondary dark:bg-primary dark:text-[#fff] focus:border-[#e0ed2e] font-light"
                     onChange={(e) => handleChangePrice(e)}
                   />
                 </div>
@@ -343,7 +356,7 @@ const ClientEditProduct = () => {
                 <div className="flex justify-center items-center">
                   <button
                     type="submit"
-                    className="w-[14%] flex flex-row justify-center items-center p-2 rounded-lg cursor-pointer hover:bg-[#2a7ffe] text-[#fff] bg-secondary"
+                    className="w-[14%] flex flex-row justify-center items-center p-2 rounded-lg cursor-pointer hover:bg-hoverButton text-[#fff] bg-bgButton"
                   >
                     <FiSave className="text-lg mr-4" />
                     Save
@@ -383,7 +396,7 @@ const ClientEditProduct = () => {
                     <input
                       type="text"
                       value={title ?? item.title}
-                      className="w-full border-[1px] border-secondary focus:border-[#e0ed2e] font-light"
+                      className="w-full border-[1px] border-secondary dark:bg-primary dark:text-[#fff] focus:border-[#e0ed2e] font-light"
                       onChange={(e) => handleChangeTitle(e)}
                     />
                   </div>
@@ -393,7 +406,7 @@ const ClientEditProduct = () => {
                       rows="3"
                       type="text"
                       value={des ?? item.description}
-                      className="w-full border-[1px] border-secondary focus:border-[#e0ed2e] font-light"
+                      className="w-full border-[1px] border-secondary dark:bg-primary dark:text-[#fff] focus:border-[#e0ed2e] font-light"
                       onChange={(e) => handleChangeDes(e)}
                     />
                   </div>
@@ -402,7 +415,7 @@ const ClientEditProduct = () => {
                     <input
                       type="text"
                       value={price ?? item.price}
-                      className="w-full border-[1px] border-secondary focus:border-[#e0ed2e] font-light"
+                      className="w-full border-[1px] border-secondary dark:bg-primary dark:text-[#fff] focus:border-[#e0ed2e] font-light"
                       onChange={(e) => handleChangePrice(e)}
                     />
                   </div>
@@ -451,7 +464,7 @@ const ClientEditProduct = () => {
                   <div className="flex justify-center items-center">
                     <button
                       type="submit"
-                      className="w-[14%] flex flex-row justify-center items-center p-2 rounded-lg cursor-pointer hover:bg-[#2a7ffe] text-[#fff] bg-secondary"
+                      className="w-[14%] flex flex-row justify-center items-center p-2 rounded-lg cursor-pointer hover:bg-hoverButton text-[#fff] bg-bgButton"
                     >
                       <FiSave className="text-lg mr-4" />
                       Save

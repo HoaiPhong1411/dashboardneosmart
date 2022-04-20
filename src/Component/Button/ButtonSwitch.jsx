@@ -6,8 +6,8 @@ const ButtonSwitch = (props) => {
         htmlFor={id}
         style={
           name == 1
-            ? { backgroundColor: "#e64141" }
-            : { backgroundColor: "#6c7293" }
+            ? { backgroundColor: "#0f8f31" }
+            : { backgroundColor: "#e64141" }
         }
         className="flex items-center w-[2.4rem] h-[1.4rem] rounded-2xl border-2 border-[#fff] cursor-pointer"
       >

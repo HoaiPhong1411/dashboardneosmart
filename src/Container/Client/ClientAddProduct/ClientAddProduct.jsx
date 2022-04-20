@@ -5,8 +5,10 @@ import { useState, useEffect } from "react";
 import ButtonCheck from "../../../Component/Button/ButtonCheck";
 import ButtonUpload from "../../../Component/Button/ButtonUpload";
 import { useSelector } from "react-redux";
+
 import notimg from "../../../assets/images/No-image-found.jpg";
 import Toast from "../../../Component/Toast";
+import "./ClientAddProduct.css";
 
 const ClientAddProduct = () => {
   const [image, setImage] = useState();
@@ -125,12 +127,14 @@ const ClientAddProduct = () => {
 
   return (
     <>
-      <div className="flex flex-row gap-5 w-full dark:bg-[black] border-[1px] dark:border-[white] py-5 px-10 rounded-xl">
-        <h1 className="text-[#fff] text-[1.4rem]">Add Product</h1>
+      <div className="flex flex-row gap-5 w-full dark:bg-nightSecondary bg-lightSecondary shadow-lg py-5 px-10 rounded-xl">
+        <h1 className="text-bgButton dark:text-[#fff] text-[1.4rem]">
+          Add Product
+        </h1>
       </div>
       <div
         onSubmit={formik.handleSubmit}
-        className=" gap-5 w-full bg-primary py-5 px-10 rounded-xl mt-7"
+        className=" gap-5 w-full dark:bg-nightSecondary bg-lightSecondary shadow-lg py-5 px-10 rounded-xl mt-7"
       >
         <form
           id="form"
@@ -139,9 +143,7 @@ const ClientAddProduct = () => {
           className="text-[#fff]"
         >
           <div className="flex flex-col justify-between gap-2 items-start mb-5">
-            <label htmlFor="title" className="text-[1.25rem] font-normal">
-              Name
-            </label>
+            <label htmlFor="title">Name</label>
             <input
               type="text"
               name="title"
@@ -149,7 +151,7 @@ const ClientAddProduct = () => {
               placeholder="Name"
               value={formik.values.title}
               onChange={formik.handleChange}
-              className="w-full px-3 py-2 border-[1px] font-light border-secondary outline-none bg-primary focus:border-[#e0ed2e]"
+              className="w-full border-[1px] dark:bg-primary dark:text-[#fff] border-secondary focus:border-[#e0ed2e]"
             />
           </div>
           {/* End title */}
@@ -158,9 +160,7 @@ const ClientAddProduct = () => {
 
           {/* Description */}
           <div className="flex flex-col justify-between gap-2 items-start mb-5">
-            <label htmlFor="description" className="text-[1.25rem] font-normal">
-              Description
-            </label>
+            <label htmlFor="description">Description</label>
             <textarea
               rows="3"
               type="text"
@@ -169,7 +169,7 @@ const ClientAddProduct = () => {
               placeholder="Description"
               value={formik.values.description}
               onChange={formik.handleChange}
-              className="w-full px-3 py-2 border-[1px] font-light border-secondary outline-none bg-primary focus:border-[#e0ed2e]"
+              className="w-full border-[1px] dark:bg-primary dark:text-[#fff] border-secondary focus:border-[#e0ed2e]"
             />
           </div>
           {/* End Description */}
@@ -178,9 +178,7 @@ const ClientAddProduct = () => {
 
           {/* Price */}
           <div className="flex flex-col justify-between gap-2 items-start mb-5">
-            <label htmlFor="price" className="text-[1.25rem] font-normal">
-              Price
-            </label>
+            <label htmlFor="price">Price</label>
             <input
               type="number"
               name="price"
@@ -188,7 +186,7 @@ const ClientAddProduct = () => {
               placeholder="Price"
               value={formik.values.price}
               onChange={formik.handleChange}
-              className="w-full px-3 py-2 border-[1px] font-light border-secondary outline-none bg-primary focus:border-[#e0ed2e]"
+              className="w-full border-[1px] dark:bg-primary dark:text-[#fff] border-secondary focus:border-[#e0ed2e]"
             />
           </div>
 
@@ -198,9 +196,7 @@ const ClientAddProduct = () => {
 
           {/* Detail */}
           <div className="flex flex-col justify-between gap-2 items-start mb-5">
-            <label htmlFor="detail" className="text-[1.25rem] font-normal">
-              Detail
-            </label>
+            <label htmlFor="detail">Detail</label>
             <textarea
               rows="3"
               type="text"
@@ -209,7 +205,7 @@ const ClientAddProduct = () => {
               placeholder="Detail"
               value={formik.values.detail}
               onChange={formik.handleChange}
-              className="w-full px-3 py-2 border-[1px] font-light border-secondary outline-none bg-primary focus:border-[#e0ed2e]"
+              className="w-full border-[1px] dark:bg-primary dark:text-[#fff] border-secondary focus:border-[#e0ed2e]"
             />
           </div>
 
@@ -219,9 +215,7 @@ const ClientAddProduct = () => {
 
           {/* Content */}
           <div className="flex flex-col justify-between gap-2 items-start mb-5">
-            <label htmlFor="content" className="text-[1.25rem] font-normal">
-              Content
-            </label>
+            <label htmlFor="content">Content</label>
             <textarea
               rows="3"
               type="text"
@@ -230,7 +224,7 @@ const ClientAddProduct = () => {
               placeholder="Content"
               value={formik.values.content}
               onChange={formik.handleChange}
-              className="w-full px-3 py-2 border-[1px] font-light border-secondary outline-none bg-primary focus:border-[#e0ed2e]"
+              className="w-full border-[1px] dark:bg-primary dark:text-[#fff] border-secondary focus:border-[#e0ed2e]"
             />
           </div>
           {/* End Content */}
@@ -239,9 +233,7 @@ const ClientAddProduct = () => {
 
           {/* Display */}
           <div className="flex flex-row justify-between items-center mb-5">
-            <label htmlFor="display" className="text-[1.25rem] font-normal">
-              Display
-            </label>
+            <label htmlFor="display">Display</label>
             <input
               type="checkbox"
               name="display"
@@ -265,9 +257,7 @@ const ClientAddProduct = () => {
 
           {/* Position */}
           <div className="flex flex-row justify-between items-center mb-5">
-            <label htmlFor="position" className="text-[1.25rem] font-normal">
-              Position
-            </label>
+            <label htmlFor="position">Position</label>
             <input
               type="checkbox"
               name="position"
@@ -291,15 +281,13 @@ const ClientAddProduct = () => {
 
           {/* Category id */}
           <div className="flex flex-row justify-between gap-2 items-start mb-5">
-            <label htmlFor="category_id" className="text-[1.25rem] font-normal">
-              Category
-            </label>
+            <label htmlFor="category_id">Category</label>
             <div className="w-[85%] flex justify-start items-center">
               <select
                 onChange={(e) => handleChangeCategory(e)}
                 name="category_id"
                 id="category_id"
-                className="text-[#333] outline-none px-2 py-1"
+                className="text-[#333] dark:bg-primary dark:text-[#fff] border-[1px] border-[#888] rounded-md outline-none px-2 py-1"
               >
                 {dataCate?.map((item) => (
                   <option value={item.id} key={item.id}>
@@ -316,7 +304,7 @@ const ClientAddProduct = () => {
 
           {/* Photo */}
           <div className="flex flex-row justify-between items-center mb-5">
-            <label className="text-[1.25rem] font-normal">Photo</label>
+            <label>Photo</label>
 
             <input
               type="file"
@@ -325,7 +313,7 @@ const ClientAddProduct = () => {
               accept="image/*"
               files={image}
               onChange={(e) => handleImage(e)}
-              className="hidden w-[85%] px-3 py-2 border-[1px] font-light border-secondary outline-none bg-primary focus:border-[#e0ed2e]"
+              className="hidden"
             />
             <div className="w-[85%] flex flex-row items-center">
               <ButtonUpload htmlFor="photo" />
@@ -343,7 +331,7 @@ const ClientAddProduct = () => {
 
           {/* Button Add */}
           <div className="flex flex-row justify-center items-center">
-            <button className="flex flex-row justify-center items-center gap-3 px-4 py-2 bg-secondary rounded-lg hover:bg-[#e64141] text-[1.25rem]">
+            <button className="flex flex-row justify-center items-center rounded-lg gap-3 px-4 py-2 hover:bg-hoverButton text-[#fff] bg-bgButton text-[1.25rem]">
               <IoMdAddCircle />
               Add Product
             </button>
