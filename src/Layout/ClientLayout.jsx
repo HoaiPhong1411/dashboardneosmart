@@ -86,7 +86,7 @@ export default function ClientLayout() {
       <div className="w-full min-h-screen flex flex-row transition-all">
         <div
           ref={refContainer}
-          className="transition-all duration-300 ease-out w-[20%] dark:bg-[black] bg-[#fefce8] relative"
+          className="transition-all duration-300 ease-out w-[30%] dark:bg-[black] bg-[#fefce8] relative"
         >
           <div className="w-full" ref={refArrow}>
             <IoArrowUndoCircleSharp

@@ -9,6 +9,10 @@ body{
     color: #fff;
     border-left-color: #fce355fb !important;
 }
+.active-sub-menu {
+    color: rgb(16, 181, 38);
+    border-left-color: #fce355fb !important;
+}
 
 #error {
     border-left: 0.5rem solid #e64141;

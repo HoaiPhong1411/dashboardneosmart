@@ -30,7 +30,7 @@ export const ClientRoutes = [
     },
     {
         index: true,
-        element: <ClientCategory />,
+        element: <ClientCategory/>,
         path: "/category",
     },
     {
