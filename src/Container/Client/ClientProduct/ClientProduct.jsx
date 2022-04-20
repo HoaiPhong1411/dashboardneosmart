@@ -13,12 +13,24 @@ import { urlImg } from "../../../Component/Variable";
 
 import "./ClientProduct.css";
 import Toast from "../../../Component/Toast";
+import InputSearch from "../../../Component/Input/InputSearch";
+import ButtonActions from "../../../Component/Button/ButtonActions";
 
 const ClientProduct = () => {
-  const getProduct = useSelector((state) => state.products.product.product);
-  const dispath = useDispatch();
   const [render, setRender] = useState(false);
   const [dataCategory, setDataCategory] = useState();
+  // -------------------
+  // input search
+  const [data, setData] = useState([]);
+  const [product, setProduct] = useState(null);
+
+  const [dataNew, setDataNew] = useState(null);
+  //  value input search
+  const [value, setValue] = useState();
+  // -----------------------
+
+  const getProduct = useSelector((state) => state.products.product.product);
+  const dispath = useDispatch();
   const navigate = useNavigate();
 
   const handleEdit = (e, product) => {
@@ -56,6 +68,7 @@ const ClientProduct = () => {
       try {
         await axios.delete(`http://localhost:8000/api/product/delete/${id}`);
         setRender(!render);
+        console.log("delete");
       } catch (error) {
         console.log(error);
       }
@@ -113,6 +126,34 @@ const ClientProduct = () => {
     // End Update display
   };
   // End handle display
+
+  // ---------------------------------------------
+
+  //   onChange Input
+  const handleChange = (e) => {
+    setValue(e.target.value);
+  };
+
+  //    search product
+  useEffect(() => {
+    const handleSearch = async () => {
+      try {
+        let dataSearch = [];
+        const res = getProduct?.forEach((item, i) => {
+          if (
+            item.title.toLowerCase().includes(value.trim().toLowerCase(), 0)
+          ) {
+            return dataSearch.push(item);
+          }
+        });
+        setDataNew(dataSearch);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    handleSearch();
+  }, [value]);
+
   return (
     <>
       <div className="flex flex-row gap-5 w-full dark:bg-nightSecondary bg-lightSecondary shadow-lg py-3 px-5 rounded-xl">
@@ -135,7 +176,7 @@ const ClientProduct = () => {
           <AiFillEdit className="mr-4 text-xl" />
           Edit Product
         </Link>
-
+        <InputSearch handleChange={(e) => handleChange(e)} value={value} />
         {/* End button edit */}
       </div>
       <div className="w-full bg-lightSecondary p-3 dark:bg-nightSecondary shadow-lg rounded-xl my-7 ">
@@ -158,7 +199,7 @@ const ClientProduct = () => {
           </thead>
           {/* show data Product */}
           <tbody className="text-[#333] dark:text-[#fff] font-light">
-            {getProduct?.map((item) => (
+            {dataNew?.map((item) => (
               <tr key={item.id}>
                 <td>{item.id}</td>
                 <td className="flex flex-row justify-start gap-2 w-40 items-center">
@@ -180,14 +221,7 @@ const ClientProduct = () => {
                 <td>{item.price}</td>
                 <td className="w-24 break-words">{item.detail}</td>
                 <td className="w-36 break-words">{item.content}</td>
-                {/* <td>
-                  <img
-                    src={urlImg + item.photo}
-                    alt=""
-                    width="50px"
-                    height="50px"
-                  />
-                </td> */}
+
                 {/* switched display */}
                 <td>
                   <ButtonSwitch
@@ -209,12 +243,70 @@ const ClientProduct = () => {
 
                 {/* Button delete */}
                 <td>
-                  <ButtonDelete handleClick={(id) => handleRemove(item.id)} />
+                  {/* <ButtonDelete handleClick={(id) => handleRemove(item.id)} /> */}
+                  <ButtonActions
+                    id={item.id}
+                    handleRemove={(id) => handleRemove(item.id)}
+                    handleEdit={(e, product) => handleEdit(e, item)}
+                  />
                 </td>
 
                 {/* End button delete */}
               </tr>
-            ))}
+            )) ??
+              getProduct?.map((item) => (
+                <tr key={item.id}>
+                  <td>{item.id}</td>
+                  <td className="flex flex-row justify-start gap-2 w-40 items-center">
+                    <img
+                      src={urlImg + item.photo}
+                      alt=""
+                      width="50px"
+                      height="50px"
+                    />
+                    <Link
+                      onClick={(e, product) => handleEdit(e, item)}
+                      to="/product/edit"
+                      className="break-words hover:text-secondary"
+                    >
+                      {item.title}
+                    </Link>
+                  </td>
+                  <td>{item.description}</td>
+                  <td>{item.price}</td>
+                  <td className="w-24 break-words">{item.detail}</td>
+                  <td className="w-36 break-words">{item.content}</td>
+                  <td>
+                    <ButtonSwitch
+                      id={item.id}
+                      name={item.display}
+                      handleChange={(e, product) => handleDisplay(e, item)}
+                    />
+                  </td>
+                  {/* End switched display */}
+
+                  <td>{item.position}</td>
+                  {dataCategory?.map((cate) =>
+                    item.category_id == cate.id ? (
+                      <td key={cate.id}>{cate.title}</td>
+                    ) : (
+                      ""
+                    )
+                  )}
+
+                  {/* Button delete */}
+                  <td>
+                    {/* <ButtonDelete handleClick={(id) => handleRemove(item.id)} /> */}
+                    <ButtonActions
+                      id={item.id}
+                      HandleDelete={(id) => handleRemove(item.id)}
+                      handleEdit={(e, product) => handleEdit(e, item)}
+                    />
+                  </td>
+
+                  {/* End button delete */}
+                </tr>
+              ))}
           </tbody>
           {/* End show data product */}
         </table>

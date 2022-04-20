@@ -12,11 +12,7 @@ import { getAllProductSuccess } from "../../../app/productSlice";
 const ClientEditProduct = () => {
   // getApi
   const [data, setData] = useState([]);
-  const [dataNew, setDataNew] = useState(null);
-  //  value input search
-  const [value, setValue] = useState();
-  // showDropDown
-  const [dropDown, setDropDown] = useState(false);
+
   // show Product Choose
   const [product, setProduct] = useState(null);
   const [load, setLoad] = useState(false);
@@ -39,7 +35,6 @@ const ClientEditProduct = () => {
       await window.addEventListener("click", (e) => {
         setGetTheme(localStorage.getItem("theme"));
       });
-      console.log(getTheme);
     } catch (error) {
       console.log(error);
     }
@@ -65,10 +60,6 @@ const ClientEditProduct = () => {
     };
     fecth();
   }, [load]);
-  //   onChange Input
-  const handleChange = (e) => {
-    setValue(e.target.value);
-  };
 
   // onChange data update
   const handleChangeTitle = (e) => {
@@ -119,18 +110,6 @@ const ClientEditProduct = () => {
 
   // End Onchange data update
 
-  //   showDropDown
-  const handleDropDown = (e) => {
-    setDropDown(!dropDown);
-  };
-
-  //CloseDropDown
-  const handleClose = (e) => {
-    setTimeout(() => {
-      setDropDown(!dropDown);
-    }, 200);
-  };
-
   // Submit Form
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -180,71 +159,11 @@ const ClientEditProduct = () => {
       console.log(error);
     }
   };
-  //    search product
-  useEffect(() => {
-    const handleSearch = async () => {
-      try {
-        let dataSearch = [];
-        const res = data?.forEach((item, i) => {
-          if (
-            item.title.toLowerCase().includes(value.trim().toLowerCase(), 0)
-          ) {
-            return dataSearch.push(item);
-          }
-        });
-        setDataNew(dataSearch);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    handleSearch();
-  }, [value]);
 
-  //   chọn product từ dropdown để edit
-  const handleGetProduct = (id) => {
-    const dataEdit = [];
-    data?.forEach((item, i) => {
-      const idItem = item.id;
-      if (idItem == id) {
-        return dataEdit.push(item);
-      }
-    });
-    setProduct(dataEdit);
-    setValue(dataEdit[0].title);
-  };
   return (
     <>
       <div className="flex flex-row gap-5 w-full items-center dark:bg-nightSecondary bg-lightSecondary shadow-lg py-5 px-10 rounded-xl">
         <h1 className="text-bgButton text-[1.4rem]">Edit Product</h1>
-        <div className="w-[40%] relative">
-          {/* input */}
-          <input
-            onFocus={(e) => handleDropDown(e)}
-            onBlur={(e) => handleClose(e)}
-            onChange={(e) => handleChange(e)}
-            type="text"
-            value={value}
-            className="w-full outline-none py-[0.4rem] text-sm rounded-md dark:bg-primary bg-[#fcfbf3] px-4 dark:text-[#fff] text-[#333] border-[1px] dark:border-[#fff] border-primary"
-            placeholder="Nhập tên sản phẩm cần chỉnh sửa"
-          />
-          {/* End input */}
-
-          {/* dropdown */}
-          <ul
-            style={dropDown ? { display: "block" } : { display: "none" }}
-            className=" w-full h-[19rem] bg-[#f5eec8] dark:bg-[black] absolute top-[100%] shadow-lg left-0 overflow-hidden overflow-y-scroll"
-          >
-            {dataNew?.map((item) => (
-              <li
-                onClick={() => handleGetProduct(item.id)}
-                className="text-[#333] dark:text-[#fff] text-[0.9rem] px-3 py-2 dark:hover:bg-primary hover:bg-[#cbbe72] cursor-pointer"
-              >
-                {item.title}
-              </li>
-            ))}
-          </ul>
-          {/* End dropdown */}
-        </div>
       </div>
       <div className="flex flex-row gap-5 w-full dark:bg-nightSecondary bg-lightSecondary shadow-lg py-5 px-10 rounded-xl mt-7">
         <form className="w-full" action="" onSubmit={(e) => handleSubmit(e)}>

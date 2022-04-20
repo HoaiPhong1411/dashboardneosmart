@@ -42,7 +42,7 @@ const Header = () => {
         <div className="s">
           {isDarkMode ? (
             <div
-              className="bg-gradient-to-b from-[#510aea] to-[#b969de] rounded-md  p-2 flex justify-between items-center cursor-pointer transition-all "
+              className="bg-gradient-to-b from-[#146910] to-[#bfda29] rounded-md  p-2 flex justify-between items-center cursor-pointer transition-all "
               onClick={toggleDarkMode}
             >
               <BsLightbulbOffFill className="text-[black]" />
@@ -53,10 +53,7 @@ const Header = () => {
               className="bg-gradient-to-t from-[#c2a016] to-[#b969de] shadow-md rounded-md p-2 flex justify-between items-center cursor-pointer transition-all "
               onClick={toggleDarkMode}
             >
-              <BsLightbulbFill
-                onClick={toggleDarkMode}
-                className="text-[#f5eec8be]"
-              />
+              <BsLightbulbFill className="text-[#f5eec8be]" />
               <p className="text-[#f5eec8be]">LightMode</p>
             </div>
           )}
@@ -88,7 +85,7 @@ const Header = () => {
 
         <div
           style={show ? { display: "block" } : { display: "none" }}
-          className="profile absolute top-[11%] w-[180px] rounded-[4px] right-[1rem] shadow-xl dark:bg-[black] bg-[#f5eec8] dark:text-[#fff] text-[black] "
+          className="profile absolute top-[11%] w-[180px] rounded-[4px] right-[1rem] shadow-md shadow-primary dark:bg-[black] bg-[#f5eec8] dark:text-[#fff] text-[black] "
         >
           <div className="text-[16px] font-medium border-b-[1px] border-secondary px-5 py-3 cursor-pointer">
             Profile
@@ -97,7 +94,7 @@ const Header = () => {
             onClick={handleLogOut}
             className="group pt-3 flex flex-row items-center hover:bg-lightSecondary dark:hover:bg-nightSecondary cursor-pointer px-5 py-3"
           >
-            <span className="w-10 h-10 rounded-[50%] dark:bg-[#000] bg-[#ffffffc0] dark:bg-bgButton group-hover:bg-lightPrimary mr-3 flex justify-center items-center">
+            <span className="w-10 h-10 rounded-[50%] bg-[#ffffffc0] dark:bg-bgButton group-hover:bg-lightPrimary mr-3 flex justify-center items-center">
               <MdOutlineLogout className=" text-[red] text-[1.25rem]" />
             </span>
             <button> Log Out</button>
