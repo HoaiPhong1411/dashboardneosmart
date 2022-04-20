@@ -5,7 +5,7 @@ body{
 
 /* Toast */
 .active {
-    background-color:#292929;
+    background-color:#0f8f31;
     color: #fff;
     border-left-color: #fce355fb !important;
 }

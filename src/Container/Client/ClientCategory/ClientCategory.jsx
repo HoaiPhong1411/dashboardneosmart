@@ -46,7 +46,7 @@ const ClientCategory = () => {
         {/* button add */}
         <Link
           to="/category/add"
-          className=" px-2 py-2 rounded-lg cursor-pointer shadow-lg hover:bg-[#e64141] text-[#fff] bg-secondary flex flex-row items-center"
+          className=" px-2 py-2 rounded-lg cursor-pointer shadow-lg hover:bg-hoverButton text-[#fff] bg-bgButton flex flex-row items-center"
         >
           <IoIosAddCircleOutline className="mr-4 text-xl" />
           Add Category
@@ -57,7 +57,7 @@ const ClientCategory = () => {
         {/* Button Edit */}
         <Link
           to="/category/edit"
-          className=" px-2 py-2 rounded-lg cursor-pointer shadow-lg hover:bg-[#e64141] text-[#fff] bg-secondary flex flex-row items-center"
+          className=" px-2 py-2 rounded-lg cursor-pointer shadow-lg hover:bg-hoverButton text-[#fff] bg-bgButton flex flex-row items-center"
         >
           <AiFillEdit className="mr-4 text-xl" />
           Edit Category
@@ -67,7 +67,7 @@ const ClientCategory = () => {
       </div>
       <div className="w-full bg-[#fefce8] shadow-lg rounded-xl my-7">
         {/* Table show product */}
-        <table className="w-full text-secondary font-medium">
+        <table className="w-full text-bgButton font-medium">
           <thead>
             <tr>
               <td>Id</td>

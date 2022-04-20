@@ -86,7 +86,7 @@ export default function ClientLayout() {
       <div className="w-full min-h-screen flex flex-row transition-all">
         <div
           ref={refContainer}
-          className="transition-all duration-300 ease-out w-[20%] dark:bg-[black] bg-[#fefce8] relative"
+          className="transition-all duration-300 ease-out w-[20%] dark:bg-nightSecondary bg-lightSecondary relative"
         >
           <div className="w-full" ref={refArrow}>
             <IoArrowUndoCircleSharp
@@ -98,10 +98,10 @@ export default function ClientLayout() {
           <NavBar show={handleShow} />
         </div>
         <div className="w-full  flex flex-col">
-          <div className="dark:bg-[black] bg-[#fefce8] py-[1.25rem] px-[1.5rem]">
+          <div className="dark:bg-nightSecondary bg-lightSecondary py-[1.25rem] px-[1.5rem]">
             <Header />
           </div>
-          <div className="dark:bg-[black] bg-[#f5eec8be] min-h-screen p-7">
+          <div className="dark:bg-[black] bg-lightPrimary min-h-screen p-7">
             <Outlet />
             <Footer />
           </div>
