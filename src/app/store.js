@@ -5,6 +5,7 @@ import productsReducer from "./productsSlice"
 import productReducer from "./productSlice"
 import blogsReducer from "./blogsSlide"
 import blogReducer from "./blogSlice"
+import listBlogReducer from "./listBlogSlice"
 import {
     persistStore,
     persistReducer,
@@ -21,7 +22,7 @@ const persistConfig = {
     version: 1,
     storage,
 };
-const rootReducer = combineReducers({ auth: authReducer, users: userReducer, products: productsReducer, product: productReducer,blogs:blogsReducer,blog:blogReducer });
+const rootReducer = combineReducers({ auth: authReducer, users: userReducer, products: productsReducer, product: productReducer,blogs:blogsReducer,blog:blogReducer,listBLog:listBlogReducer });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
