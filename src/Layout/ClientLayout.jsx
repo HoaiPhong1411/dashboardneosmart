@@ -132,7 +132,7 @@ export default function ClientLayout() {
                     </div>
                 )} */}
         <div className="flex min-h-full">
-          <div className="transition-all ">
+          <div className="transition-all">
             {!show ? <NavBar /> : <NavBarClose />}
           </div>
           <div className="cursor-pointer w-[25px]  flex justify-start items-start ">

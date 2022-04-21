@@ -1,22 +1,28 @@
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { getCategorySuccess } from "../../app/categorySlice";
 
 const SubNavBar = (props) => {
-  const { dataCate } = props;
+  const { dataCate, name } = props;
 
-  const handleActive = (e) => {
+  const dispath = useDispatch();
+  const handleActive = (e, cate) => {
     const elementLi = document.querySelectorAll(".sub-menu");
     elementLi.forEach((li) => {
       li.classList.remove("active-sub-menu");
     });
     e.target.closest(".sub-menu").classList.toggle("active-sub-menu");
+    if (name == "category") {
+      dispath(getCategorySuccess(cate));
+    }
   };
   return (
     <>
       {dataCate?.map((item) => (
-        <Link to={`/product/edit`} key={item.id}>
+        <Link to={`/${name}`} key={item.id}>
           <li
-            onClick={(e) => handleActive(e)}
-            className="sub-menu flex flex-row items-center px-5 py-2 hover:bg-[#292929] w-[90%] rounded-br-3xl rounded-tr-3xl hover:text-[#fff] border-l-4 border-[#fefce8] dark:border-[black] hover:border-[#fce355fb] dark:hover:border-[#fce355fb] cursor-pointer"
+            onClick={(e, cate) => handleActive(e, item)}
+            className="sub-menu flex flex-row items-center text-[0.8rem] pl-8 py-2  w-full rounded-br-3xl rounded-tr-3xl text-[#777] hover:text-bgButton border-l-4 border-[#fefce8] dark:border-[black] cursor-pointer"
           >
             {item.title}
           </li>

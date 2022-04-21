@@ -15,6 +15,7 @@ import {
 } from "./userSlice";
 
 import { getALlProductStart, getAllProductSuccess, getAllProductFailed } from "./productsSlice";
+import { getCategoryFailed, getCategoryStart, getCategorySuccess } from "./categorySlice";
 
 export const loginUser = async (user, dispath, navigate) => {
     dispath(loginStart());
@@ -71,7 +72,7 @@ export const logOut = async (dispath, navigate, access_token) => {
     }
 };
 
-export const getFullProduct = async (dispath) => {
+export const getAllProduct = async (dispath) => {
     dispath(getALlProductStart())
     try {
         const urlProduct = "http://localhost:8000/api/product/index"
@@ -81,3 +82,4 @@ export const getFullProduct = async (dispath) => {
         dispath(getAllProductFailed())
     }
 };
+

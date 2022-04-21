@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import ButtonSwitch from "../../../Component/Button/ButtonSwitch";
 import { useDispatch, useSelector } from "react-redux";
-import { getFullProduct } from "../../../app/apiRequest";
+import { getAllProduct } from "../../../app/apiRequest";
 import { getAllProductSuccess } from "../../../app/productSlice";
 import { urlImg } from "../../../Component/Variable";
 
@@ -38,7 +38,7 @@ const ClientProduct = () => {
   // get data Product
 
   useEffect(() => {
-    getFullProduct(dispath);
+    getAllProduct(dispath);
   }, [render]);
   // End data Product
 

@@ -8,6 +8,7 @@ import "./ClientEditProduct.css";
 import ButtonCheck from "../../../Component/Button/ButtonCheck";
 import ButtonUpload from "../../../Component/Button/ButtonUpload";
 import { getAllProductSuccess } from "../../../app/productSlice";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 const ClientEditProduct = () => {
   // getApi
@@ -30,6 +31,7 @@ const ClientEditProduct = () => {
   const dispath = useDispatch();
   const getEdit = useSelector((state) => state.product.product.product);
   const [getTheme, setGetTheme] = useState();
+  const navigate = useNavigate();
   const getChangeTheme = async () => {
     try {
       await window.addEventListener("click", (e) => {
@@ -137,7 +139,9 @@ const ClientEditProduct = () => {
     dispath(getAllProductSuccess([]));
     setEditPro([]);
     setLoad(!load);
+    navigate("/product", dataUpdate);
   };
+
   const updateProduct = async (id, data) => {
     try {
       await axios.post(`http://localhost:8000/api/product/update/${id}`, data);
@@ -157,141 +161,151 @@ const ClientEditProduct = () => {
           {
             // pick from product
             editPro?.map((item) => (
-              <table className="w-full text-secondary flex flex-row justify-between gap-5">
-                {/* === Left Table === */}
-                <div className="w-1/2 flex flex-col justify-between gap-4">
-                  {/* === Id === */}
+              <table className="w-full text-secondary flex flex-col justify-between gap-5">
+                {/* === Input === */}
+                <div className="flex flex-row justify-between gap-5">
+                  {/* === Left Table === */}
+                  <div className="w-1/2 flex flex-col justify-between gap-4">
+                    {/* === Id === */}
 
-                  <div className="hidden">
-                    <label className="id">{item.id}</label>
-                  </div>
-                  {/* === End Id === */}
+                    <div className="hidden">
+                      <label className="id">{item.id}</label>
+                    </div>
+                    {/* === End Id === */}
 
-                  {/* === Title === */}
+                    {/* === Title === */}
 
-                  <div className="w-full flex flex-col justify-between gap-2 items-start text-[#fff]">
-                    <label htmlFor="title">Title</label>
-                    <input
-                      type="text"
-                      value={title ?? item.title}
-                      className="w-full border-[1px] border-secondary dark:bg-primary dark:text-[#fff] focus:border-[#e0ed2e] font-light"
-                      onChange={(e) => handleChangeTitle(e)}
-                    />
-                  </div>
-
-                  {/* === End Title === */}
-
-                  {/* === Description === */}
-
-                  <div className="w-full flex flex-col justify-between gap-2 items-start text-[#fff]">
-                    <label htmlFor="description">Description</label>
-                    <textarea
-                      rows="3"
-                      type="text"
-                      value={des ?? item.description}
-                      className="w-full border-[1px] border-secondary dark:bg-primary dark:text-[#fff] focus:border-[#e0ed2e] font-light"
-                      onChange={(e) => handleChangeDes(e)}
-                    />
-                  </div>
-
-                  {/* === End Discription === */}
-
-                  {/* === Price === */}
-
-                  <div className="w-full flex flex-col justify-between gap-2 items-start text-[#fff]">
-                    <label htmlFor="price">Price</label>
-                    <input
-                      type="text"
-                      value={price ?? item.price}
-                      className="w-full border-[1px] border-secondary dark:bg-primary dark:text-[#fff] focus:border-[#e0ed2e] font-light"
-                      onChange={(e) => handleChangePrice(e)}
-                    />
-                  </div>
-
-                  {/* === End Price === */}
-
-                  {/* === Display === */}
-
-                  <div className="w-full flex flex-row justify-between items-center text-[#fff]">
-                    <label htmlFor="display">Display</label>
-                    <div className="w-[75%] ">
-                      <ButtonCheck
-                        htmlFor="display"
-                        idIcon="btn-display"
-                        style={
-                          item.display !== 1
-                            ? { backgroundColor: "#fff" }
-                            : { backgroundColor: "#0f8f31" }
-                        }
+                    <div className="w-full flex flex-col justify-between gap-2 items-start text-[#fff]">
+                      <label htmlFor="title">Title</label>
+                      <input
+                        type="text"
+                        value={title ?? item.title}
+                        className="w-full border-[1px] border-secondary dark:bg-primary dark:text-[#fff] focus:border-[#e0ed2e] font-light"
+                        onChange={(e) => handleChangeTitle(e)}
                       />
                     </div>
-                    <input
-                      type="checkbox"
-                      defaultChecked={item.display == 1 ? true : false}
-                      id="display"
-                      className="hidden"
-                      onChange={(e) => handleChangeDiplay(e)}
-                    />
-                  </div>
 
-                  {/* === End Display === */}
+                    {/* === End Title === */}
 
-                  {/* === Position === */}
+                    {/* === Description === */}
 
-                  <div className="w-full flex flex-row justify-between items-center text-[#fff]">
-                    <label htmlFor="position">Position</label>
-                    <div className="w-[75%] ">
-                      <ButtonCheck
-                        htmlFor="position"
-                        idIcon="btn-position"
-                        style={
-                          item.position !== 1
-                            ? { backgroundColor: "#fff" }
-                            : { backgroundColor: "#0f8f31" }
-                        }
+                    <div className="w-full flex flex-col justify-between gap-2 items-start text-[#fff]">
+                      <label htmlFor="description">Description</label>
+                      <textarea
+                        rows="3"
+                        type="text"
+                        value={des ?? item.description}
+                        className="w-full border-[1px] border-secondary dark:bg-primary dark:text-[#fff] focus:border-[#e0ed2e] font-light"
+                        onChange={(e) => handleChangeDes(e)}
                       />
                     </div>
-                    <input
-                      type="checkbox"
-                      id="position"
-                      className="hidden"
-                      defaultChecked={item.position == 1 ? true : false}
-                      onChange={(e) => handleChangePosition(e)}
-                    />
+
+                    {/* === End Discription === */}
+
+                    {/* === Price === */}
+
+                    <div className="w-full flex flex-col justify-between gap-2 items-start text-[#fff]">
+                      <label htmlFor="price">Price</label>
+                      <input
+                        type="text"
+                        value={price ?? item.price}
+                        className="w-full border-[1px] border-secondary dark:bg-primary dark:text-[#fff] focus:border-[#e0ed2e] font-light"
+                        onChange={(e) => handleChangePrice(e)}
+                      />
+                    </div>
+
+                    {/* === End Price === */}
+
+                    {/* === Display === */}
+
+                    <div className="w-full flex flex-row justify-between items-center text-[#fff]">
+                      <label htmlFor="display">Display</label>
+                      <div className="w-[75%] ">
+                        <ButtonCheck
+                          htmlFor="display"
+                          idIcon="btn-display"
+                          style={
+                            item.display !== 1
+                              ? { backgroundColor: "#fff" }
+                              : { backgroundColor: "#0f8f31" }
+                          }
+                        />
+                      </div>
+                      <input
+                        type="checkbox"
+                        defaultChecked={item.display == 1 ? true : false}
+                        id="display"
+                        className="hidden"
+                        onChange={(e) => handleChangeDiplay(e)}
+                      />
+                    </div>
+
+                    {/* === End Display === */}
+
+                    {/* === Position === */}
+
+                    <div className="w-full flex flex-row justify-between items-center text-[#fff]">
+                      <label htmlFor="position">Position</label>
+                      <div className="w-[75%] ">
+                        <ButtonCheck
+                          htmlFor="position"
+                          idIcon="btn-position"
+                          style={
+                            item.position !== 1
+                              ? { backgroundColor: "#fff" }
+                              : { backgroundColor: "#0f8f31" }
+                          }
+                        />
+                      </div>
+                      <input
+                        type="checkbox"
+                        id="position"
+                        className="hidden"
+                        defaultChecked={item.position == 1 ? true : false}
+                        onChange={(e) => handleChangePosition(e)}
+                      />
+                    </div>
+
+                    {/* === End Position === */}
                   </div>
 
-                  {/* === End Position === */}
+                  {/* === End Left Table === */}
+
+                  {/* === Right Table === */}
+
+                  <div className=" w-1/2 flex flex-col justify-between">
+                    {/* === Image === */}
+                    <div className="w-full flex flex-col gap-5 justify-between items-center text-[#fff]">
+                      <div
+                        className="flex flex-col w-full justify-between items-center
+                   gap-2"
+                      >
+                        <img
+                          src={img ?? urlImg + item.photo}
+                          alt=""
+                          className="w-[450px] h-[350px] bg-cover border-2 border-secondary"
+                        />
+                        <input
+                          type="file"
+                          name="photo"
+                          id="photo"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => handleChangeImage(e)}
+                        />
+                        <ButtonUpload htmlFor="photo" />
+                      </div>
+                    </div>
+                    {/* === End Image === */}
+                  </div>
+
+                  {/* === End Right Table === */}
                 </div>
 
-                {/* === End Left Table === */}
+                {/* === End Input === */}
 
-                {/* === Right Table === */}
-
-                <div className=" w-1/2 flex flex-col justify-between">
-                  {/* === Image === */}
-                  <div className="w-full flex flex-col gap-5 justify-between items-center text-[#fff]">
-                    <div
-                      className="flex flex-col w-full justify-between items-center
-                   gap-2"
-                    >
-                      <img
-                        src={img ?? urlImg + item.photo}
-                        alt=""
-                        className="w-[400px] h-[310px] bg-cover border-2 border-secondary"
-                      />
-                      <input
-                        type="file"
-                        name="photo"
-                        id="photo"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={(e) => handleChangeImage(e)}
-                      />
-                      <ButtonUpload htmlFor="photo" />
-                    </div>
-                  </div>
-                  {/* === End Image === */}
-
+                {/* === Button Save === */}
+                <div>
                   {/* === Button Submit === */}
 
                   <div className="flex justify-center items-center">
@@ -307,7 +321,7 @@ const ClientEditProduct = () => {
                   {/* === End Button === */}
                 </div>
 
-                {/* === End Right Table === */}
+                {/* === End Button Save === */}
               </table>
             ))
           }

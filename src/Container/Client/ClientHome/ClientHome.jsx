@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 const ClientHome = () => {
   const user = useSelector((state) => state.auth.login?.currentUser);
   const userCurrent = [user.user];
-  console.log(userCurrent);
   return (
     <>
       {userCurrent.map((item) => (
