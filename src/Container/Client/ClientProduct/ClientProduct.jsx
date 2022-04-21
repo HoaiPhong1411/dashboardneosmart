@@ -1,10 +1,7 @@
 import axios from "axios";
-import { IoIosAddCircleOutline } from "react-icons/io";
-import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import ButtonDelete from "../../../Component/Button/ButtonDelete";
 import ButtonSwitch from "../../../Component/Button/ButtonSwitch";
 import { useDispatch, useSelector } from "react-redux";
 import { getFullProduct } from "../../../app/apiRequest";
@@ -15,6 +12,7 @@ import "./ClientProduct.css";
 import Toast from "../../../Component/Toast";
 import InputSearch from "../../../Component/Input/InputSearch";
 import ButtonActions from "../../../Component/Button/ButtonActions";
+import ButtonAdd from "../../../Component/Button/ButtonAdd";
 
 const ClientProduct = () => {
   const [render, setRender] = useState(false);
@@ -158,14 +156,7 @@ const ClientProduct = () => {
     <>
       <div className="flex flex-row items-center gap-5 w-full dark:bg-nightSecondary bg-lightSecondary shadow-lg py-3 px-5 rounded-xl">
         {/* button add */}
-        <Link
-          to="/product/add"
-          className="px-2 py-2 rounded-lg cursor-pointer shadow-lg text-[#fff] hover:bg-hoverButton bg-bgButton flex flex-row items-center"
-        >
-          <IoIosAddCircleOutline className="mr-3 text-xl" />
-          Add New
-        </Link>
-
+        <ButtonAdd link="/product/add" title="Add New" />
         {/* End button add */}
 
         {/* Input search */}
@@ -194,7 +185,7 @@ const ClientProduct = () => {
           {/* show data Product */}
           <tbody className="text-[#333] dark:text-[#fff] font-light">
             {dataNew?.map((item) => (
-              <tr key={item.id}>
+              <tr key={item.id} className="dark:hover:hoverButton">
                 <td>{item.id}</td>
                 <td className="flex flex-row justify-start gap-2 w-40 items-center">
                   <img
@@ -206,7 +197,7 @@ const ClientProduct = () => {
                   <Link
                     onClick={(e, product) => handleEdit(e, item)}
                     to="/product/edit"
-                    className="break-words hover:text-secondary"
+                    className="break-words hover:text-bgButton dark:hover:text-lightPrimary"
                   >
                     {item.title}
                   </Link>
@@ -249,7 +240,7 @@ const ClientProduct = () => {
               </tr>
             )) ??
               getProduct?.map((item) => (
-                <tr key={item.id}>
+                <tr key={item.id} className="dark:hover:bg-hoverButton">
                   <td>{item.id}</td>
                   <td className="flex flex-row justify-start gap-2 w-40 items-center">
                     <img
@@ -261,7 +252,7 @@ const ClientProduct = () => {
                     <Link
                       onClick={(e, product) => handleEdit(e, item)}
                       to="/product/edit"
-                      className="break-words hover:text-secondary"
+                      className="break-words hover:text-bgButton dark:hover:text-lightPrimary"
                     >
                       {item.title}
                     </Link>

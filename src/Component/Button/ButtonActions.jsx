@@ -6,10 +6,14 @@ import "./Button.css";
 const ButtonActions = (props) => {
   const { id, HandleDelete, handleEdit } = props;
   const idUl = `ul${id}`;
-  const UlElement = document.getElementById(idUl);
+  let UlElement = document.getElementById(idUl);
   const handleShow = (e) => {
     UlElement.classList.toggle("show-drop-actions");
   };
+  window.addEventListener("click", (e) => {
+    const dropElement = document.querySelector(".show-drop-actions");
+    console.log(e.target.closest(idUl));
+  });
 
   return (
     <div className="relative flex justify-center items-center">
