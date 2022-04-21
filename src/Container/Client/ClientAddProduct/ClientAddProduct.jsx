@@ -246,7 +246,11 @@ const ClientAddProduct = () => {
               <ButtonCheck
                 htmlFor="display"
                 idIcon="btn-display"
-                style={display ? { color: "#04f604" } : { color: "#fff" }}
+                style={
+                  display
+                    ? { backgroundColor: "#fff" }
+                    : { backgroundColor: "#0f8f31" }
+                }
               />
             </div>
           </div>
@@ -270,7 +274,11 @@ const ClientAddProduct = () => {
               <ButtonCheck
                 htmlFor="position"
                 idIcon="btn-position"
-                style={position ? { color: "#04f604" } : { color: "#fff" }}
+                style={
+                  position
+                    ? { backgroundColor: "#fff" }
+                    : { backgroundColor: "#0f8f31" }
+                }
               />
             </div>
           </div>
