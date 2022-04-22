@@ -3,11 +3,13 @@ import { useEffect, useState, useLayoutEffect } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 
+import { TiArrowBack } from "react-icons/ti";
+
 import { urlImg } from "../../../Component/Variable";
 import "./ClientEditProduct.css";
 import ButtonCheck from "../../../Component/Button/ButtonCheck";
 import ButtonUpload from "../../../Component/Button/ButtonUpload";
-import { getAllProductSuccess } from "../../../app/productSlice";
+import { getAllProductSuccess } from "../../../app/productSlice/productSlice";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 
 const ClientEditProduct = () => {
@@ -150,11 +152,21 @@ const ClientEditProduct = () => {
     }
   };
 
+  const handleNavigate = () => {
+    navigate(-1);
+  };
+
   return (
     <>
-      {/* <div className="flex flex-row gap-5 w-full items-center dark:bg-nightSecondary bg-lightSecondary shadow-lg py-5 px-10 rounded-xl">
-        <h1 className="text-bgButton text-[1.4rem]">Edit Product</h1>
-      </div> */}
+      <div className="ml-3 hover:text-hoverButton">
+        <div
+          className="cursor-pointer flex flex-row gap-1 items-center"
+          onClick={() => handleNavigate()}
+        >
+          <span>Back</span>
+          <TiArrowBack />
+        </div>
+      </div>
 
       <div className="flex flex-row gap-5 w-full dark:bg-nightSecondary bg-lightSecondary shadow-lg py-5 px-10 rounded-xl ">
         <form className="w-full" action="" onSubmit={(e) => handleSubmit(e)}>

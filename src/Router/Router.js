@@ -6,6 +6,8 @@ import ClientEditProduct from "../Container/Client/ClientEditProduct/ClientEditP
 import ClientHome from "../Container/Client/ClientHome/ClientHome";
 import ClientProduct from "../Container/Client/ClientProduct/ClientProduct";
 import ClientCategory from "../Container/Client/ClientCategory/ClientCategory"
+import ClientBlogList from "../Container/Client/ClientBlogList/ClientBlogList";
+import ClientMail from "../Container/Client/ClientMail/ClientMail";
 
 export const ClientRoutes = [
     {
@@ -47,5 +49,15 @@ export const ClientRoutes = [
         index: true,
         element: <ClientEditBlog />,
         path: "/blog/edit",
+    },
+    {
+        index: true,
+        element: <ClientBlogList />,
+        path: "/bloglist",
+    },
+    {
+        index: true,
+        element: <ClientMail />,
+        path: "/mail",
     },
 ];

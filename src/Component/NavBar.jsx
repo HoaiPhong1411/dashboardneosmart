@@ -11,8 +11,7 @@ import axios from "axios";
 const NavBar = ({ show }) => {
   // get User from redux
   const user = useSelector((state) => state.auth.login.currentUser);
-
-  const [showSub, setShowSub] = useState(false);
+  const getListBlog = useSelector((state) => state.listBlog.listBlog.listBlog);
   const [dataCate, setDataCate] = useState();
 
   // Active NavBar
@@ -60,7 +59,7 @@ const NavBar = ({ show }) => {
       name: "Blog",
       path: "/blog",
       icon: <FaMicroblog />,
-      cate: <SubNavBar dataCate={dataCate} name="blog" />,
+      cate: <SubNavBar dataCate={getListBlog} name="bloglist" />,
     },
     {
       name: "Mail",

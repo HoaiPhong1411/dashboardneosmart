@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import ButtonSwitch from "../../../Component/Button/ButtonSwitch";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProduct } from "../../../app/apiRequest";
-import { getAllProductSuccess } from "../../../app/productSlice";
+import { getAllProductSuccess } from "../../../app/productSlice/productSlice";
 import { urlImg } from "../../../Component/Variable";
 
 import "./ClientProduct.css";
@@ -16,7 +16,6 @@ import ButtonAdd from "../../../Component/Button/ButtonAdd";
 
 const ClientProduct = () => {
   const [render, setRender] = useState(false);
-  const [dataCategory, setDataCategory] = useState();
   // -------------------
   // input search
   const [data, setData] = useState([]);
@@ -26,8 +25,11 @@ const ClientProduct = () => {
   //  value input search
   const [value, setValue] = useState();
   // -----------------------
-
+  const dataCategory = useSelector(
+    (state) => state.category.category.category[0]
+  );
   const getProduct = useSelector((state) => state.products.product.product);
+
   const dispath = useDispatch();
   const navigate = useNavigate();
 
@@ -42,23 +44,6 @@ const ClientProduct = () => {
   }, [render]);
   // End data Product
 
-  // get data Category
-  useEffect(() => {
-    const fecth = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8000/api/category/index"
-        );
-        setDataCategory(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fecth();
-  }, [render]);
-
-  // End data Category
-
   // delete Product
 
   const handleRemove = (id) => {
@@ -66,7 +51,6 @@ const ClientProduct = () => {
       try {
         await axios.delete(`http://localhost:8000/api/product/delete/${id}`);
         setRender(!render);
-        console.log("delete");
       } catch (error) {
         console.log(error);
       }
@@ -169,7 +153,6 @@ const ClientProduct = () => {
         <table className="w-full text-bgButton font-medium">
           <thead>
             <tr>
-              <td>Id</td>
               <td>Title</td>
               <td>Description</td>
               <td>Price</td>
@@ -186,7 +169,6 @@ const ClientProduct = () => {
           <tbody className="text-[#333] dark:text-[#fff] font-light">
             {dataNew?.map((item) => (
               <tr key={item.id} className="dark:hover:hoverButton">
-                <td>{item.id}</td>
                 <td className="flex flex-row justify-start gap-2 w-40 items-center">
                   <img
                     src={urlImg + item.photo}
@@ -233,6 +215,7 @@ const ClientProduct = () => {
                     id={item.id}
                     handleRemove={(id) => handleRemove(item.id)}
                     handleEdit={(e, product) => handleEdit(e, item)}
+                    path="product"
                   />
                 </td>
 
@@ -241,7 +224,6 @@ const ClientProduct = () => {
             )) ??
               getProduct?.map((item) => (
                 <tr key={item.id} className="dark:hover:bg-hoverButton">
-                  <td>{item.id}</td>
                   <td className="flex flex-row justify-start gap-2 w-40 items-center">
                     <img
                       src={urlImg + item.photo}
@@ -258,7 +240,7 @@ const ClientProduct = () => {
                     </Link>
                   </td>
                   <td>{item.description}</td>
-                  <td>{item.price}</td>
+                  <td>{Intl.NumberFormat().format(Number(item.price))} VNĐ</td>
                   <td className="w-24 break-words">{item.detail}</td>
                   <td className="w-36 break-words">{item.content}</td>
                   <td>
@@ -286,6 +268,7 @@ const ClientProduct = () => {
                       id={item.id}
                       HandleDelete={(id) => handleRemove(item.id)}
                       handleEdit={(e, product) => handleEdit(e, item)}
+                      path="product"
                     />
                   </td>
 

@@ -11,7 +11,7 @@ const productsSlice = createSlice( {
         }
     },
     reducers: {
-        getALlProductStart: (state) => {
+        getAllProductStart: (state) => {
             state.product.isFetching = true
         },
         getAllProductSuccess: (state, action) => {
@@ -28,7 +28,7 @@ const productsSlice = createSlice( {
 });
 
 export const {
-    getALlProductStart,
+    getAllProductStart,
     getAllProductSuccess,
     getAllProductFailed,
 } = productsSlice.actions;

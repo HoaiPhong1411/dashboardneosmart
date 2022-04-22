@@ -1,12 +1,10 @@
 import { IoMdArrowDropdown } from "react-icons/io";
+import { IoNotificationsSharp } from "react-icons/io5";
 import { MdOutlineLogout } from "react-icons/md";
 import { BsLightbulbFill, BsLightbulbOffFill } from "react-icons/bs";
-import { BiArrowBack } from "react-icons/bi";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { logOut } from "../app/apiRequest";
-import ButtonSwitch from "./Button/ButtonSwitch";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import useDark from "../useDark";
 
 const Header = () => {
@@ -58,17 +56,24 @@ const Header = () => {
             </div>
           )}
         </div>
-        <div
-          onClick={(e) => handleShowProfile(e)}
-          className="flex flex-row justify-center items-center cursor-pointer"
-        >
+
+        <div className="flex flex-row justify-center gap-5 items-center cursor-pointer">
+          <div className="flex justify-center items-center">
+            <span className="p-2 bg-lightPrimary dark:bg-bgButton dark:text-[#fff] dark:hover:bg-hoverButton shadow-md hover:bg-[#e8dd97be] cursor-pointer rounded-[50%] ">
+              <IoNotificationsSharp />
+            </span>
+          </div>
           <img
+            onClick={(e) => handleShowProfile(e)}
             src="https://www.bootstrapdash.com/demo/corona-react-free/template/demo_1/preview/static/media/face15.736ec0d9.jpg"
             alt=""
             className="w-[2.25rem] h-[2.25rem] rounded-[50%]"
           />
 
-          <div className="flex flex-row justify-center items-center text-[#fff] ml-3 relative">
+          <div
+            onClick={(e) => handleShowProfile(e)}
+            className="flex flex-row justify-center items-center text-[#fff] relative"
+          >
             {user ? (
               <>
                 <div className="text-sm dark:text-[white] text-[black] ">

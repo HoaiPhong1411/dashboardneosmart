@@ -1,13 +1,16 @@
-import { IoMdAddCircle } from "react-icons/io";
-import { useFormik, Field } from "formik";
-import axios from "axios";
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useFormik, Field } from "formik";
+import { IoMdAddCircle } from "react-icons/io";
+import { TiArrowBack } from "react-icons/ti";
+
 import ButtonCheck from "../../../Component/Button/ButtonCheck";
 import ButtonUpload from "../../../Component/Button/ButtonUpload";
-import { useSelector } from "react-redux";
+import Toast from "../../../Component/Toast";
 
 import notimg from "../../../assets/images/No-image-found.jpg";
-import Toast from "../../../Component/Toast";
 import "./ClientAddProduct.css";
 
 const ClientAddProduct = () => {
@@ -17,7 +20,7 @@ const ClientAddProduct = () => {
   const [img, setImg] = useState();
   const [dataCate, setDataCate] = useState([]);
   const [categoryId, setCategoryId] = useState();
-
+  const navigate = useNavigate();
   let toastSuccess;
   // ---------------------------------------
 
@@ -117,6 +120,9 @@ const ClientAddProduct = () => {
         "http://localhost:8000/api/product/store",
         data
       );
+      setTimeout(() => {
+        window.location.reload();
+      }, 200);
     } catch (error) {
       alert("Vui Lòng Nhập Đầy Đủ !");
     }
@@ -124,225 +130,248 @@ const ClientAddProduct = () => {
 
   // End formik handle
   // ---------------------------------------
+  const handleNavigate = () => {
+    navigate(-1);
+  };
 
   return (
     <>
-      <div className="flex flex-row gap-5 w-full dark:bg-nightSecondary bg-lightSecondary shadow-lg py-5 px-10 rounded-xl">
-        <h1 className="text-bgButton dark:text-[#fff] text-[1.4rem]">
-          Add Product
-        </h1>
+      <div className="ml-3 hover:text-hoverButton">
+        <div
+          className="cursor-pointer flex flex-row gap-1 items-center"
+          onClick={() => handleNavigate()}
+        >
+          <span>Back</span>
+          <TiArrowBack />
+        </div>
       </div>
       <div
         onSubmit={formik.handleSubmit}
-        className=" gap-5 w-full dark:bg-nightSecondary bg-lightSecondary shadow-lg py-5 px-10 rounded-xl mt-7"
+        className=" gap-5 w-full dark:bg-nightSecondary bg-lightSecondary shadow-lg py-5 px-10 rounded-xl"
       >
         <form
           id="form"
           action=""
           onSubmit={(e) => handleSubmit(e)}
-          className="text-[#fff]"
+          className="text-[#fff] flex flex-col justify-between gap-5"
         >
-          <div className="flex flex-col justify-between gap-2 items-start mb-5">
-            <label htmlFor="title">Name</label>
-            <input
-              type="text"
-              name="title"
-              id="title"
-              placeholder="Name"
-              value={formik.values.title}
-              onChange={formik.handleChange}
-              className="w-full border-[1px] dark:bg-primary dark:text-[#fff] border-secondary focus:border-[#e0ed2e]"
-            />
-          </div>
-          {/* End title */}
+          {/* === Input === */}
+          <div className="flex flex-row justify-between gap-5">
+            {/*=== Left ===*/}
+            <div className="w-[65%] flex flex-col justify-start items-start gap-2">
+              <div className="w-full flex flex-col justify-between gap-2 items-start">
+                <label htmlFor="title">Name</label>
+                <input
+                  type="text"
+                  name="title"
+                  id="title"
+                  placeholder="Name"
+                  value={formik.values.title}
+                  onChange={formik.handleChange}
+                  className="w-full border-[1px] dark:bg-primary dark:text-[#fff] border-secondary focus:border-[#e0ed2e]"
+                />
+              </div>
+              {/* End title */}
 
-          {/* ------------------------------------ */}
+              {/* ------------------------------------ */}
 
-          {/* Description */}
-          <div className="flex flex-col justify-between gap-2 items-start mb-5">
-            <label htmlFor="description">Description</label>
-            <textarea
-              rows="3"
-              type="text"
-              name="description"
-              id="description"
-              placeholder="Description"
-              value={formik.values.description}
-              onChange={formik.handleChange}
-              className="w-full border-[1px] dark:bg-primary dark:text-[#fff] border-secondary focus:border-[#e0ed2e]"
-            />
-          </div>
-          {/* End Description */}
+              {/* Description */}
+              <div className="w-full flex flex-col justify-between gap-2 items-start mb-5">
+                <label htmlFor="description">Description</label>
+                <textarea
+                  rows="3"
+                  type="text"
+                  name="description"
+                  id="description"
+                  placeholder="Description"
+                  value={formik.values.description}
+                  onChange={formik.handleChange}
+                  className="w-full border-[1px] dark:bg-primary dark:text-[#fff] border-secondary focus:border-[#e0ed2e]"
+                />
+              </div>
+              {/* End Description */}
 
-          {/* ------------------------------------ */}
+              {/* ------------------------------------ */}
 
-          {/* Price */}
-          <div className="flex flex-col justify-between gap-2 items-start mb-5">
-            <label htmlFor="price">Price</label>
-            <input
-              type="number"
-              name="price"
-              id="price"
-              placeholder="Price"
-              value={formik.values.price}
-              onChange={formik.handleChange}
-              className="w-full border-[1px] dark:bg-primary dark:text-[#fff] border-secondary focus:border-[#e0ed2e]"
-            />
-          </div>
+              {/* Price */}
+              <div className="w-full flex flex-col justify-between gap-2 items-start mb-5">
+                <label htmlFor="price">Price</label>
+                <input
+                  type="number"
+                  name="price"
+                  id="price"
+                  placeholder="Price"
+                  value={formik.values.price}
+                  onChange={formik.handleChange}
+                  className="w-full border-[1px] dark:bg-primary dark:text-[#fff] border-secondary focus:border-[#e0ed2e]"
+                />
+              </div>
 
-          {/* End Price */}
+              {/* End Price */}
 
-          {/* ------------------------------------ */}
+              {/* ------------------------------------ */}
 
-          {/* Detail */}
-          <div className="flex flex-col justify-between gap-2 items-start mb-5">
-            <label htmlFor="detail">Detail</label>
-            <textarea
-              rows="3"
-              type="text"
-              name="detail"
-              id="detail"
-              placeholder="Detail"
-              value={formik.values.detail}
-              onChange={formik.handleChange}
-              className="w-full border-[1px] dark:bg-primary dark:text-[#fff] border-secondary focus:border-[#e0ed2e]"
-            />
-          </div>
+              {/* Detail */}
+              <div className="w-full flex flex-col justify-between gap-2 items-start mb-5">
+                <label htmlFor="detail">Detail</label>
+                <textarea
+                  rows="3"
+                  type="text"
+                  name="detail"
+                  id="detail"
+                  placeholder="Detail"
+                  value={formik.values.detail}
+                  onChange={formik.handleChange}
+                  className="w-full border-[1px] dark:bg-primary dark:text-[#fff] border-secondary focus:border-[#e0ed2e]"
+                />
+              </div>
 
-          {/* End Detail */}
+              {/* End Detail */}
 
-          {/* ------------------------------------ */}
+              {/* ------------------------------------ */}
 
-          {/* Content */}
-          <div className="flex flex-col justify-between gap-2 items-start mb-5">
-            <label htmlFor="content">Content</label>
-            <textarea
-              rows="3"
-              type="text"
-              name="content"
-              id="content"
-              placeholder="Content"
-              value={formik.values.content}
-              onChange={formik.handleChange}
-              className="w-full border-[1px] dark:bg-primary dark:text-[#fff] border-secondary focus:border-[#e0ed2e]"
-            />
-          </div>
-          {/* End Content */}
-
-          {/* ------------------------------------ */}
-
-          {/* Display */}
-          <div className="flex flex-row justify-between items-center mb-5">
-            <label htmlFor="display">Display</label>
-            <input
-              type="checkbox"
-              name="display"
-              id="display"
-              defaultChecked={true}
-              onChange={(e) => handleChangeDisplay(e)}
-              className="hidden"
-            />
-            <div className="w-[85%]">
-              <ButtonCheck
-                htmlFor="display"
-                idIcon="btn-display"
-                style={
-                  display
-                    ? { backgroundColor: "#fff" }
-                    : { backgroundColor: "#0f8f31" }
-                }
-              />
+              {/* Content */}
+              <div className=" w-full flex flex-col justify-between gap-2 items-start mb-5">
+                <label htmlFor="content">Content</label>
+                <textarea
+                  rows="3"
+                  type="text"
+                  name="content"
+                  id="content"
+                  placeholder="Content"
+                  value={formik.values.content}
+                  onChange={formik.handleChange}
+                  className="w-full border-[1px] dark:bg-primary dark:text-[#fff] border-secondary focus:border-[#e0ed2e]"
+                />
+              </div>
+              {/* End Content */}
             </div>
-          </div>
+            {/*=== End Left ===*/}
 
-          {/* End Display */}
+            {/*=== Right ===*/}
 
-          {/* ------------------------------------ */}
+            <div className="w-[35%] flex flex-col justify-start items-start gap-2">
+              {/* Photo */}
+              <div className="w-full flex flex-row justify-between items-center mb-5">
+                <input
+                  type="file"
+                  name="photo"
+                  id="photo"
+                  accept="image/*"
+                  files={image}
+                  onChange={(e) => handleImage(e)}
+                  className="hidden"
+                />
+                <div className="w-full flex flex-col justify-center items-center">
+                  <img
+                    src={img ?? notimg}
+                    alt=""
+                    className="w-full h-[250px] object-cover border-2 border-secondary"
+                  />
+                  <ButtonUpload htmlFor="photo" />
+                </div>
+              </div>
 
-          {/* Position */}
-          <div className="flex flex-row justify-between items-center mb-5">
-            <label htmlFor="position">Position</label>
-            <input
-              type="checkbox"
-              name="position"
-              id="position"
-              defaultChecked={true}
-              onChange={(e) => handleChangePosition(e)}
-              className="hidden"
-            />
-            <div className="w-[85%]">
-              <ButtonCheck
-                htmlFor="position"
-                idIcon="btn-position"
-                style={
-                  position
-                    ? { backgroundColor: "#fff" }
-                    : { backgroundColor: "#0f8f31" }
-                }
-              />
+              {/* End Photo */}
+
+              {/* ------------------------------------ */}
+
+              <div className="w-full flex flex-row justify-between">
+                {/* Display */}
+                <div className="w-1/2 flex flex-row justify-between items-center mb-5">
+                  <label htmlFor="display">Display</label>
+                  <input
+                    type="checkbox"
+                    name="display"
+                    id="display"
+                    defaultChecked={true}
+                    onChange={(e) => handleChangeDisplay(e)}
+                    className="hidden"
+                  />
+                  <div className="w-[55%]">
+                    <ButtonCheck
+                      htmlFor="display"
+                      idIcon="btn-display"
+                      style={
+                        display
+                          ? { backgroundColor: "#0f8f31" }
+                          : { backgroundColor: "#fff" }
+                      }
+                    />
+                  </div>
+                </div>
+
+                {/* End Display */}
+
+                {/* ------------------------------------ */}
+
+                {/* Position */}
+                <div className="w-1/2 flex flex-row justify-between items-center mb-5">
+                  <label htmlFor="position">Position</label>
+                  <input
+                    type="checkbox"
+                    name="position"
+                    id="position"
+                    defaultChecked={true}
+                    onChange={(e) => handleChangePosition(e)}
+                    className="hidden"
+                  />
+                  <div className="w-[55%]">
+                    <ButtonCheck
+                      htmlFor="position"
+                      idIcon="btn-position"
+                      style={
+                        position
+                          ? { backgroundColor: "#0f8f31" }
+                          : { backgroundColor: "#fff" }
+                      }
+                    />
+                  </div>
+                </div>
+
+                {/* End Position */}
+              </div>
+
+              {/* ------------------------------------ */}
+
+              {/* Category id */}
+              <div className="flex flex-row justify-between gap-2 items-start mb-5">
+                <label htmlFor="category_id">Category</label>
+                <div className="w-full flex justify-start items-center">
+                  <select
+                    onChange={(e) => handleChangeCategory(e)}
+                    name="category_id"
+                    id="category_id"
+                    className="text-[#333] dark:bg-primary dark:text-[#fff] border-[1px] border-[#888] rounded-md outline-none px-2 py-1"
+                  >
+                    {dataCate?.map((item) => (
+                      <option value={item.id} key={item.id}>
+                        {item.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* End category id */}
+
+              {/* ------------------------------------ */}
             </div>
+            {/*=== End Right ===*/}
           </div>
-
-          {/* End Position */}
-
-          {/* ------------------------------------ */}
-
-          {/* Category id */}
-          <div className="flex flex-row justify-between gap-2 items-start mb-5">
-            <label htmlFor="category_id">Category</label>
-            <div className="w-[85%] flex justify-start items-center">
-              <select
-                onChange={(e) => handleChangeCategory(e)}
-                name="category_id"
-                id="category_id"
-                className="text-[#333] dark:bg-primary dark:text-[#fff] border-[1px] border-[#888] rounded-md outline-none px-2 py-1"
-              >
-                {dataCate?.map((item) => (
-                  <option value={item.id} key={item.id}>
-                    {item.title}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* End category id */}
-
-          {/* ------------------------------------ */}
-
-          {/* Photo */}
-          <div className="flex flex-row justify-between items-center mb-5">
-            <label>Photo</label>
-
-            <input
-              type="file"
-              name="photo"
-              id="photo"
-              accept="image/*"
-              files={image}
-              onChange={(e) => handleImage(e)}
-              className="hidden"
-            />
-            <div className="w-[85%] flex flex-row items-center">
-              <ButtonUpload htmlFor="photo" />
-              <img
-                src={img ?? notimg}
-                alt=""
-                className="w-[350px] h-[300px] object-cover border-2 border-secondary"
-              />
-            </div>
-          </div>
-
-          {/* End Photo */}
-
-          {/* ------------------------------------ */}
-
+          {/* === End Input === */}
           {/* Button Add */}
-          <div className="flex flex-row justify-center items-center">
-            <button className="flex flex-row justify-center items-center rounded-lg gap-3 px-4 py-2 hover:bg-hoverButton text-[#fff] bg-bgButton text-[1.25rem]">
-              <IoMdAddCircle />
-              Add Product
-            </button>
+
+          <div>
+            {/* Button Add */}
+            <div className="flex flex-row justify-center items-center">
+              <button className="flex flex-row justify-center items-center rounded-lg gap-3 px-4 py-2 hover:bg-hoverButton text-[#fff] bg-bgButton text-[1.25rem]">
+                <IoMdAddCircle />
+                Add Product
+              </button>
+            </div>
+
+            {/* End Button Add */}
           </div>
 
           {/* End Button Add */}

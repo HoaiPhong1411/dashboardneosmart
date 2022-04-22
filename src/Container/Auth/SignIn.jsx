@@ -1,14 +1,29 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
-import { loginUser } from "../../app/apiRequest";
+import {
+  getAllProduct,
+  loginUser,
+  getAllBlog,
+  getAllListBlog,
+  getAllCategory,
+} from "../../app/apiRequest";
 import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 
 import logo from "../../assets/images/logo.png";
 
 const Signin = () => {
   const dispath = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    getAllBlog(dispath);
+    getAllProduct(dispath);
+    getAllListBlog(dispath);
+    getAllCategory(dispath);
+  }, []);
+
   const formik = useFormik({
     initialValues: {
       email: "",
