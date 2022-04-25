@@ -14,13 +14,33 @@ import {
     getAllUserSuccess,
 } from "./userSlice";
 
-import { getAllProductStart, getAllProductSuccess, getAllProductFailed } from "./productSlice/productsSlice";
-import { getCategoryFailed, getCategoryStart, getCategorySuccess } from "./productSlice/categorySlice";
-import { getAllBlogFailed, getAllBlogStart, getAllBlogSuccess } from "./blogSlice/blogsSlice";
-import { getBlogByBlogListIdStart, getBlogByBlogListIdSuccess, getBlogByBlogListIdFailed} from "./blogSlice/blogByBlogListIdSlice"
-import {getProductByCategorySuccess} from "./productSlice/productByCateIdSlice"
+import {
+    getAllProductStart,
+    getAllProductSuccess,
+    getAllProductFailed,
+} from "./productSlice/productsSlice";
+import {
+    getCategoryFailed,
+    getCategoryStart,
+    getCategorySuccess,
+} from "./productSlice/categorySlice";
+import {
+    getAllBlogFailed,
+    getAllBlogStart,
+    getAllBlogSuccess,
+} from "./blogSlice/blogsSlice";
+import {
+    getBlogByBlogListIdStart,
+    getBlogByBlogListIdSuccess,
+    getBlogByBlogListIdFailed,
+} from "./blogSlice/blogByBlogListIdSlice";
+import { getProductByCategorySuccess } from "./productSlice/productByCateIdSlice";
 import { useDispatch } from "react-redux";
-import { getListBlogFailed, getListBlogStart, getListBlogSuccess } from "./blogSlice/listBlogSlice";
+import {
+    getListBlogFailed,
+    getListBlogStart,
+    getListBlogSuccess,
+} from "./blogSlice/listBlogSlice";
 
 export const loginUser = async (user, dispath, navigate) => {
     dispath(loginStart());
@@ -58,6 +78,7 @@ export const getAllUser = async (access_token, dispath, axiosJWT) => {
             },
         });
         dispath(getAllUserSuccess(res.data));
+        console.log(res.data);
     } catch (error) {
         dispath(getAllUserFailed());
     }
@@ -78,54 +99,54 @@ export const logOut = async (dispath, navigate, access_token) => {
 };
 // call api product
 export const getAllProduct = async (dispath) => {
-    dispath(getAllProductStart())
+    dispath(getAllProductStart());
     try {
-        const urlProduct = "http://localhost:8000/api/product/index"
-        const res = await axios.get(urlProduct)   
-        dispath(getAllProductSuccess(res.data))
+        const urlProduct = "http://localhost:8000/api/product/index";
+        const res = await axios.get(urlProduct);
+        dispath(getAllProductSuccess(res.data));
     } catch (error) {
-        dispath(getAllProductFailed())
+        dispath(getAllProductFailed());
     }
 };
 
 // call api Category
 export const getAllCategory = async (dispath) => {
-    dispath(getCategoryStart())
+    dispath(getCategoryStart());
     try {
-        const urlProduct = "http://localhost:8000/api/category/index"
-        const res = await axios.get(urlProduct)   
-        dispath(getCategorySuccess(res.data))
+        const urlProduct = "http://localhost:8000/api/category/index";
+        const res = await axios.get(urlProduct);
+        dispath(getCategorySuccess(res.data));
     } catch (error) {
-        dispath(getCategoryFailed())
+        dispath(getCategoryFailed());
     }
 };
 
 // call api get blog
 
 export const getAllBlog = async (dispath) => {
-    dispath(getAllBlogStart())
+    dispath(getAllBlogStart());
     try {
-        const urlBlog = "http://localhost:8000/api/blog/index"
-        const res = await axios.get(urlBlog)
-        dispath(getAllBlogSuccess(res.data))
+        const urlBlog = "http://localhost:8000/api/blog/index";
+        const res = await axios.get(urlBlog);
+        dispath(getAllBlogSuccess(res.data));
     } catch (error) {
-        dispath(getAllBlogFailed())
+        dispath(getAllBlogFailed());
     }
-}
+};
 // End call api get blog
 
 // call api get blog List
 
 export const getAllListBlog = async (dispath) => {
-    dispath(getListBlogStart())
+    dispath(getListBlogStart());
     try {
-        const urlBlog = "http://localhost:8000/api/listblog/index"
-        const res = await axios.get(urlBlog)
-        dispath(getListBlogSuccess(res.data))
+        const urlBlog = "http://localhost:8000/api/listblog/index";
+        const res = await axios.get(urlBlog);
+        dispath(getListBlogSuccess(res.data));
     } catch (error) {
-        dispath(getListBlogFailed())
+        dispath(getListBlogFailed());
     }
-}
+};
 // End call api get blog List
 
 // call api get Product By CateId
@@ -133,24 +154,24 @@ export const getAllListBlog = async (dispath) => {
 export const getProductByCategory = async (dispath, id) => {
     try {
         const urlProByCate = `http://localhost:8000/api/product/show/category/${id}`;
-        const res = await axios.get(urlProByCate)
-        dispath(getProductByCategorySuccess(res.data))
+        const res = await axios.get(urlProByCate);
+        dispath(getProductByCategorySuccess(res.data));
     } catch (error) {
         console.log(error);
     }
-}
+};
 // Ebd call api get Product By CateId
 
 // call api get Blog By BlogListId
 
 export const getBlogByBlogListId = async (dispath, id) => {
-    dispath(getBlogByBlogListIdStart())
+    dispath(getBlogByBlogListIdStart());
     try {
         const urlBlogByBlogListId = `http://localhost:8000/api/blog/show/listblog/${id}`;
-        const res = await axios.get(urlBlogByBlogListId)
-        dispath(getBlogByBlogListIdSuccess(res.data))
+        const res = await axios.get(urlBlogByBlogListId);
+        dispath(getBlogByBlogListIdSuccess(res.data));
     } catch (error) {
-        dispath(getBlogByBlogListIdFailed())
+        dispath(getBlogByBlogListIdFailed());
     }
-}
+};
 // End call api get Blog By BlogListId
