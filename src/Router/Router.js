@@ -5,7 +5,10 @@ import ClientEditBlog from "../Container/Client/ClientEditBlog/ClientEditBlog";
 import ClientEditProduct from "../Container/Client/ClientEditProduct/ClientEditProduct";
 import ClientHome from "../Container/Client/ClientHome/ClientHome";
 import ClientProduct from "../Container/Client/ClientProduct/ClientProduct";
-import ClientCategory from "../Container/Client/ClientCategory/ClientCategory"
+import ClientCategory from "../Container/Client/ClientCategory/ClientCategory";
+import ClientUser from "../Container/Client/ClientUser/ClientUser";
+import ClientMenu from "../Container/Client/ClientMenu/ClientMenu";
+import ClientAddMenu from "../Container/Client/ClientMenu/ClientAddMenu";
 
 export const ClientRoutes = [
     {
@@ -30,7 +33,7 @@ export const ClientRoutes = [
     },
     {
         index: true,
-        element: <ClientCategory/>,
+        element: <ClientCategory />,
         path: "/category",
     },
     {
@@ -47,5 +50,20 @@ export const ClientRoutes = [
         index: true,
         element: <ClientEditBlog />,
         path: "/blog/edit",
+    },
+    {
+        index: true,
+        element: <ClientUser />,
+        path: "/user",
+    },
+    {
+        index: true,
+        element: <ClientMenu />,
+        path: "/menu",
+    },
+    {
+        index: true,
+        element: <ClientAddMenu />,
+        path: "/menu/add",
     },
 ];

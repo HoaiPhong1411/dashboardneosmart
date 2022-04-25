@@ -14,7 +14,12 @@ import {
     getAllUserSuccess,
 } from "./userSlice";
 
-import { getALlProductStart, getAllProductSuccess, getAllProductFailed } from "./productsSlice";
+import {
+    getALlProductStart,
+    getAllProductSuccess,
+    getAllProductFailed,
+} from "./productsSlice";
+import { getMenuFailed, getMenuSuccess, getMenuStart } from "./menuSlice";
 
 export const loginUser = async (user, dispath, navigate) => {
     dispath(loginStart());
@@ -52,6 +57,7 @@ export const getAllUser = async (access_token, dispath, axiosJWT) => {
             },
         });
         dispath(getAllUserSuccess(res.data));
+        console.log(res.data);
     } catch (error) {
         dispath(getAllUserFailed());
     }
@@ -72,12 +78,23 @@ export const logOut = async (dispath, navigate, access_token) => {
 };
 
 export const getFullProduct = async (dispath) => {
-    dispath(getALlProductStart())
+    dispath(getALlProductStart());
     try {
-        const urlProduct = "http://localhost:8000/api/product/index"
-        const res = await axios.get(urlProduct)   
-        dispath(getAllProductSuccess(res.data))
+        const urlProduct = "http://localhost:8000/api/product/index";
+        const res = await axios.get(urlProduct);
+        dispath(getAllProductSuccess(res.data));
     } catch (error) {
-        dispath(getAllProductFailed())
+        dispath(getAllProductFailed());
+    }
+};
+export const getMenuApi = async (dispath) => {
+    dispath(getMenuStart());
+    try {
+        const url = "http://localhost:8000/api/menu/index";
+        const res = await axios.get(url);
+        dispath(getMenuSuccess(res.data));
+    } catch (error) {
+        dispath(getMenuFailed());
+        console.log(error);
     }
 };

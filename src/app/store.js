@@ -1,8 +1,9 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import authReducer from "./authSlice";
 import userReducer from "./userSlice";
-import productsReducer from "./productsSlice"
-import productReducer from "./productSlice"
+import productsReducer from "./productsSlice";
+import productReducer from "./productSlice";
+import menuReducer from "./menuSlice";
 import {
     persistStore,
     persistReducer,
@@ -19,7 +20,13 @@ const persistConfig = {
     version: 1,
     storage,
 };
-const rootReducer = combineReducers({ auth: authReducer, users: userReducer, products: productsReducer, product: productReducer });
+const rootReducer = combineReducers({
+    auth: authReducer,
+    users: userReducer,
+    products: productsReducer,
+    product: productReducer,
+    menu: menuReducer,
+});
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
