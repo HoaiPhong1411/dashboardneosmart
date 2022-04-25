@@ -2,46 +2,32 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import ButtonAdd from "../../../Component/Button/ButtonAdd";
-import { getAllProductSuccess } from "../../../app/productSlice/productSlice";
+
+//
+import { addBlogSuccess } from "../../../app/blogSlice/blogsSlice";
 import InputSearch from "../../../Component/Input/InputSearch";
 import { urlImg } from "../../../Component/Variable";
+import ButtonAdd from "../../../Component/Button/ButtonAdd";
 import ButtonSwitch from "../../../Component/Button/ButtonSwitch";
 import ButtonActions from "../../../Component/Button/ButtonActions";
-import { getProductByCategory } from "../../../app/apiRequest";
+import { getBlogByBlogListId } from "../../../app/apiRequest";
 
-const ClientCategory = () => {
+const ClientBlogList = () => {
   const [render, setRender] = useState(false);
-  const [dataProduct, setDataProduct] = useState([]);
-  const dataCategory = useSelector(
-    (state) => state.category.category.category[0]
+  const getBlogByListBlog = useSelector(
+    (state) => state.blogByBlogListId.blogByBlogListId.blogByBlogListId
   );
-  const CurrentCategory = useSelector(
-    (state) => state.category.category.currentCategory
+  const getListBlog = useSelector((state) => state.listBlog.listBlog.listBlog);
+  const getCurrentBlog = useSelector(
+    (state) => state.blogByBlogListId.blogByBlogListId.currentBlog
   );
-  const getProductById = useSelector(
-    (state) => state.productByCateId.productByCateId
-  );
+
   const [value, setValue] = useState("");
   const dispath = useDispatch();
   const [dataNew, setDataNew] = useState(null);
-  // get data Product
-  useEffect(() => {
-    const getProduct = async () => {
-      try {
-        const res = await axios.get("http://localhost:8000/api/product/index");
-        setDataProduct(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getProduct();
-  }, [render]);
-  // End data Product
-  // ------------------------------------
 
   const handleEdit = (e, product) => {
-    dispath(getAllProductSuccess(product));
+    dispath(addBlogSuccess(product));
   };
 
   // -------
@@ -70,7 +56,7 @@ const ClientCategory = () => {
     const updateDisplay = async (id, data) => {
       try {
         const res = await axios.post(
-          `http://localhost:8000/api/product/update/${id}`,
+          `http://localhost:8000/api/blog/updateDisplay/${id}`,
           data
         );
       } catch (error) {
@@ -78,11 +64,6 @@ const ClientCategory = () => {
       }
     };
     const dataDisplay = new FormData();
-    dataDisplay.append("title", product.title);
-    dataDisplay.append("photo", product.photo);
-    dataDisplay.append("price", product.price);
-    dataDisplay.append("description", product.description);
-    dataDisplay.append("position", product.position);
     if (check) {
       dataDisplay.append("display", 1);
       updateDisplay(product.id, dataDisplay);
@@ -104,7 +85,7 @@ const ClientCategory = () => {
     const handleSearch = async () => {
       try {
         let dataSearch = [];
-        const res = getProductById[0]?.forEach((item, i) => {
+        const res = getBlogByListBlog[0]?.forEach((item, i) => {
           if (
             item.title.toLowerCase().includes(value.trim().toLowerCase(), 0)
           ) {
@@ -122,16 +103,17 @@ const ClientCategory = () => {
     handleSearch();
   }, [value]);
 
-  useEffect(() => {
-    getProductByCategory(dispath, CurrentCategory[0].id);
-  }, [render]);
   // delete Product
+
+  useEffect(() => {
+    getBlogByBlogListId(dispath, getCurrentBlog[0].id);
+  }, [render]);
 
   const handleRemove = (id) => {
     const remove = async () => {
       try {
         const response = await axios.delete(
-          `http://localhost:8000/api/product/delete/${id}`
+          `http://localhost:8000/api/blog/delete/${id}`
         );
         setRender(!render);
       } catch (error) {
@@ -139,10 +121,10 @@ const ClientCategory = () => {
       }
     };
     remove();
-    console.log("delete");
   };
 
   // End delete Product
+
   return (
     <>
       <div className="flex flex-row items-center gap-5 w-full dark:bg-nightSecondary bg-lightSecondary shadow-lg py-3 px-5 rounded-xl">
@@ -162,13 +144,10 @@ const ClientCategory = () => {
             <tr>
               <td>Title</td>
               <td>Description</td>
-              <td>Price</td>
-              <td>Detail</td>
               <td>Content</td>
-              {/* <td>Photo</td> */}
               <td>Display</td>
               <td>Position</td>
-              <td>Category</td>
+              <td>Blog List</td>
               <td>Actions</td>
             </tr>
           </thead>
@@ -186,17 +165,13 @@ const ClientCategory = () => {
                       />
                       <Link
                         onClick={(e, product) => handleEdit(e, item)}
-                        to="/product/edit"
+                        to="/blog/edit"
                         className="break-words hover:text-bgButton dark:hover:text-lightPrimary"
                       >
                         {item.title}
                       </Link>
                     </td>
                     <td>{item.description}</td>
-                    <td>
-                      {Intl.NumberFormat().format(Number(item.price))} VNĐ
-                    </td>
-                    <td className="w-24 break-words">{item.detail}</td>
                     <td className="w-36 break-words">{item.content}</td>
 
                     {/* switched display */}
@@ -210,9 +185,63 @@ const ClientCategory = () => {
                     {/* End switched display */}
 
                     <td>{item.position}</td>
-                    {dataCategory?.map((cate) =>
-                      item.category_id == cate.id ? (
-                        <td key={cate.id}>{cate.title}</td>
+
+                    {getListBlog?.map((blog) =>
+                      item.listblog_id == blog.id ? (
+                        <td key={blog.id}>{blog.title}</td>
+                      ) : (
+                        ""
+                      )
+                    )}
+                    {/* Button delete */}
+                    <td>
+                      {/* <ButtonDelete handleClick={(id) => handleRemove(item.id)} /> */}
+                      <ButtonActions
+                        id={item.id}
+                        HandleDelete={(id) => handleRemove(item.id)}
+                        handleEdit={(e, product) => handleEdit(e, item)}
+                        path="blog"
+                      />
+                    </td>
+
+                    {/* End button delete */}
+                  </tr>
+                ))
+              : getBlogByListBlog[0]?.map((item) => (
+                  <tr key={item.id} className="dark:hover:hoverButton">
+                    <td className="flex flex-row justify-start gap-2 w-40 items-center">
+                      <img
+                        src={urlImg + item.photo}
+                        alt=""
+                        width="50px"
+                        height="50px"
+                      />
+                      <Link
+                        onClick={(e, product) => handleEdit(e, item)}
+                        to="/blog/edit"
+                        className="break-words hover:text-bgButton dark:hover:text-lightPrimary"
+                      >
+                        {item.title}
+                      </Link>
+                    </td>
+                    <td>{item.description}</td>
+                    <td className="w-36 break-words">{item.content}</td>
+
+                    {/* switched display */}
+                    <td>
+                      <ButtonSwitch
+                        id={item.id}
+                        name={item.display}
+                        handleChange={(e, product) => handleDisplay(e, item)}
+                      />
+                    </td>
+                    {/* End switched display */}
+
+                    <td>{item.position}</td>
+
+                    {getListBlog?.map((blog) =>
+                      item.listblog_id == blog.id ? (
+                        <td key={blog.id}>{blog.title}</td>
                       ) : (
                         ""
                       )
@@ -225,64 +254,6 @@ const ClientCategory = () => {
                         id={item.id}
                         HandleDelete={(id) => handleRemove(item.id)}
                         handleEdit={(e, product) => handleEdit(e, item)}
-                        path="product"
-                      />
-                    </td>
-
-                    {/* End button delete */}
-                  </tr>
-                ))
-              : getProductById[0]?.map((item) => (
-                  <tr key={item.id} className="dark:hover:hoverButton">
-                    <td className="flex flex-row justify-start gap-2 w-40 items-center">
-                      <img
-                        src={urlImg + item.photo}
-                        alt=""
-                        width="50px"
-                        height="50px"
-                      />
-                      <Link
-                        onClick={(e, product) => handleEdit(e, item)}
-                        to="/product/edit"
-                        className="break-words hover:text-bgButton dark:hover:text-lightPrimary"
-                      >
-                        {item.title}
-                      </Link>
-                    </td>
-                    <td>{item.description}</td>
-                    <td>
-                      {Intl.NumberFormat().format(Number(item.price))} VNĐ
-                    </td>
-                    <td className="w-24 break-words">{item.detail}</td>
-                    <td className="w-36 break-words">{item.content}</td>
-
-                    {/* switched display */}
-                    <td>
-                      <ButtonSwitch
-                        id={item.id}
-                        name={item.display}
-                        handleChange={(e, product) => handleDisplay(e, item)}
-                      />
-                    </td>
-                    {/* End switched display */}
-
-                    <td>{item.position}</td>
-
-                    {dataCategory?.map((cate) =>
-                      item.category_id == cate.id ? (
-                        <td key={cate.id}>{cate.title}</td>
-                      ) : (
-                        ""
-                      )
-                    )}
-
-                    {/* Button delete */}
-                    <td>
-                      <ButtonActions
-                        id={item.id}
-                        HandleDelete={(id) => handleRemove(item.id)}
-                        handleEdit={(e, product) => handleEdit(e, item)}
-                        path="product"
                       />
                     </td>
 
@@ -299,4 +270,4 @@ const ClientCategory = () => {
   );
 };
 
-export default ClientCategory;
+export default ClientBlogList;

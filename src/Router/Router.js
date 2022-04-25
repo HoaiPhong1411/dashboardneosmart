@@ -9,6 +9,8 @@ import ClientCategory from "../Container/Client/ClientCategory/ClientCategory";
 import ClientUser from "../Container/Client/ClientUser/ClientUser";
 import ClientMenu from "../Container/Client/ClientMenu/ClientMenu";
 import ClientAddMenu from "../Container/Client/ClientMenu/ClientAddMenu";
+import ClientBlogList from "../Container/Client/ClientBlogList/ClientBlogList";
+import ClientMail from "../Container/Client/ClientMail/ClientMail";
 
 export const ClientRoutes = [
     {
@@ -65,5 +67,12 @@ export const ClientRoutes = [
         index: true,
         element: <ClientAddMenu />,
         path: "/menu/add",
+        element: <ClientBlogList />,
+        path: "/bloglist",
+    },
+    {
+        index: true,
+        element: <ClientMail />,
+        path: "/mail",
     },
 ];

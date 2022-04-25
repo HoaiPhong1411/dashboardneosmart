@@ -1,9 +1,15 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import authReducer from "./authSlice";
 import userReducer from "./userSlice";
-import productsReducer from "./productsSlice";
-import productReducer from "./productSlice";
+import productsReducer from "./productSlice/productsSlice";
+import productReducer from "./productSlice/productSlice";
+import categoryReducer from "./productSlice/categorySlice";
+import listBlogReducer from "./blogSlice/listBlogSlice";
+import blogsReducer from "./blogSlice/blogsSlice";
+import productByCateIdReducer from "./productSlice/productByCateIdSlice";
+import blogByBlogListIdReducer from "./blogSlice/blogByBlogListIdSlice";
 import menuReducer from "./menuSlice";
+
 import {
     persistStore,
     persistReducer,
@@ -25,6 +31,11 @@ const rootReducer = combineReducers({
     users: userReducer,
     products: productsReducer,
     product: productReducer,
+    category: categoryReducer,
+    blogs: blogsReducer,
+    listBlog: listBlogReducer,
+    productByCateId: productByCateIdReducer,
+    blogByBlogListId: blogByBlogListIdReducer,
     menu: menuReducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);

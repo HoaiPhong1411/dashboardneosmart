@@ -2,23 +2,36 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
-import { getMenuApi, loginUser } from "../../app/apiRequest";
+// import { getMenuApi, loginUser } from "../../app/apiRequest";
 import * as Yup from "yup";
+import {
+    getAllProduct,
+    loginUser,
+    getAllBlog,
+    getAllListBlog,
+    getAllCategory,
+} from "../../app/apiRequest";
 
 import logo from "../../assets/images/logo.png";
 
 const Signin = () => {
-    const [render, setRender] = useState(false);
     const dispath = useDispatch();
     const navigate = useNavigate();
+
     useEffect(() => {
-        getMenuApi(dispath);
-    }, [!render]);
+        getAllBlog(dispath);
+        getAllProduct(dispath);
+        getAllListBlog(dispath);
+        getAllCategory(dispath);
+    }, []);
 
     const formik = useFormik({
         initialValues: {
             email: "",
             password: "",
+        },
+        onSubmit: (values) => {
+            loginUser(values, dispath, navigate);
         },
         validationSchema: Yup.object({
             email: Yup.string()
