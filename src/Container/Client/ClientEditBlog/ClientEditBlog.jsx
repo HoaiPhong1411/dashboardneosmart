@@ -156,7 +156,7 @@ const ClientEditBlog = () => {
                 {/* === Input === */}
                 <div className="flex flex-row justify-between gap-5">
                   {/* === Left Table === */}
-                  <div className="w-1/2 flex flex-col justify-between gap-4">
+                  <div className="w-[65%] flex flex-col justify-between gap-4">
                     {/* === Id === */}
 
                     <div className="hidden">
@@ -207,65 +207,13 @@ const ClientEditBlog = () => {
                     </div>
 
                     {/* === End Content === */}
-
-                    {/* === Display === */}
-
-                    <div className="w-full flex flex-row justify-between items-center text-[#fff]">
-                      <label htmlFor="display">Display</label>
-                      <div className="w-[75%] ">
-                        <ButtonCheck
-                          htmlFor="display"
-                          idIcon="btn-display"
-                          style={
-                            item.display !== 1
-                              ? { backgroundColor: "#fff" }
-                              : { backgroundColor: "#0f8f31" }
-                          }
-                        />
-                      </div>
-                      <input
-                        type="checkbox"
-                        defaultChecked={item.display == 1 ? true : false}
-                        id="display"
-                        className="hidden"
-                        onChange={(e) => handleChangeDiplay(e)}
-                      />
-                    </div>
-
-                    {/* === End Display === */}
-
-                    {/* === Position === */}
-
-                    <div className="w-full flex flex-row justify-between items-center text-[#fff]">
-                      <label htmlFor="position">Position</label>
-                      <div className="w-[75%] ">
-                        <ButtonCheck
-                          htmlFor="position"
-                          idIcon="btn-position"
-                          style={
-                            item.position !== 1
-                              ? { backgroundColor: "#fff" }
-                              : { backgroundColor: "#0f8f31" }
-                          }
-                        />
-                      </div>
-                      <input
-                        type="checkbox"
-                        id="position"
-                        className="hidden"
-                        defaultChecked={item.position == 1 ? true : false}
-                        onChange={(e) => handleChangePosition(e)}
-                      />
-                    </div>
-
-                    {/* === End Position === */}
                   </div>
 
                   {/* === End Left Table === */}
 
                   {/* === Right Table === */}
 
-                  <div className=" w-1/2 flex flex-col justify-between">
+                  <div className=" w-[35%] flex flex-col justify-between">
                     {/* === Image === */}
                     <div className="w-full flex flex-col gap-5 justify-between items-center text-[#fff]">
                       <div
@@ -275,7 +223,7 @@ const ClientEditBlog = () => {
                         <img
                           src={img ?? urlImg + item.photo}
                           alt=""
-                          className="w-[450px] h-[350px] bg-cover border-2 border-secondary"
+                          className="w-full h-[250px] bg-cover border-2 border-secondary"
                         />
                         <input
                           type="file"
@@ -287,6 +235,59 @@ const ClientEditBlog = () => {
                         />
                         <ButtonUpload htmlFor="photo" />
                       </div>
+                    </div>
+                    <div className="flex flex-row ">
+                      {/* === Display === */}
+
+                      <div className="w-full flex flex-row justify-between items-center text-[#fff]">
+                        <label htmlFor="display">Display</label>
+                        <div className="w-[55%] ">
+                          <ButtonCheck
+                            htmlFor="display"
+                            idIcon="btn-display"
+                            style={
+                              item.display !== 1
+                                ? { backgroundColor: "#fff" }
+                                : { backgroundColor: "#0f8f31" }
+                            }
+                          />
+                        </div>
+                        <input
+                          type="checkbox"
+                          defaultChecked={item.display == 1 ? true : false}
+                          id="display"
+                          className="hidden"
+                          onChange={(e) => handleChangeDiplay(e)}
+                        />
+                      </div>
+
+                      {/* === End Display === */}
+
+                      {/* === Position === */}
+
+                      <div className="w-full flex flex-row justify-between items-center text-[#fff]">
+                        <label htmlFor="position">Position</label>
+                        <div className="w-[55%] ">
+                          <ButtonCheck
+                            htmlFor="position"
+                            idIcon="btn-position"
+                            style={
+                              item.position !== 1
+                                ? { backgroundColor: "#fff" }
+                                : { backgroundColor: "#0f8f31" }
+                            }
+                          />
+                        </div>
+                        <input
+                          type="checkbox"
+                          id="position"
+                          className="hidden"
+                          defaultChecked={item.position == 1 ? true : false}
+                          onChange={(e) => handleChangePosition(e)}
+                        />
+                      </div>
+
+                      {/* === End Position === */}
                     </div>
                     {/* === End Image === */}
                   </div>

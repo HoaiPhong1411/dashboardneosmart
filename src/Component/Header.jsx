@@ -59,7 +59,7 @@ const Header = () => {
 
         <div className="flex flex-row justify-center gap-5 items-center cursor-pointer">
           <div className="flex justify-center items-center">
-            <span className="p-2 bg-lightPrimary dark:bg-bgButton dark:text-[#fff] dark:hover:bg-hoverButton shadow-md hover:bg-[#e8dd97be] cursor-pointer rounded-[50%] ">
+            <span className="p-2 bg-lightPrimary dark:bg-hoverButton dark:text-[#fff] dark:hover:bg-bgButton shadow-md hover:bg-[#e8dd97be] cursor-pointer rounded-[50%] ">
               <IoNotificationsSharp />
             </span>
           </div>
