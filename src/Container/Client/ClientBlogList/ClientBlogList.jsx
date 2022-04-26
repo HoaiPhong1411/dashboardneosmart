@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,6 +11,7 @@ import ButtonAdd from "../../../Component/Button/ButtonAdd";
 import ButtonSwitch from "../../../Component/Button/ButtonSwitch";
 import ButtonActions from "../../../Component/Button/ButtonActions";
 import { getBlogByBlogListId } from "../../../app/apiRequest";
+import { clientApi } from "../../../api/api";
 
 const ClientBlogList = () => {
   const [render, setRender] = useState(false);
@@ -24,10 +25,12 @@ const ClientBlogList = () => {
 
   const [value, setValue] = useState("");
   const dispath = useDispatch();
+  const navigate = useNavigate();
   const [dataNew, setDataNew] = useState(null);
 
   const handleEdit = (e, product) => {
     dispath(addBlogSuccess(product));
+    navigate("/blog/edit", product);
   };
 
   // -------
@@ -55,10 +58,7 @@ const ClientBlogList = () => {
     // Update display
     const updateDisplay = async (id, data) => {
       try {
-        const res = await axios.post(
-          `http://localhost:8000/api/blog/updateDisplay/${id}`,
-          data
-        );
+        const res = await clientApi.blogDisplay(id, data);
       } catch (error) {
         console.log(error);
       }
@@ -112,9 +112,7 @@ const ClientBlogList = () => {
   const handleRemove = (id) => {
     const remove = async () => {
       try {
-        const response = await axios.delete(
-          `http://localhost:8000/api/blog/delete/${id}`
-        );
+        const response = await clientApi.blogDelete(id);
         setRender(!render);
       } catch (error) {
         console.log(error);

@@ -1,6 +1,5 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import ButtonAdd from "../../../Component/Button/ButtonAdd";
 import { getAllProductSuccess } from "../../../app/productSlice/productSlice";
@@ -9,10 +8,12 @@ import { urlImg } from "../../../Component/Variable";
 import ButtonSwitch from "../../../Component/Button/ButtonSwitch";
 import ButtonActions from "../../../Component/Button/ButtonActions";
 import { getProductByCategory } from "../../../app/apiRequest";
+import { clientApi } from "../../../api/api";
 
 const ClientCategory = () => {
   const [render, setRender] = useState(false);
   const [dataProduct, setDataProduct] = useState([]);
+  const navigate = useNavigate();
   const dataCategory = useSelector(
     (state) => state.category.category.category[0]
   );
@@ -29,7 +30,7 @@ const ClientCategory = () => {
   useEffect(() => {
     const getProduct = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/api/product/index");
+        const res = await clientApi.productShow();
         setDataProduct(res.data);
       } catch (error) {
         console.log(error);
@@ -42,6 +43,7 @@ const ClientCategory = () => {
 
   const handleEdit = (e, product) => {
     dispath(getAllProductSuccess(product));
+    navigate("/product/edit", product);
   };
 
   // -------
@@ -69,10 +71,7 @@ const ClientCategory = () => {
     // Update display
     const updateDisplay = async (id, data) => {
       try {
-        const res = await axios.post(
-          `http://localhost:8000/api/product/update/${id}`,
-          data
-        );
+        const res = await clientApi.productEdit(id, data);
       } catch (error) {
         console.log(error);
       }
@@ -130,9 +129,7 @@ const ClientCategory = () => {
   const handleRemove = (id) => {
     const remove = async () => {
       try {
-        const response = await axios.delete(
-          `http://localhost:8000/api/product/delete/${id}`
-        );
+        const response = await clientApi.productDelete(id);
         setRender(!render);
       } catch (error) {
         console.log(error);

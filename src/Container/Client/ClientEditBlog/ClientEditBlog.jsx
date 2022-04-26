@@ -9,8 +9,8 @@ import { urlImg } from "../../../Component/Variable";
 import "../ClientEditProduct/ClientEditProduct.css";
 import ButtonCheck from "../../../Component/Button/ButtonCheck";
 import ButtonUpload from "../../../Component/Button/ButtonUpload";
-import { getAllProductSuccess } from "../../../app/productSlice/productSlice";
 import { Link, Navigate, useNavigate } from "react-router-dom";
+import { clientApi } from "../../../api/api";
 
 const ClientEditBlog = () => {
   // getApi
@@ -122,7 +122,7 @@ const ClientEditBlog = () => {
 
   const updateBlog = async (id, data) => {
     try {
-      await axios.post(`http://localhost:8000/api/blog/update/${id}`, data);
+      await clientApi.blogEdit(id, data);
     } catch (error) {
       console.log(error);
     }

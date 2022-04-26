@@ -90,7 +90,7 @@ const Header = () => {
 
         <div
           style={show ? { display: "block" } : { display: "none" }}
-          className="profile absolute top-[11%] w-[180px] rounded-[4px] right-[1rem] shadow-md shadow-primary dark:bg-[black] bg-[#f5eec8] dark:text-[#fff] text-[black] "
+          className="profile absolute top-[11%] w-[180px] rounded-[4px] right-[1rem] shadow-md shadow-primary dark:bg-[black] bg-[#f5eec8] dark:text-[#fff] text-[black] z-[1000]"
         >
           <div className="text-[16px] font-medium border-b-[1px] border-secondary px-5 py-3 cursor-pointer">
             Profile

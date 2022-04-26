@@ -10,6 +10,7 @@ import { TiArrowBack } from "react-icons/ti";
 import ButtonCheck from "../../../Component/Button/ButtonCheck";
 import ButtonUpload from "../../../Component/Button/ButtonUpload";
 import notimg from "../../../assets/images/No-image-found.jpg";
+import { clientApi } from "../../../api/api";
 
 const ClientAddBlog = () => {
   const [image, setImage] = useState();
@@ -76,10 +77,7 @@ const ClientAddBlog = () => {
   //   FunctionAdd
   const addBlog = async (data) => {
     try {
-      const response = await axios.post(
-        "http://localhost:8000/api/blog/store",
-        data
-      );
+      const response = await clientApi.blogAdd(data);
       setTimeout(() => {
         window.location.reload();
       }, 200);

@@ -13,6 +13,7 @@ import ButtonSwitch from "../../../Component/Button/ButtonSwitch";
 import ButtonAdd from "../../../Component/Button/ButtonAdd";
 import { getAllBlog } from "../../../app/apiRequest";
 import { addBlogSuccess } from "../../../app/blogSlice/blogsSlice";
+import { clientApi } from "../../../api/api";
 
 const ClientBlog = () => {
   const [render, setRender] = useState(false);
@@ -36,14 +37,13 @@ const ClientBlog = () => {
 
   const handleEdit = (e, product) => {
     dispath(addBlogSuccess(product));
+    navigate("/blog/edit", product);
   };
   // getBlog
   useEffect(() => {
     const fecth = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:8000/api/blog/index"
-        );
+        const response = await clientApi.blogShow();
         setData(response.data);
       } catch (error) {
         console.log(error);
@@ -55,9 +55,7 @@ const ClientBlog = () => {
   const handleRemove = (id) => {
     const remove = async () => {
       try {
-        const response = await axios.delete(
-          `http://localhost:8000/api/blog/delete/${id}`
-        );
+        const response = await clientApi.blogDelete(id);
         setRender(!render);
       } catch (error) {
         console.log(error);
@@ -89,10 +87,7 @@ const ClientBlog = () => {
     // Update display
     const updateDisplay = async (id, data) => {
       try {
-        const res = await axios.post(
-          `http://localhost:8000/api/blog/updateDisplay/${id}`,
-          data
-        );
+        const res = await clientApi.blogDisplay(id, data);
       } catch (error) {
         console.log(error);
       }
