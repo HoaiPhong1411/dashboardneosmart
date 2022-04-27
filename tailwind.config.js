@@ -11,7 +11,7 @@ module.exports = {
             bgButton: "#0f8f31",
             hoverButton: "#0e6726",
             nightSecondary: "#094418",
-
+            buttonAction: '#f5eec8'
         },
     },
     plugins: [],

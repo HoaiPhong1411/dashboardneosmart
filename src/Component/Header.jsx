@@ -59,7 +59,7 @@ const Header = () => {
 
         <div className="flex flex-row justify-center gap-5 items-center cursor-pointer">
           <div className="flex justify-center items-center">
-            <span className="p-2 bg-lightPrimary dark:bg-bgButton dark:text-[#fff] dark:hover:bg-hoverButton shadow-md hover:bg-[#e8dd97be] cursor-pointer rounded-[50%] ">
+            <span className="p-2 bg-lightPrimary dark:bg-hoverButton dark:text-[#fff] dark:hover:bg-bgButton shadow-md hover:bg-[#e8dd97be] cursor-pointer rounded-[50%] ">
               <IoNotificationsSharp />
             </span>
           </div>
@@ -90,7 +90,7 @@ const Header = () => {
 
         <div
           style={show ? { display: "block" } : { display: "none" }}
-          className="profile absolute top-[11%] w-[180px] rounded-[4px] right-[1rem] shadow-md shadow-primary dark:bg-[black] bg-[#f5eec8] dark:text-[#fff] text-[black] "
+          className="profile absolute top-[11%] w-[180px] rounded-[4px] right-[1rem] shadow-md shadow-primary dark:bg-[black] bg-[#f5eec8] dark:text-[#fff] text-[black] z-[1000]"
         >
           <div className="text-[16px] font-medium border-b-[1px] border-secondary px-5 py-3 cursor-pointer">
             Profile

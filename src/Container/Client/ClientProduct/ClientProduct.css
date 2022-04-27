@@ -12,5 +12,5 @@ table tbody tr {
 
 }
 table tbody tr:hover {
-    background-color: #f5eec8be;
+    background-color: #f5eec8be !important;
 }

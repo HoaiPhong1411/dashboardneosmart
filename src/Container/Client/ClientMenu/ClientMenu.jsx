@@ -1,38 +1,73 @@
 import React, { useState, useEffect } from "react";
 import ButtonAdd from "../../../Component/Button/ButtonAdd";
-import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import { clientApi } from "../../../api/api";
+import { useNavigate } from "react-router-dom";
+import { getAllMenu } from "../../../app/apiRequest";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ClientMenu = () => {
     const dispatch = useDispatch();
-    const [show, setShow] = useState(false);
-    const [menuId, setMenuId] = useState(null);
+    const [render, setRender] = useState(false);
+    const [show, setShow] = useState(true);
+    const [menuId, setMenuId] = useState([]);
+    const [displayName, setDisplayName] = useState();
+    const [link, setLink] = useState();
+    const [position, setPosition] = useState();
+    const [parent, setParent] = useState();
+    const [display, setDisplay] = useState();
+    const handleChangeDisplay = (e) => {
+        setDisplay(e.target.checked);
+    };
+    const notify = () => toast("Wow so easy!");
+    const navigate = useNavigate();
+    const dispath = useDispatch();
     const dataMenu = useSelector((state) => state.menu.menu.listMenu);
-    const handleEdit = () => {
-        setShow(!show);
-    };
-    const editMenuById = (id) => {
-        const getMenuById = async () => {
-            try {
-                const url = `http://localhost:8000/api/menu/show/${id}`;
-                const res = await axios.get(url);
-                setMenuId([res.data]);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        getMenuById();
-    };
 
-    const formik = useFormik({
-        initialValues: {
-            title: "",
-            label: "",
-            parent: "",
-            sort: "",
-        },
-    });
+    const getMenuById = async (id) => {
+        try {
+            const res = await clientApi.menuShowId(id);
+            setMenuId([res.data]);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    const upDateMenu = async (id, data) => {
+        try {
+            const res = await clientApi.menuEdit(id, data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    useEffect(() => {
+        getAllMenu(dispatch);
+    }, [render]);
+
+    const handleEdit = () => setShow(true);
+
+    const editMenuById = (id) => {
+        handleEdit(false);
+        getMenuById(id);
+    };
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const dataUpdate = new FormData();
+
+        dataUpdate.append("label", displayName ?? menuId.label);
+        dataUpdate.append("link", link ?? menuId.link);
+        dataUpdate.append("parent", parent ?? menuId.parent);
+        dataUpdate.append("position", position ?? menuId.position);
+        if (display ?? menuId.display) {
+            dataUpdate.append("display", 1);
+        } else {
+            dataUpdate.append("display", 0);
+        }
+        upDateMenu(menuId[0].id, dataUpdate);
+        notify();
+        setRender(!render);
+    };
 
     return (
         <div>
@@ -49,6 +84,7 @@ const ClientMenu = () => {
                                 <td>Link</td>
                                 <td>Sub Menu</td>
                                 <td>Position</td>
+                                <td>Display</td>
                                 <td>Action</td>
                             </tr>
                         </thead>
@@ -69,6 +105,13 @@ const ClientMenu = () => {
                                     <td>{item.parent}</td>
                                     <td>{item.sort}</td>
                                     <td>
+                                        {item.display == 0 ? (
+                                            <p>Ẩn</p>
+                                        ) : (
+                                            <p>Hiện</p>
+                                        )}
+                                    </td>
+                                    <td>
                                         <button className="bg-[red] px-2 text-[white]">
                                             Edit
                                         </button>
@@ -78,35 +121,66 @@ const ClientMenu = () => {
                         </tbody>
                     </table>
                 </div>
-            </div>
-            {!show && (
-                <div>
-                    <form className="flex flex-col gap-5">
+                {menuId.map((item) => (
+                    <form
+                        action=""
+                        className="flex flex-col gap-4"
+                        onSubmit={(e) => handleSubmit(e)}
+                    >
                         <div>
-                            <label htmlFor="title">Title</label>
+                            <label htmlFor="">Title</label>
                             <input
                                 type="text"
-                                value={formik.values.label}
-                                onChange={formik.handleChange}
-                                id="title"
+                                value={displayName ?? item.label}
+                                onChange={(e) => setDisplayName(e.target.value)}
                             />
                         </div>
                         <div>
-                            <label htmlFor="title">Link</label>
+                            <label htmlFor="">Link</label>
                             <input
                                 type="text"
-                                value={formik.values.link}
-                                onChange={formik.handleChange}
-                                id="title"
+                                value={link ?? item.link}
+                                onChange={(e) => setLink(e.target.value)}
                             />
                         </div>
-                        <div className="flex gap-4">
-                            <label htmlFor="title">Show Sub Menu</label>
-                            <div></div>
+                        <div>
+                            <label htmlFor="">Parent</label>
+                            <input
+                                type="text"
+                                value={parent ?? item.parent}
+                                onChange={(e) => setParent(e.target.value)}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="">Position</label>
+                            <input
+                                type="text"
+                                value={position ?? item.position}
+                                onChange={(e) => setPosition(e.target.value)}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="">Display</label>
+                            <input
+                                type="checkbox"
+                                defaultChecked={
+                                    item.display == 1 ? true : false
+                                }
+                                onChange={(e) => handleChangeDisplay(e)}
+                            />
+                        </div>
+                        <div>
+                            <button
+                                type="submit"
+                                className="bg-[red] text-[white] px-4"
+                            >
+                                sửa
+                            </button>
                         </div>
                     </form>
-                </div>
-            )}
+                ))}
+                <ToastContainer />
+            </div>
         </div>
     );
 };

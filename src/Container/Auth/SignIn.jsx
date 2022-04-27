@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
-// import { getMenuApi, loginUser } from "../../app/apiRequest";
 import * as Yup from "yup";
 import {
     getAllProduct,
@@ -10,6 +9,8 @@ import {
     getAllBlog,
     getAllListBlog,
     getAllCategory,
+    getAllMessage,
+    getAllMenu,
 } from "../../app/apiRequest";
 
 import logo from "../../assets/images/logo.png";
@@ -23,6 +24,8 @@ const Signin = () => {
         getAllProduct(dispath);
         getAllListBlog(dispath);
         getAllCategory(dispath);
+        getAllMessage(dispath);
+        getAllMenu(dispath);
     }, []);
 
     const formik = useFormik({

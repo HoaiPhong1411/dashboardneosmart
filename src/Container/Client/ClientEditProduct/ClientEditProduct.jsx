@@ -11,6 +11,7 @@ import ButtonCheck from "../../../Component/Button/ButtonCheck";
 import ButtonUpload from "../../../Component/Button/ButtonUpload";
 import { getAllProductSuccess } from "../../../app/productSlice/productSlice";
 import { Link, Navigate, useNavigate } from "react-router-dom";
+import { clientApi } from "../../../api/api";
 
 const ClientEditProduct = () => {
     // getApi
@@ -146,10 +147,7 @@ const ClientEditProduct = () => {
 
     const updateProduct = async (id, data) => {
         try {
-            await axios.post(
-                `http://localhost:8000/api/product/update/${id}`,
-                data
-            );
+            await clientApi.productEdit(id, data)
         } catch (error) {
             console.log(error);
         }

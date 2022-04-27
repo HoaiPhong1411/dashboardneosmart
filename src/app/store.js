@@ -8,7 +8,8 @@ import listBlogReducer from "./blogSlice/listBlogSlice";
 import blogsReducer from "./blogSlice/blogsSlice";
 import productByCateIdReducer from "./productSlice/productByCateIdSlice";
 import blogByBlogListIdReducer from "./blogSlice/blogByBlogListIdSlice";
-import menuReducer from "./menuSlice";
+import menuReducer from "./menuSlice/menuSlice";
+import messageReducer from "./messageSlice/messageSlice";
 
 import {
     persistStore,
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
     productByCateId: productByCateIdReducer,
     blogByBlogListId: blogByBlogListIdReducer,
     menu: menuReducer,
+    message: messageReducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
