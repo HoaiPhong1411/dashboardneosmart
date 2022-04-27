@@ -11,6 +11,7 @@ import {
   getAllListBlog,
   getAllCategory,
   getAllMessage,
+  getAllMenu,
 } from "../../app/apiRequest";
 
 import logo from "../../assets/images/logo.png";
@@ -25,6 +26,7 @@ const Signin = () => {
     getAllListBlog(dispath);
     getAllCategory(dispath);
     getAllMessage(dispath);
+    getAllMenu(dispath);
   }, []);
 
   const formik = useFormik({

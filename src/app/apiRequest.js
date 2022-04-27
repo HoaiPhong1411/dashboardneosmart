@@ -18,6 +18,7 @@ import {
     getAllProductStart,
     getAllProductSuccess,
     getAllProductFailed,
+    getProductByIdSuccess,
 } from "./productSlice/productsSlice";
 import {
     getCategoryFailed,
@@ -110,6 +111,19 @@ export const getAllProduct = async (dispath) => {
     }
 };
 
+// call api product by id
+
+export const getProductById = async (dispatch, id) => {
+    try {
+        const res = await clientApi.productShowById(id)
+        dispatch(getProductByIdSuccess(res.data))
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+// End call api product by id
+
 // call api get Product By CateId
 
 export const getProductByCategory = async (dispath, id) => {
@@ -179,7 +193,7 @@ export const getAllMenu = async (dispath) => {
         const res = await clientApi.menuShow();
         dispath(getMenuSuccess(res.data));
     } catch (error) {
-        dispath(getMenuFailed())
+        dispath(getMenuFailed()) 
     }
 }
 

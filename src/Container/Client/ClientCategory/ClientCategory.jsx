@@ -1,31 +1,60 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import ButtonAdd from "../../../Component/Button/ButtonAdd";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+
+import { clientApi } from "../../../api/api";
+import { getProductByCategory, getProductById } from "../../../app/apiRequest";
 import { getAllProductSuccess } from "../../../app/productSlice/productSlice";
-import InputSearch from "../../../Component/Input/InputSearch";
 import { urlImg } from "../../../Component/Variable";
+import ButtonAdd from "../../../Component/Button/ButtonAdd";
+import InputSearch from "../../../Component/Input/InputSearch";
 import ButtonSwitch from "../../../Component/Button/ButtonSwitch";
 import ButtonActions from "../../../Component/Button/ButtonActions";
-import { getProductByCategory } from "../../../app/apiRequest";
-import { clientApi } from "../../../api/api";
+
+// Style Modal show detail
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 700,
+  backgroundColor: "#fff",
+  border: "none",
+  boxShadow: 24,
+};
+// End Style Modal show detail
 
 const ClientCategory = () => {
   const [render, setRender] = useState(false);
   const [dataProduct, setDataProduct] = useState([]);
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const [value, setValue] = useState("");
+  const dispath = useDispatch();
+  const [dataNew, setDataNew] = useState(null);
   const dataCategory = useSelector(
     (state) => state.category.category.category[0]
   );
   const CurrentCategory = useSelector(
     (state) => state.category.category.currentCategory
   );
-  const getProductById = useSelector(
+  const productByCateId = useSelector(
     (state) => state.productByCateId.productByCateId
   );
-  const [value, setValue] = useState("");
-  const dispath = useDispatch();
-  const [dataNew, setDataNew] = useState(null);
+  const productById = useSelector(
+    (state) => state.products.product.productById
+  );
+
+  // show Detail
+  const handleOpen = (id) => {
+    getProductById(dispath, id);
+    setOpen(true);
+  };
+  const handleClose = () => setOpen(false);
+  // End show Detail
+
   // get data Product
   useEffect(() => {
     const getProduct = async () => {
@@ -103,7 +132,7 @@ const ClientCategory = () => {
     const handleSearch = async () => {
       try {
         let dataSearch = [];
-        const res = getProductById[0]?.forEach((item, i) => {
+        const res = productByCateId[0]?.forEach((item, i) => {
           if (
             item.title.toLowerCase().includes(value.trim().toLowerCase(), 0)
           ) {
@@ -138,7 +167,7 @@ const ClientCategory = () => {
     remove();
     console.log("delete");
   };
-
+  console.log(productById);
   // End delete Product
   return (
     <>
@@ -219,17 +248,16 @@ const ClientCategory = () => {
                     <td>
                       {/* <ButtonDelete handleClick={(id) => handleRemove(item.id)} /> */}
                       <ButtonActions
-                        id={item.id}
+                        handleSeen={(id) => handleOpen(item.id)}
                         HandleDelete={(id) => handleRemove(item.id)}
                         handleEdit={(e, product) => handleEdit(e, item)}
-                        path="product"
                       />
                     </td>
 
                     {/* End button delete */}
                   </tr>
                 ))
-              : getProductById[0]?.map((item) => (
+              : productByCateId[0]?.map((item) => (
                   <tr key={item.id} className="dark:hover:hoverButton">
                     <td className="flex flex-row justify-start gap-2 w-40 items-center">
                       <img
@@ -276,10 +304,9 @@ const ClientCategory = () => {
                     {/* Button delete */}
                     <td>
                       <ButtonActions
-                        id={item.id}
+                        handleSeen={(id) => handleOpen(item.id)}
                         HandleDelete={(id) => handleRemove(item.id)}
                         handleEdit={(e, product) => handleEdit(e, item)}
-                        path="product"
                       />
                     </td>
 
@@ -291,6 +318,55 @@ const ClientCategory = () => {
         </table>
 
         {/* End table show product */}
+
+        {/* Show Detail Blog */}
+
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <div className="flex flex-col px-10 py-16 gap-5">
+              <div className="flex flex-row gap-5 ">
+                <div className="w-[40%]">
+                  <img
+                    src={urlImg + productById[0]?.photo}
+                    alt=""
+                    className="w-full h-[200px] border-[1px] border-[#333]"
+                  />
+                </div>
+                <div className="w-[60%] flex flex-col gap-3">
+                  <div>
+                    <h2 className="text-2xl font-medium">
+                      {productById[0].title}
+                    </h2>
+                    <span className="text-md font-normal italic text-[#777]">
+                      {productById[0].description}
+                    </span>
+                  </div>
+                  <div>
+                    <span>Giá: </span>
+                    <strong className="text-[#ff6363] text-xl font-medium">
+                      {Intl.NumberFormat().format(Number(productById[0].price))}{" "}
+                      VNĐ
+                    </strong>
+                  </div>
+                  <p>{productById[0].detail} </p>
+                  <p></p>
+                </div>
+              </div>
+              <div>
+                <p className="text-lg font-light text-[#000]">
+                  {productById[0].content}
+                </p>
+              </div>
+            </div>
+          </Box>
+        </Modal>
+
+        {/*End Show Detail Blog */}
       </div>
     </>
   );

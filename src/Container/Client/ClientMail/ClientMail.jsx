@@ -1,21 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import ButtonSwitch from "../../../Component/Button/ButtonSwitch";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllMessage } from "../../../app/apiRequest";
 import { getMessageById } from "../../../app/apiRequest";
-import { urlImg } from "../../../Component/Variable";
 
 import "../ClientProduct/ClientProduct.css";
 import Toast from "../../../Component/Toast";
 import InputSearch from "../../../Component/Input/InputSearch";
 import ButtonActions from "../../../Component/Button/ButtonActions";
-import ButtonAdd from "../../../Component/Button/ButtonAdd";
 import { clientApi } from "../../../api/api";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 
 const style = {
   position: "absolute",
@@ -101,6 +97,7 @@ const ClientMail = () => {
     updateStatus(id, { status: 1 });
     getAllMessage(dispath);
     setRender(!render);
+    alert("bam");
   };
   return (
     <>

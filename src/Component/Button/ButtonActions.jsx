@@ -10,8 +10,7 @@ import { IoBagHandle } from "react-icons/io5";
 import { MdOutlineBrandingWatermark } from "react-icons/md";
 
 const ButtonActions = (props) => {
-  const { id, HandleDelete, handleEdit, path, handleSeen } = props;
-  const idUl = `ul${id}`;
+  const { HandleDelete, handleEdit, handleSeen } = props;
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -35,32 +34,25 @@ const ButtonActions = (props) => {
   };
   const options = [
     {
+      action: "See more",
+      onC: handleClose,
+    },
+    {
       action: "Edit",
       onC: handleClose,
-      link: path,
     },
     {
       action: "Delete",
       onC: handleClose,
-      link: null,
     },
   ];
   const optionSee = [
     {
       action: "See more",
       onC: handleClose,
-      link: null,
     },
   ];
 
-  // const handleShow = async (e) => {
-  //   try {
-  //     let UlElement = document.getElementById(idUl);
-  //     UlElement?.classList.toggle("show-drop-actions");
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
   return (
     <>
       <IconButton
@@ -85,7 +77,7 @@ const ButtonActions = (props) => {
           style: { backgroundColor: "#f5eec8" },
         }}
       >
-        {handleSeen
+        {!handleEdit
           ? optionSee.map((option) => (
               <MenuItem
                 onClick={option.onC}

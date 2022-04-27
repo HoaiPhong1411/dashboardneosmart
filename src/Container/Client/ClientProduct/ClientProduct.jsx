@@ -1,18 +1,31 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
-import ButtonSwitch from "../../../Component/Button/ButtonSwitch";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllProduct } from "../../../app/apiRequest";
-import { getAllProductSuccess } from "../../../app/productSlice/productSlice";
-import { urlImg } from "../../../Component/Variable";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
 
-import "./ClientProduct.css";
-import Toast from "../../../Component/Toast";
+import { getAllProduct, getProductById } from "../../../app/apiRequest";
+import { getAllProductSuccess } from "../../../app/productSlice/productSlice";
+import { clientApi } from "../../../api/api";
+import ButtonSwitch from "../../../Component/Button/ButtonSwitch";
 import InputSearch from "../../../Component/Input/InputSearch";
 import ButtonActions from "../../../Component/Button/ButtonActions";
 import ButtonAdd from "../../../Component/Button/ButtonAdd";
-import { clientApi } from "../../../api/api";
+import { urlImg } from "../../../Component/Variable";
+import "./ClientProduct.css";
+
+// Style Modal show detail
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 700,
+  backgroundColor: "#fff",
+  border: "none",
+  boxShadow: 24,
+};
+// End Style Modal show detail
 
 const ClientProduct = () => {
   const [render, setRender] = useState(false);
@@ -20,7 +33,7 @@ const ClientProduct = () => {
   // input search
   const [data, setData] = useState([]);
   const [product, setProduct] = useState(null);
-
+  const [open, setOpen] = useState(false);
   const [dataNew, setDataNew] = useState(null);
   //  value input search
   const [value, setValue] = useState();
@@ -29,7 +42,9 @@ const ClientProduct = () => {
     (state) => state.category.category.category[0]
   );
   const getProduct = useSelector((state) => state.products.product.product);
-
+  const productById = useSelector(
+    (state) => state.products.product.productById
+  );
   const dispath = useDispatch();
   const navigate = useNavigate();
 
@@ -37,6 +52,14 @@ const ClientProduct = () => {
     dispath(getAllProductSuccess(product));
     navigate("/product/edit", product);
   };
+
+  // show Detail
+  const handleOpen = (id) => {
+    getProductById(dispath, id);
+    setOpen(true);
+  };
+  const handleClose = () => setOpen(false);
+  // End show Detail
 
   // get data Product
 
@@ -154,8 +177,6 @@ const ClientProduct = () => {
               <td>Title</td>
               <td>Description</td>
               <td>Price</td>
-              <td>Detail</td>
-              <td>Content</td>
               {/* <td>Photo</td> */}
               <td>Display</td>
               <td>Position</td>
@@ -183,9 +204,7 @@ const ClientProduct = () => {
                   </Link>
                 </td>
                 <td>{item.description}</td>
-                <td>{item.price}</td>
-                <td className="w-24 break-words">{item.detail}</td>
-                <td className="w-36 break-words">{item.content}</td>
+                <td>{Intl.NumberFormat().format(Number(item.price))} VNĐ</td>
 
                 {/* switched display */}
                 <td>
@@ -210,10 +229,9 @@ const ClientProduct = () => {
                 <td>
                   {/* <ButtonDelete handleClick={(id) => handleRemove(item.id)} /> */}
                   <ButtonActions
-                    id={item.id}
+                    handleSeen={(id) => handleOpen(item.id)}
                     handleRemove={(id) => handleRemove(item.id)}
                     handleEdit={(e, product) => handleEdit(e, item)}
-                    path="product"
                   />
                 </td>
 
@@ -237,10 +255,11 @@ const ClientProduct = () => {
                       {item.title}
                     </Link>
                   </td>
-                  <td>{item.description}</td>
+                  <td
+                    dangerouslySetInnerHTML={{ __html: item.description }}
+                  ></td>
                   <td>{Intl.NumberFormat().format(Number(item.price))} VNĐ</td>
-                  <td className="w-24 break-words">{item.detail}</td>
-                  <td className="w-36 break-words">{item.content}</td>
+
                   <td>
                     <ButtonSwitch
                       id={item.id}
@@ -263,10 +282,9 @@ const ClientProduct = () => {
                   <td>
                     {/* <ButtonDelete handleClick={(id) => handleRemove(item.id)} /> */}
                     <ButtonActions
-                      id={item.id}
+                      handleSeen={(id) => handleOpen(item.id)}
                       HandleDelete={(id) => handleRemove(item.id)}
                       handleEdit={(e, product) => handleEdit(e, item)}
-                      path="product"
                     />
                   </td>
 
@@ -278,6 +296,62 @@ const ClientProduct = () => {
         </table>
 
         {/* End table show product */}
+
+        {/* Show Detail Blog */}
+
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <div className="flex flex-col px-10 py-16 h-[600px] overflow-y-scroll gap-5">
+              <div className="flex flex-row gap-5 ">
+                <div className="w-[40%]">
+                  <img
+                    src={urlImg + productById[0]?.photo}
+                    alt=""
+                    className="w-full h-[200px] border-[1px] border-[#333]"
+                  />
+                </div>
+                <div className="w-[60%] flex flex-col gap-3">
+                  <div>
+                    <h2 className="text-2xl font-medium">
+                      {productById[0]?.title}
+                    </h2>
+                    <span
+                      dangerouslySetInnerHTML={{
+                        __html: productById[0]?.description,
+                      }}
+                      className="text-md font-normal italic text-[#777]"
+                    ></span>
+                  </div>
+                  <div>
+                    <span>Giá: </span>
+                    <strong className="text-[#ff6363] text-xl font-medium">
+                      {Intl.NumberFormat().format(
+                        Number(productById[0]?.price)
+                      )}{" "}
+                      VNĐ
+                    </strong>
+                  </div>
+                  <div
+                    dangerouslySetInnerHTML={{ __html: productById[0]?.detail }}
+                  ></div>
+                </div>
+              </div>
+              <div>
+                <p
+                  dangerouslySetInnerHTML={{ __html: productById[0]?.content }}
+                  className="text-lg font-light text-[#000]"
+                ></p>
+              </div>
+            </div>
+          </Box>
+        </Modal>
+
+        {/*End Show Detail Blog */}
       </div>
     </>
   );

@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoMdAddCircle } from "react-icons/io";
 import { useFormik, Field } from "formik";
-import axios from "axios";
-import { useState } from "react";
 import { useSelector } from "react-redux";
 import { TiArrowBack } from "react-icons/ti";
+import { Editor } from "@tinymce/tinymce-react";
 
 import ButtonCheck from "../../../Component/Button/ButtonCheck";
 import ButtonUpload from "../../../Component/Button/ButtonUpload";
@@ -15,12 +14,22 @@ import { clientApi } from "../../../api/api";
 const ClientAddBlog = () => {
   const [image, setImage] = useState();
   const [display, setDisplay] = useState(true);
+  const [content, setContent] = useState();
+  const [des, setDes] = useState();
+  const [detail, setDetail] = useState();
   const [position, setPosition] = useState(true);
   const [img, setImg] = useState();
   const [listBLogId, setListBlogId] = useState();
   const navigate = useNavigate();
   const dataListBlog = useSelector((state) => state.listBlog.listBlog.listBlog);
-  console.log(dataListBlog);
+
+  const editorRef = useRef(null);
+  const log = () => {
+    if (editorRef.current) {
+      console.log(editorRef.current.getContent());
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
   };
@@ -56,6 +65,7 @@ const ClientAddBlog = () => {
     initialValues: {
       title: "",
       description: "",
+      detail: "",
       content: "",
       photo: "",
       display: "",
@@ -64,8 +74,9 @@ const ClientAddBlog = () => {
     onSubmit: (value) => {
       const data = new FormData();
       data.append("title", value.title);
-      data.append("description", value.description);
-      data.append("content", value.content);
+      data.append("description", des);
+      data.append("content", content);
+      data.append("detail", detail);
       data.append("photo", image);
       data.append("display", display ? 1 : 0);
       data.append("position", position ? 1 : 0);
@@ -147,7 +158,7 @@ const ClientAddBlog = () => {
               {/* Description */}
               <div className="w-full flex flex-col justify-between gap-2 items-start mb-5">
                 <label htmlFor="description">Description</label>
-                <textarea
+                {/* <textarea
                   rows="3"
                   type="text"
                   name="description"
@@ -156,6 +167,50 @@ const ClientAddBlog = () => {
                   value={formik.values.description}
                   onChange={formik.handleChange}
                   className="w-full border-[1px] dark:bg-primary dark:text-[#fff] border-secondary focus:border-[#e0ed2e]"
+                /> */}
+                <Editor
+                  apiKey="9ksw8tn5zsdmdzj74e4l69xoewcxuqnmdgy3uf06wunsn404"
+                  onInit={(evt, editor) => (editorRef.current = editor)}
+                  initialValue="<b>Địa chỉ: <br>Diện tích: "
+                  onEditorChange={(newText) => setDes(newText)}
+                  init={{
+                    height: 250,
+                    width: "100%",
+                    menubar: true,
+                  }}
+                  plugins="advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount image"
+                  toolbar="undo redo | formatselect bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help | image"
+                  content_style="body { font-family:Helvetica,Arial,sans-serif; font-size:14px }"
+                />
+              </div>
+              {/* End Description */}
+
+              {/* Description */}
+              <div className="w-full flex flex-col justify-between gap-2 items-start mb-5">
+                <label htmlFor="description">Detail</label>
+                {/* <textarea
+                  rows="3"
+                  type="text"
+                  name="description"
+                  id="description"
+                  placeholder="Description"
+                  value={formik.values.description}
+                  onChange={formik.handleChange}
+                  className="w-full border-[1px] dark:bg-primary dark:text-[#fff] border-secondary focus:border-[#e0ed2e]"
+                /> */}
+                <Editor
+                  apiKey="9ksw8tn5zsdmdzj74e4l69xoewcxuqnmdgy3uf06wunsn404"
+                  onInit={(evt, editor) => (editorRef.current = editor)}
+                  initialValue="<b>Giới thiệu chung:</b>"
+                  onEditorChange={(newText) => setDetail(newText)}
+                  init={{
+                    height: 250,
+                    width: "100%",
+                    menubar: true,
+                  }}
+                  plugins="advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount image"
+                  toolbar="undo redo | formatselect bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help | image"
+                  content_style="body { font-family:Helvetica,Arial,sans-serif; font-size:14px }"
                 />
               </div>
               {/* End Description */}
@@ -165,7 +220,7 @@ const ClientAddBlog = () => {
               {/* Content */}
               <div className=" w-full flex flex-col justify-between gap-2 items-start mb-5">
                 <label htmlFor="content">Content</label>
-                <textarea
+                {/* <textarea
                   rows="5"
                   type="text"
                   name="content"
@@ -174,6 +229,19 @@ const ClientAddBlog = () => {
                   value={formik.values.content}
                   onChange={formik.handleChange}
                   className="w-full border-[1px] dark:bg-primary dark:text-[#fff] border-secondary focus:border-[#e0ed2e]"
+                /> */}
+                <Editor
+                  apiKey="9ksw8tn5zsdmdzj74e4l69xoewcxuqnmdgy3uf06wunsn404"
+                  onInit={(evt, editor) => (editorRef.current = editor)}
+                  onEditorChange={(newText) => setContent(newText)}
+                  init={{
+                    height: 500,
+                    width: "100%",
+                    menubar: true,
+                  }}
+                  plugins="advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount image"
+                  toolbar="undo redo | formatselect bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help | image"
+                  content_style="body { font-family:Helvetica,Arial,sans-serif; font-size:14px }"
                 />
               </div>
               {/* End Content */}
@@ -302,7 +370,7 @@ const ClientAddBlog = () => {
                 className="flex flex-row justify-center items-center rounded-lg gap-3 px-4 py-2 hover:bg-hoverButton text-[#fff] bg-bgButton text-[1.25rem]"
               >
                 <IoMdAddCircle />
-                Add Product
+                Add Blog
               </button>
             </div>
 

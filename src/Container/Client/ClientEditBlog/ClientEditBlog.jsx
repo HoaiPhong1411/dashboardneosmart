@@ -1,7 +1,9 @@
 import { FiSave } from "react-icons/fi";
-import { useEffect, useState, useLayoutEffect } from "react";
+import { useEffect, useState, useLayoutEffect, useRef } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Editor } from "@tinymce/tinymce-react";
 
 import { TiArrowBack } from "react-icons/ti";
 
@@ -9,7 +11,6 @@ import { urlImg } from "../../../Component/Variable";
 import "../ClientEditProduct/ClientEditProduct.css";
 import ButtonCheck from "../../../Component/Button/ButtonCheck";
 import ButtonUpload from "../../../Component/Button/ButtonUpload";
-import { Link, Navigate, useNavigate } from "react-router-dom";
 import { clientApi } from "../../../api/api";
 
 const ClientEditBlog = () => {
@@ -27,11 +28,15 @@ const ClientEditBlog = () => {
   const [content, setContent] = useState();
   const [display, setDisplay] = useState();
   const [position, setPosition] = useState();
+  const [detail, setDetail] = useState();
 
   const dispath = useDispatch();
   const getEdit = useSelector((state) => state.blogs.blogs.blog);
   const [getTheme, setGetTheme] = useState();
   const navigate = useNavigate();
+
+  const editorRef = useRef(null);
+
   const getChangeTheme = async () => {
     try {
       await window.addEventListener("click", (e) => {
@@ -102,6 +107,7 @@ const ClientEditBlog = () => {
 
     // update
     dataUpdate.append("title", title ?? getEdit[0].title);
+    dataUpdate.append("detail", detail ?? getEdit[0].detail);
     dataUpdate.append("description", des ?? getEdit[0].description);
     dataUpdate.append("photo", file ?? getEdit[0].photo);
     dataUpdate.append("content", content ?? getEdit[0].content);
@@ -182,27 +188,66 @@ const ClientEditBlog = () => {
 
                     <div className="w-full flex flex-col justify-between gap-2 items-start text-[#fff]">
                       <label htmlFor="description">Description</label>
-                      <textarea
-                        rows="3"
-                        type="text"
-                        value={des ?? item.description}
-                        className="w-full border-[1px] border-secondary dark:bg-primary dark:text-[#fff] focus:border-[#e0ed2e] font-light"
-                        onChange={(e) => handleChangeDes(e)}
+
+                      <Editor
+                        apiKey="9ksw8tn5zsdmdzj74e4l69xoewcxuqnmdgy3uf06wunsn404"
+                        onInit={(evt, editor) => (editorRef.current = editor)}
+                        initialValue={item.description}
+                        onEditorChange={(newText) => setDes(newText)}
+                        init={{
+                          height: 250,
+                          width: "100%",
+                          menubar: true,
+                        }}
+                        plugins="advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount image"
+                        toolbar="undo redo | formatselect bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help | image"
+                        content_style="body { font-family:Helvetica,Arial,sans-serif; font-size:14px }"
                       />
                     </div>
 
                     {/* === End Discription === */}
 
+                    {/* === Detail === */}
+
+                    <div className="w-full flex flex-col justify-between gap-2 items-start text-[#fff]">
+                      <label htmlFor="detail">Detail</label>
+
+                      <Editor
+                        apiKey="9ksw8tn5zsdmdzj74e4l69xoewcxuqnmdgy3uf06wunsn404"
+                        onInit={(evt, editor) => (editorRef.current = editor)}
+                        initialValue={item.detail}
+                        onEditorChange={(newText) => setDetail(newText)}
+                        init={{
+                          height: 250,
+                          width: "100%",
+                          menubar: true,
+                        }}
+                        plugins="advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount image"
+                        toolbar="undo redo | formatselect bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help | image"
+                        content_style="body { font-family:Helvetica,Arial,sans-serif; font-size:14px }"
+                      />
+                    </div>
+
+                    {/* === End Detail === */}
+
                     {/* === Content === */}
 
                     <div className="w-full flex flex-col justify-between gap-2 items-start text-[#fff]">
                       <label htmlFor="content">Content</label>
-                      <textarea
-                        rows="3"
-                        type="text"
-                        value={content ?? item.content}
-                        className="w-full border-[1px] border-secondary dark:bg-primary dark:text-[#fff] focus:border-[#e0ed2e] font-light"
-                        onChange={(e) => handleChangeContent(e)}
+
+                      <Editor
+                        apiKey="9ksw8tn5zsdmdzj74e4l69xoewcxuqnmdgy3uf06wunsn404"
+                        onInit={(evt, editor) => (editorRef.current = editor)}
+                        initialValue={item.content}
+                        onEditorChange={(newText) => setContent(newText)}
+                        init={{
+                          height: 500,
+                          width: "100%",
+                          menubar: true,
+                        }}
+                        plugins="advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount image"
+                        toolbar="undo redo | formatselect bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help | image"
+                        content_style="body { font-family:Helvetica,Arial,sans-serif; font-size:14px }"
                       />
                     </div>
 
@@ -213,7 +258,7 @@ const ClientEditBlog = () => {
 
                   {/* === Right Table === */}
 
-                  <div className=" w-[35%] flex flex-col justify-between">
+                  <div className=" w-[35%] flex flex-col justify-start gap-5">
                     {/* === Image === */}
                     <div className="w-full flex flex-col gap-5 justify-between items-center text-[#fff]">
                       <div

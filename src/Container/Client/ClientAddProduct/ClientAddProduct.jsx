@@ -1,29 +1,29 @@
-import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { useFormik, Field } from "formik";
+import { useFormik } from "formik";
+import { Editor } from "@tinymce/tinymce-react";
 import { IoMdAddCircle } from "react-icons/io";
 import { TiArrowBack } from "react-icons/ti";
 
+import { clientApi } from "../../../api/api";
 import ButtonCheck from "../../../Component/Button/ButtonCheck";
 import ButtonUpload from "../../../Component/Button/ButtonUpload";
-import Toast from "../../../Component/Toast";
 
 import notimg from "../../../assets/images/No-image-found.jpg";
 import "./ClientAddProduct.css";
-import { clientApi } from "../../../api/api";
 
 const ClientAddProduct = () => {
   const [image, setImage] = useState();
   const [display, setDisplay] = useState(true);
   const [position, setPosition] = useState(true);
   const [img, setImg] = useState();
+  const [des, setDes] = useState();
+  const [detail, setDetail] = useState();
+  const [content, setContent] = useState();
   const [dataCate, setDataCate] = useState([]);
   const [categoryId, setCategoryId] = useState();
   const navigate = useNavigate();
-  let toastSuccess;
-  // ---------------------------------------
+  const editorRef = useRef(null);
 
   useEffect(() => {
     const fecthCategory = async () => {
@@ -104,10 +104,10 @@ const ClientAddProduct = () => {
     onSubmit: (value) => {
       const data = new FormData();
       data.append("title", value.title);
-      data.append("description", value.description);
+      data.append("description", des);
       data.append("price", value.price);
-      data.append("detail", value.detail);
-      data.append("content", value.content);
+      data.append("detail", detail);
+      data.append("content", content);
       data.append("photo", image);
       data.append("display", display ? 1 : 0);
       data.append("position", position ? 1 : 0);
@@ -118,9 +118,9 @@ const ClientAddProduct = () => {
   const addProduct = async (data) => {
     try {
       const response = await clientApi.productAdd(data);
-      setTimeout(() => {
-        window.location.reload();
-      }, 100);
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 100);
     } catch (error) {
       alert("Vui Lòng Nhập Đầy Đủ !");
     }
@@ -173,29 +173,11 @@ const ClientAddProduct = () => {
 
               {/* ------------------------------------ */}
 
-              {/* Description */}
-              <div className="w-full flex flex-col justify-between gap-2 items-start mb-5">
-                <label htmlFor="description">Description</label>
-                <textarea
-                  rows="3"
-                  type="text"
-                  name="description"
-                  id="description"
-                  placeholder="Description"
-                  value={formik.values.description}
-                  onChange={formik.handleChange}
-                  className="w-full border-[1px] dark:bg-primary dark:text-[#fff] border-secondary focus:border-[#e0ed2e]"
-                />
-              </div>
-              {/* End Description */}
-
-              {/* ------------------------------------ */}
-
               {/* Price */}
               <div className="w-full flex flex-col justify-between gap-2 items-start mb-5">
                 <label htmlFor="price">Price</label>
                 <input
-                  type="number"
+                  type="text"
                   name="price"
                   id="price"
                   placeholder="Price"
@@ -209,40 +191,72 @@ const ClientAddProduct = () => {
 
               {/* ------------------------------------ */}
 
-              {/* Detail */}
-              <div className="w-full flex flex-col justify-between gap-2 items-start mb-5">
+              {/* === Description === */}
+
+              <div className="w-full flex flex-col justify-between gap-2 items-start text-[#fff]">
+                <label htmlFor="description">Description</label>
+
+                <Editor
+                  apiKey="9ksw8tn5zsdmdzj74e4l69xoewcxuqnmdgy3uf06wunsn404"
+                  onInit={(evt, editor) => (editorRef.current = editor)}
+                  onEditorChange={(newText) => setDes(newText)}
+                  init={{
+                    height: 250,
+                    width: "100%",
+                    menubar: true,
+                  }}
+                  plugins="advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount image"
+                  toolbar="undo redo | formatselect bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help | image"
+                  content_style="body { font-family:Helvetica,Arial,sans-serif; font-size:14px }"
+                />
+              </div>
+
+              {/* === End Discription === */}
+
+              {/* === Detail === */}
+
+              <div className="w-full flex flex-col justify-between gap-2 items-start text-[#fff]">
                 <label htmlFor="detail">Detail</label>
-                <textarea
-                  rows="3"
-                  type="text"
-                  name="detail"
-                  id="detail"
-                  placeholder="Detail"
-                  value={formik.values.detail}
-                  onChange={formik.handleChange}
-                  className="w-full border-[1px] dark:bg-primary dark:text-[#fff] border-secondary focus:border-[#e0ed2e]"
+
+                <Editor
+                  apiKey="9ksw8tn5zsdmdzj74e4l69xoewcxuqnmdgy3uf06wunsn404"
+                  onInit={(evt, editor) => (editorRef.current = editor)}
+                  initialValue="điện áp: </br> </br> Trọng Lượng:</br>Support giao diện:</br>Bảo hành:  tháng"
+                  onEditorChange={(newText) => setDetail(newText)}
+                  init={{
+                    height: 250,
+                    width: "100%",
+                    menubar: true,
+                  }}
+                  plugins="advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount image"
+                  toolbar="undo redo | formatselect bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help | image"
+                  content_style="body { font-family:Helvetica,Arial,sans-serif; font-size:14px }"
                 />
               </div>
 
-              {/* End Detail */}
+              {/* === End Detail === */}
 
-              {/* ------------------------------------ */}
+              {/* === Content === */}
 
-              {/* Content */}
-              <div className=" w-full flex flex-col justify-between gap-2 items-start mb-5">
+              <div className="w-full flex flex-col justify-between gap-2 items-start text-[#fff]">
                 <label htmlFor="content">Content</label>
-                <textarea
-                  rows="3"
-                  type="text"
-                  name="content"
-                  id="content"
-                  placeholder="Content"
-                  value={formik.values.content}
-                  onChange={formik.handleChange}
-                  className="w-full border-[1px] dark:bg-primary dark:text-[#fff] border-secondary focus:border-[#e0ed2e]"
+
+                <Editor
+                  apiKey="9ksw8tn5zsdmdzj74e4l69xoewcxuqnmdgy3uf06wunsn404"
+                  onInit={(evt, editor) => (editorRef.current = editor)}
+                  onEditorChange={(newText) => setContent(newText)}
+                  init={{
+                    height: 500,
+                    width: "100%",
+                    menubar: true,
+                  }}
+                  plugins="advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount image"
+                  toolbar="undo redo | formatselect bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help | image"
+                  content_style="body { font-family:Helvetica,Arial,sans-serif; font-size:14px }"
                 />
               </div>
-              {/* End Content */}
+
+              {/* === End Content === */}
             </div>
             {/*=== End Left ===*/}
 
@@ -371,7 +385,10 @@ const ClientAddProduct = () => {
           <div>
             {/* Button Add */}
             <div className="flex flex-row justify-center items-center">
-              <button className="flex flex-row justify-center items-center rounded-lg gap-3 px-4 py-2 hover:bg-hoverButton text-[#fff] bg-bgButton text-[1.25rem]">
+              <button
+                type="submit"
+                className="flex flex-row justify-center items-center rounded-lg gap-3 px-4 py-2 hover:bg-hoverButton text-[#fff] bg-bgButton text-[1.25rem]"
+              >
                 <IoMdAddCircle />
                 Add Product
               </button>
