@@ -42,9 +42,19 @@ import {
     getListBlogStart,
     getListBlogSuccess,
 } from "./blogSlice/listBlogSlice";
-import { getMenuStart, getMenuFailed, getMenuSuccess } from "./menuSlice";
+import {
+    getMenuStart,
+    getMenuFailed,
+    getMenuSuccess,
+    getMenuByIdSuccess,
+} from "./menuSlice/menuSlice";
 import { clientApi } from "../api/api";
-import { getMessageByIdSuccess, getMessageFailed, getMessageStart, getMessageSuccess } from "./messageSlice/messageSlice";
+import {
+    getMessageByIdSuccess,
+    getMessageFailed,
+    getMessageStart,
+    getMessageSuccess,
+} from "./messageSlice/messageSlice";
 
 export const loginUser = async (user, dispath, navigate) => {
     dispath(loginStart());
@@ -104,7 +114,7 @@ export const logOut = async (dispath, navigate, access_token) => {
 export const getAllProduct = async (dispath) => {
     dispath(getAllProductStart());
     try {
-        const res = await clientApi.productShow()
+        const res = await clientApi.productShow();
         dispath(getAllProductSuccess(res.data));
     } catch (error) {
         dispath(getAllProductFailed());
@@ -152,7 +162,7 @@ export const getAllCategory = async (dispath) => {
 export const getAllBlog = async (dispath) => {
     dispath(getAllBlogStart());
     try {
-        const res = await clientApi.blogShow()
+        const res = await clientApi.blogShow();
         dispath(getAllBlogSuccess(res.data));
     } catch (error) {
         dispath(getAllBlogFailed());
@@ -173,7 +183,6 @@ export const getAllListBlog = async (dispath) => {
 };
 // End call api get blog List
 
-
 // call api get Blog By BlogListId
 
 export const getBlogByBlogListId = async (dispath, id) => {
@@ -193,29 +202,34 @@ export const getAllMenu = async (dispath) => {
         const res = await clientApi.menuShow();
         dispath(getMenuSuccess(res.data));
     } catch (error) {
+<<<<<<< HEAD
         dispath(getMenuFailed()) 
+=======
+        dispath(getMenuFailed());
+>>>>>>> a548e78997c4f87163e806f558df6cb904701f6b
     }
-}
+};
 
 // Call Api message
 
 export const getAllMessage = async (dispath) => {
-    dispath(getMessageStart())
+    dispath(getMessageStart());
     try {
         const res = await clientApi.messageShow();
-        dispath(getMessageSuccess(res.data))
+        dispath(getMessageSuccess(res.data));
     } catch (error) {
-        dispath(getMessageFailed())
+        dispath(getMessageFailed());
     }
-}
+};
 
 export const getMessageById = async (dispath, id) => {
     try {
-        const res = await clientApi.messageShowById(id)
-        dispath(getMessageByIdSuccess(res.data))
+        const res = await clientApi.messageShowById(id);
+        dispath(getMessageByIdSuccess(res.data));
     } catch (error) {
         console.log(error);
     }
-}
+};
 
 // End Call Api message
+// getMenuById

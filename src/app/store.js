@@ -8,8 +8,8 @@ import listBlogReducer from "./blogSlice/listBlogSlice";
 import blogsReducer from "./blogSlice/blogsSlice";
 import productByCateIdReducer from "./productSlice/productByCateIdSlice";
 import blogByBlogListIdReducer from "./blogSlice/blogByBlogListIdSlice";
-import menuReducer from "./menuSlice";
-import messageReducer from "./messageSlice/messageSlice"
+import menuReducer from "./menuSlice/menuSlice";
+import messageReducer from "./messageSlice/messageSlice";
 
 import {
     persistStore,
