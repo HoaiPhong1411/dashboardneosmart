@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { clientApi } from "../../../api/api";
 import { getProductByCategory, getProductById } from "../../../app/apiRequest";
@@ -34,6 +36,10 @@ const ClientCategory = () => {
   const [value, setValue] = useState("");
   const dispath = useDispatch();
   const [dataNew, setDataNew] = useState(null);
+  const notify = (
+    type = "success",
+    content = "Cập nhật hiển thị thành công!"
+  ) => toast[type](content);
   const dataCategory = useSelector(
     (state) => state.category.category.category[0]
   );
@@ -100,15 +106,18 @@ const ClientCategory = () => {
     // Update display
     const updateDisplay = async (id, data) => {
       try {
-        const res = await clientApi.productEdit(id, data);
+        await clientApi.productEdit(id, data);
+        notify();
       } catch (error) {
-        console.log(error);
+        notify("error", "Cập nhật thất bại!");
       }
     };
     const dataDisplay = new FormData();
     dataDisplay.append("title", product.title);
     dataDisplay.append("photo", product.photo);
     dataDisplay.append("price", product.price);
+    dataDisplay.append("detail", product.detail);
+    dataDisplay.append("content", product.content);
     dataDisplay.append("description", product.description);
     dataDisplay.append("position", product.position);
     if (check) {
@@ -158,16 +167,17 @@ const ClientCategory = () => {
   const handleRemove = (id) => {
     const remove = async () => {
       try {
-        const response = await clientApi.productDelete(id);
+        await clientApi.productDelete(id);
+        notify("success", "Xóa sản phẩm thành công!");
         setRender(!render);
       } catch (error) {
+        notify("error", "Xóa sản phẩm thất bại!");
         console.log(error);
       }
     };
     remove();
     console.log("delete");
   };
-  console.log(productById);
   // End delete Product
   return (
     <>
@@ -189,9 +199,6 @@ const ClientCategory = () => {
               <td>Title</td>
               <td>Description</td>
               <td>Price</td>
-              <td>Detail</td>
-              <td>Content</td>
-              {/* <td>Photo</td> */}
               <td>Display</td>
               <td>Position</td>
               <td>Category</td>
@@ -274,12 +281,12 @@ const ClientCategory = () => {
                         {item.title}
                       </Link>
                     </td>
-                    <td>{item.description}</td>
+                    <td
+                      dangerouslySetInnerHTML={{ __html: item.description }}
+                    ></td>
                     <td>
                       {Intl.NumberFormat().format(Number(item.price))} VNĐ
                     </td>
-                    <td className="w-24 break-words">{item.detail}</td>
-                    <td className="w-36 break-words">{item.content}</td>
 
                     {/* switched display */}
                     <td>
@@ -340,34 +347,41 @@ const ClientCategory = () => {
                 <div className="w-[60%] flex flex-col gap-3">
                   <div>
                     <h2 className="text-2xl font-medium">
-                      {productById[0].title}
+                      {productById[0]?.title}
                     </h2>
-                    <span className="text-md font-normal italic text-[#777]">
-                      {productById[0].description}
-                    </span>
+                    <span
+                      dangerouslySetInnerHTML={{
+                        __html: productById[0]?.description,
+                      }}
+                      className="text-md font-normal italic text-[#777]"
+                    ></span>
                   </div>
                   <div>
                     <span>Giá: </span>
                     <strong className="text-[#ff6363] text-xl font-medium">
-                      {Intl.NumberFormat().format(Number(productById[0].price))}{" "}
+                      {Intl.NumberFormat().format(
+                        Number(productById[0]?.price)
+                      )}{" "}
                       VNĐ
                     </strong>
                   </div>
-                  <p>{productById[0].detail} </p>
+                  <div
+                    dangerouslySetInnerHTML={{ __html: productById[0]?.detail }}
+                  ></div>
                   <p></p>
                 </div>
               </div>
-              <div>
-                <p className="text-lg font-light text-[#000]">
-                  {productById[0].content}
-                </p>
-              </div>
+              <div
+                dangerouslySetInnerHTML={{ __html: productById[0]?.content }}
+                className="text-lg font-light text-[#000]"
+              ></div>
             </div>
           </Box>
         </Modal>
 
         {/*End Show Detail Blog */}
       </div>
+      <ToastContainer />
     </>
   );
 };

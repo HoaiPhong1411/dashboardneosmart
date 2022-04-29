@@ -1,7 +1,7 @@
 import { IoMdArrowDropdown } from "react-icons/io";
 import { IoNotificationsSharp } from "react-icons/io5";
 import { MdOutlineLogout } from "react-icons/md";
-import { BsLightbulbFill, BsLightbulbOffFill } from "react-icons/bs";
+import { BsSunFill, BsMoonStarsFill } from "react-icons/bs";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -20,7 +20,6 @@ const Header = () => {
   };
   const handleShowProfile = (e) => {
     setShow(!show);
-    console.log(show);
   };
   const handleLogOut = () => {
     localStorage.clear();
@@ -43,16 +42,14 @@ const Header = () => {
               className="bg-gradient-to-b from-[#146910] to-[#bfda29] rounded-md  p-2 flex justify-between items-center cursor-pointer transition-all "
               onClick={toggleDarkMode}
             >
-              <BsLightbulbOffFill className="text-[black]" />
-              <p className="text-[black]">DarkMode</p>
+              <BsMoonStarsFill className="text-[black]" />
             </div>
           ) : (
             <div
               className="bg-gradient-to-t from-[#c2a016] to-[#b969de] shadow-md rounded-md p-2 flex justify-between items-center cursor-pointer transition-all "
               onClick={toggleDarkMode}
             >
-              <BsLightbulbFill className="text-[#f5eec8be]" />
-              <p className="text-[#f5eec8be]">LightMode</p>
+              <BsSunFill className="text-[#f5eec8be]" />
             </div>
           )}
         </div>

@@ -4,6 +4,8 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 //
 import { addBlogSuccess } from "../../../app/blogSlice/blogsSlice";
 import InputSearch from "../../../Component/Input/InputSearch";
@@ -35,6 +37,10 @@ const ClientBlogList = () => {
   const navigate = useNavigate();
   const [dataNew, setDataNew] = useState(null);
   const [blogById, setBlogById] = useState([]);
+  const notify = (
+    type = "error",
+    content = "Cập nhật hiển thị không thành công!"
+  ) => toast[type](content);
 
   const getBlogByListBlog = useSelector(
     (state) => state.blogByBlogListId.blogByBlogListId.blogByBlogListId
@@ -90,9 +96,10 @@ const ClientBlogList = () => {
     // Update display
     const updateDisplay = async (id, data) => {
       try {
-        const res = await clientApi.blogDisplay(id, data);
+        await clientApi.blogDisplay(id, data);
+        notify("success", "Cập nhật hiển thị thành công!");
       } catch (error) {
-        console.log(error);
+        notify();
       }
     };
     const dataDisplay = new FormData();
@@ -117,7 +124,7 @@ const ClientBlogList = () => {
     const handleSearch = async () => {
       try {
         let dataSearch = [];
-        const res = getBlogByListBlog[0]?.forEach((item, i) => {
+        getBlogByListBlog[0]?.forEach((item, i) => {
           if (
             item.title.toLowerCase().includes(value.trim().toLowerCase(), 0)
           ) {
@@ -144,10 +151,11 @@ const ClientBlogList = () => {
   const handleRemove = (id) => {
     const remove = async () => {
       try {
-        const response = await clientApi.blogDelete(id);
+        await clientApi.blogDelete(id);
         setRender(!render);
+        notify("success", "Xóa bài viết thành công!");
       } catch (error) {
-        console.log(error);
+        notify("error", "Xóa sản phẩm thất bại!");
       }
     };
     remove();
@@ -157,6 +165,7 @@ const ClientBlogList = () => {
 
   return (
     <>
+      <ToastContainer />
       <div className="flex flex-row items-center gap-5 w-full dark:bg-nightSecondary bg-lightSecondary shadow-lg py-3 px-5 rounded-xl">
         {/* button add */}
         <ButtonAdd link="/blog/add" title="Add New" />

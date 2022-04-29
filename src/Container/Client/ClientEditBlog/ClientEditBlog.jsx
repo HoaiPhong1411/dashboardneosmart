@@ -1,9 +1,10 @@
 import { FiSave } from "react-icons/fi";
-import { useEffect, useState, useLayoutEffect, useRef } from "react";
-import axios from "axios";
+import { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { TiArrowBack } from "react-icons/ti";
 
@@ -36,6 +37,9 @@ const ClientEditBlog = () => {
   const navigate = useNavigate();
 
   const editorRef = useRef(null);
+
+  const notify = (type = "error", content = "Lỗi hệ thống không thể upload!") =>
+    toast[type](content);
 
   const getChangeTheme = async () => {
     try {
@@ -123,14 +127,17 @@ const ClientEditBlog = () => {
     }
     updateBlog(id, dataUpdate);
     setLoad(!load);
-    navigate("/blog", dataUpdate);
   };
 
   const updateBlog = async (id, data) => {
     try {
       await clientApi.blogEdit(id, data);
+      notify("success", "Cập nhật bài viết thành công!");
+      setTimeout(() => {
+        navigate("/blog", data);
+      }, 2000);
     } catch (error) {
-      console.log(error);
+      notify();
     }
   };
 
@@ -140,6 +147,7 @@ const ClientEditBlog = () => {
 
   return (
     <>
+      <ToastContainer />
       <div className="ml-3 hover:text-hoverButton">
         <div
           className="cursor-pointer flex flex-row gap-1 items-center"

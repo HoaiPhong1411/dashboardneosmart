@@ -5,6 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Component Button
 import { urlImg } from "../../../Component/Variable";
@@ -47,6 +49,11 @@ const ClientBlog = () => {
   const listBlog = useSelector((state) => state.listBlog.listBlog.listBlog);
   const dataBlog = useSelector((state) => state.blogs.blogs.blogs);
 
+  const notify = (
+    type = "error",
+    content = "Cập nhật hiển thị không thành công!"
+  ) => toast[type](content);
+
   // show Detail
   const handleOpen = (id) => {
     const getBlogById = async () => {
@@ -87,10 +94,11 @@ const ClientBlog = () => {
   const handleRemove = (id) => {
     const remove = async () => {
       try {
-        const response = await clientApi.blogDelete(id);
+        await clientApi.blogDelete(id);
         setRender(!render);
+        notify("success", "Xóa bài viết thành công!");
       } catch (error) {
-        console.log(error);
+        notify("error", "Xóa sản phẩm thất bại!");
       }
     };
     remove();
@@ -119,9 +127,10 @@ const ClientBlog = () => {
     // Update display
     const updateDisplay = async (id, data) => {
       try {
-        const res = await clientApi.blogDisplay(id, data);
+        await clientApi.blogDisplay(id, data);
+        notify("success", "Cập nhật hiển thị thành công!");
       } catch (error) {
-        console.log(error);
+        notify();
       }
     };
     const dataDisplay = new FormData();
@@ -165,6 +174,7 @@ const ClientBlog = () => {
 
   return (
     <>
+      <ToastContainer />
       <div className="flex flex-row items-center gap-5 w-full dark:bg-nightSecondary bg-lightSecondary shadow-lg py-3 px-5 rounded-xl">
         {/* button add */}
         <ButtonAdd link="/blog/add" title="Add New" />

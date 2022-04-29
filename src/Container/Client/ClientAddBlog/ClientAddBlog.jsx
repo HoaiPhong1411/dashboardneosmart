@@ -5,14 +5,52 @@ import { useFormik, Field } from "formik";
 import { useSelector } from "react-redux";
 import { TiArrowBack } from "react-icons/ti";
 import { Editor } from "@tinymce/tinymce-react";
+import { location } from "../../../Component/Variable";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import ButtonCheck from "../../../Component/Button/ButtonCheck";
 import ButtonUpload from "../../../Component/Button/ButtonUpload";
 import notimg from "../../../assets/images/No-image-found.jpg";
 import { clientApi } from "../../../api/api";
 
+// config upload img
+const init = {
+  file_browser_callback: function (field_name, url, type, win) {
+    win.document.getElementById(field_name).value = "my browser value";
+  },
+  file_browser_callback_types: "image media",
+  file_picker_callback: function (callback, value, meta) {
+    // Provide file and text for the link dialog
+
+    // Provide image and alt text for the image dialog
+    if (meta.filetype == "image") {
+      callback("myimage.jpg", { alt: "My alt text" });
+    }
+
+    // Provide alternative source and posted for the media dialog
+    if (meta.filetype == "media") {
+      callback("movie.mp4", {
+        source2: "alt.ogg",
+        poster: "image.jpg",
+      });
+    }
+  },
+  file_picker_types: "file image media",
+  images_upload_url: location,
+  automatic_uploads: false,
+  images_reuse_filename: true,
+  images_dataimg_filter: function (img) {
+    return img.hasAttribute("internal-blob");
+  },
+  tablemergecells: true,
+};
+
+// End config upload img
+
 const ClientAddBlog = () => {
   const [image, setImage] = useState();
+
   const [display, setDisplay] = useState(true);
   const [content, setContent] = useState();
   const [des, setDes] = useState();
@@ -22,13 +60,10 @@ const ClientAddBlog = () => {
   const [listBLogId, setListBlogId] = useState();
   const navigate = useNavigate();
   const dataListBlog = useSelector((state) => state.listBlog.listBlog.listBlog);
+  const notify = (type = "error", content = "Vui lòng nhập đầy đủ!") =>
+    toast[type](content);
 
   const editorRef = useRef(null);
-  const log = () => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent());
-    }
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -64,12 +99,6 @@ const ClientAddBlog = () => {
   const formik = useFormik({
     initialValues: {
       title: "",
-      description: "",
-      detail: "",
-      content: "",
-      photo: "",
-      display: "",
-      position: "",
     },
     onSubmit: (value) => {
       const data = new FormData();
@@ -88,12 +117,10 @@ const ClientAddBlog = () => {
   //   FunctionAdd
   const addBlog = async (data) => {
     try {
-      const response = await clientApi.blogAdd(data);
-      setTimeout(() => {
-        window.location.reload();
-      }, 200);
+      await clientApi.blogAdd(data);
+      notify("success", "Thêm sản phẩm thành công!");
     } catch (error) {
-      alert("Vui Lòng Nhập Đầy Đủ !");
+      notify();
     }
   };
 
@@ -116,6 +143,7 @@ const ClientAddBlog = () => {
   };
   return (
     <>
+      <ToastContainer />
       <div className="ml-3 hover:text-hoverButton">
         <div
           className="cursor-pointer flex flex-row gap-1 items-center"
@@ -158,17 +186,9 @@ const ClientAddBlog = () => {
               {/* Description */}
               <div className="w-full flex flex-col justify-between gap-2 items-start mb-5">
                 <label htmlFor="description">Description</label>
-                {/* <textarea
-                  rows="3"
-                  type="text"
-                  name="description"
-                  id="description"
-                  placeholder="Description"
-                  value={formik.values.description}
-                  onChange={formik.handleChange}
-                  className="w-full border-[1px] dark:bg-primary dark:text-[#fff] border-secondary focus:border-[#e0ed2e]"
-                /> */}
+
                 <Editor
+                  name="description"
                   apiKey="9ksw8tn5zsdmdzj74e4l69xoewcxuqnmdgy3uf06wunsn404"
                   onInit={(evt, editor) => (editorRef.current = editor)}
                   initialValue="<b>Địa chỉ: <br>Diện tích: "
@@ -177,6 +197,8 @@ const ClientAddBlog = () => {
                     height: 250,
                     width: "100%",
                     menubar: true,
+                    image_advtab: true,
+                    ...init,
                   }}
                   plugins="advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount image"
                   toolbar="undo redo | formatselect bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help | image"
@@ -188,17 +210,9 @@ const ClientAddBlog = () => {
               {/* Description */}
               <div className="w-full flex flex-col justify-between gap-2 items-start mb-5">
                 <label htmlFor="description">Detail</label>
-                {/* <textarea
-                  rows="3"
-                  type="text"
-                  name="description"
-                  id="description"
-                  placeholder="Description"
-                  value={formik.values.description}
-                  onChange={formik.handleChange}
-                  className="w-full border-[1px] dark:bg-primary dark:text-[#fff] border-secondary focus:border-[#e0ed2e]"
-                /> */}
+
                 <Editor
+                  name="detail"
                   apiKey="9ksw8tn5zsdmdzj74e4l69xoewcxuqnmdgy3uf06wunsn404"
                   onInit={(evt, editor) => (editorRef.current = editor)}
                   initialValue="<b>Giới thiệu chung:</b>"
@@ -207,6 +221,7 @@ const ClientAddBlog = () => {
                     height: 250,
                     width: "100%",
                     menubar: true,
+                    ...init,
                   }}
                   plugins="advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount image"
                   toolbar="undo redo | formatselect bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help | image"
@@ -220,28 +235,23 @@ const ClientAddBlog = () => {
               {/* Content */}
               <div className=" w-full flex flex-col justify-between gap-2 items-start mb-5">
                 <label htmlFor="content">Content</label>
-                {/* <textarea
-                  rows="5"
-                  type="text"
-                  name="content"
-                  id="content"
-                  placeholder="Content"
-                  value={formik.values.content}
-                  onChange={formik.handleChange}
-                  className="w-full border-[1px] dark:bg-primary dark:text-[#fff] border-secondary focus:border-[#e0ed2e]"
-                /> */}
+
                 <Editor
+                  name="content"
                   apiKey="9ksw8tn5zsdmdzj74e4l69xoewcxuqnmdgy3uf06wunsn404"
                   onInit={(evt, editor) => (editorRef.current = editor)}
+                  initialValue=""
                   onEditorChange={(newText) => setContent(newText)}
                   init={{
                     height: 500,
                     width: "100%",
                     menubar: true,
+                    ...init,
                   }}
-                  plugins="advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount image"
-                  toolbar="undo redo | formatselect bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help | image"
+                  plugins="advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount image imagetools"
+                  toolbar="undo redo | formatselect bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help | image  imagetools"
                   content_style="body { font-family:Helvetica,Arial,sans-serif; font-size:14px }"
+                  imagetools_cors_hosts={("mydomain.com", "otherdomain.com")}
                 />
               </div>
               {/* End Content */}

@@ -4,6 +4,8 @@ import { useFormik } from "formik";
 import { Editor } from "@tinymce/tinymce-react";
 import { IoMdAddCircle } from "react-icons/io";
 import { TiArrowBack } from "react-icons/ti";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { clientApi } from "../../../api/api";
 import ButtonCheck from "../../../Component/Button/ButtonCheck";
@@ -24,6 +26,8 @@ const ClientAddProduct = () => {
   const [categoryId, setCategoryId] = useState();
   const navigate = useNavigate();
   const editorRef = useRef(null);
+  const notify = (type = "error", content = "Thêm sản phẩm thành công!") =>
+    toast[type](content);
 
   useEffect(() => {
     const fecthCategory = async () => {
@@ -117,12 +121,11 @@ const ClientAddProduct = () => {
   });
   const addProduct = async (data) => {
     try {
-      const response = await clientApi.productAdd(data);
-      // setTimeout(() => {
-      //   window.location.reload();
-      // }, 100);
+      await clientApi.productAdd(data);
+      notify();
+      navigate("/product", data);
     } catch (error) {
-      alert("Vui Lòng Nhập Đầy Đủ !");
+      notify("error", "Thêm sản phẩm thất bại!");
     }
   };
 
@@ -134,6 +137,7 @@ const ClientAddProduct = () => {
 
   return (
     <>
+      <ToastContainer />
       <div className="ml-3 hover:text-hoverButton">
         <div
           className="cursor-pointer flex flex-row gap-1 items-center"

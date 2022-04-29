@@ -1,5 +1,3 @@
-import Toast from "./Toast";
-
 const Footer = () => {
   return (
     <>

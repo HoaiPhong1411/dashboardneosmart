@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { getAllProduct, getProductById } from "../../../app/apiRequest";
 import { getAllProductSuccess } from "../../../app/productSlice/productSlice";
@@ -37,6 +39,8 @@ const ClientProduct = () => {
   const [dataNew, setDataNew] = useState(null);
   //  value input search
   const [value, setValue] = useState();
+  const notify = (type = "success", content = "Cập nhật thành công!") =>
+    toast[type](content);
   // -----------------------
   const dataCategory = useSelector(
     (state) => state.category.category.category[0]
@@ -74,9 +78,10 @@ const ClientProduct = () => {
     const remove = async () => {
       try {
         await clientApi.productDelete(id);
+        notify("success", "Xóa sản phẩm thành công!");
         setRender(!render);
       } catch (error) {
-        console.log(error);
+        notify("error", "Xóa sản phẩm thất bại!");
       }
     };
     remove();
@@ -109,14 +114,17 @@ const ClientProduct = () => {
     const updateDisplay = async (id, data) => {
       try {
         const res = await clientApi.productEdit(id, data);
+        notify();
       } catch (error) {
-        console.log(error);
+        notify("error", "Cập nhật thất bại!");
       }
     };
     const dataDisplay = new FormData();
     dataDisplay.append("title", product.title);
     dataDisplay.append("photo", product.photo);
     dataDisplay.append("price", product.price);
+    dataDisplay.append("detail", product.detail);
+    dataDisplay.append("content", product.content);
     dataDisplay.append("description", product.description);
     dataDisplay.append("position", product.position);
     if (check) {
@@ -126,6 +134,7 @@ const ClientProduct = () => {
       dataDisplay.append("display", 0);
       updateDisplay(product.id, dataDisplay);
     }
+    setRender(!render);
     // End Update display
   };
   // End handle display
@@ -337,6 +346,7 @@ const ClientProduct = () => {
                     </strong>
                   </div>
                   <div
+                    className="text-[13px] font-light"
                     dangerouslySetInnerHTML={{ __html: productById[0]?.detail }}
                   ></div>
                 </div>
@@ -344,7 +354,7 @@ const ClientProduct = () => {
               <div>
                 <p
                   dangerouslySetInnerHTML={{ __html: productById[0]?.content }}
-                  className="text-lg font-light text-[#000]"
+                  className="text-md font-normal text-[#000]"
                 ></p>
               </div>
             </div>
@@ -353,6 +363,7 @@ const ClientProduct = () => {
 
         {/*End Show Detail Blog */}
       </div>
+      <ToastContainer />
     </>
   );
 };

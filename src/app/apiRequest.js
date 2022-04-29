@@ -202,11 +202,7 @@ export const getAllMenu = async (dispath) => {
         const res = await clientApi.menuShow();
         dispath(getMenuSuccess(res.data));
     } catch (error) {
-<<<<<<< HEAD
         dispath(getMenuFailed()) 
-=======
-        dispath(getMenuFailed());
->>>>>>> a548e78997c4f87163e806f558df6cb904701f6b
     }
 };
 

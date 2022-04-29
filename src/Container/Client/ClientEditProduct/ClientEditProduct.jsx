@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { FiSave } from "react-icons/fi";
 import { TiArrowBack } from "react-icons/ti";
 import { Editor } from "@tinymce/tinymce-react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { clientApi } from "../../../api/api";
 import { getAllProductSuccess } from "../../../app/productSlice/productSlice";
@@ -14,7 +16,6 @@ import "./ClientEditProduct.css";
 
 const ClientEditProduct = () => {
   // getApi
-  // const [data, setData] = useState([]);
 
   // show Product Choose
   const [load, setLoad] = useState(false);
@@ -22,11 +23,13 @@ const ClientEditProduct = () => {
   const [file, setFile] = useState();
   const [img, setImg] = useState();
   // get data edited
-  const [title, setTitle] = useState();
+  const [stateValue, setStateValue] = useState({
+    title: null,
+    price: null,
+  });
   const [des, setDes] = useState();
   const [detail, setDetail] = useState();
   const [content, setContent] = useState();
-  const [price, setPrice] = useState();
   const [display, setDisplay] = useState();
   const [position, setPosition] = useState();
   const editorRef = useRef(null);
@@ -36,6 +39,8 @@ const ClientEditProduct = () => {
   const getEdit = useSelector((state) => state.product.product.product);
   const [getTheme, setGetTheme] = useState();
   const navigate = useNavigate();
+  const notify = (type = "success", content = "Sửa sản phẩm thành công!") =>
+    toast[type](content);
   const getChangeTheme = async () => {
     try {
       await window.addEventListener("click", (e) => {
@@ -53,13 +58,18 @@ const ClientEditProduct = () => {
     setEditPro(getEdit);
   }, []);
 
+  // Change title và price
+  const handleChanges = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setStateValue({
+      ...stateValue,
+      [name]: value,
+    });
+  };
+
   // onChange data update
-  const handleChangeTitle = (e) => {
-    setTitle(e.target.value);
-  };
-  const handleChangePrice = (e) => {
-    setPrice(e.target.value);
-  };
+
   const handleChangeImage = (e) => {
     setFile(e.target.files[0]);
     const reader = new FileReader();
@@ -106,11 +116,11 @@ const ClientEditProduct = () => {
     const dataUpdate = new FormData();
 
     // update
-    dataUpdate.append("title", title ?? editPro[0].title);
+    dataUpdate.append("title", stateValue.title ?? editPro[0].title);
     dataUpdate.append("description", des ?? editPro[0].description);
     dataUpdate.append("detail", detail ?? editPro[0].detail);
     dataUpdate.append("content", content ?? editPro[0].content);
-    dataUpdate.append("price", price ?? editPro[0].price);
+    dataUpdate.append("price", stateValue.price ?? editPro[0].price);
     dataUpdate.append("photo", file ?? editPro[0].photo);
     if (display ?? editPro[0].display) {
       dataUpdate.append("display", 1);
@@ -126,14 +136,17 @@ const ClientEditProduct = () => {
     dispath(getAllProductSuccess([]));
     setEditPro([]);
     setLoad(!load);
-    navigate("/product", dataUpdate);
   };
 
   const updateProduct = async (id, data) => {
     try {
       await clientApi.productEdit(id, data);
+      notify();
+      setTimeout(() => {
+        navigate("/product", data);
+      }, 3000);
     } catch (error) {
-      console.log(error);
+      notify("error", "Cập nhật sản phẩm thất bại!");
     }
   };
 
@@ -143,6 +156,8 @@ const ClientEditProduct = () => {
 
   return (
     <>
+      <ToastContainer />
+
       <div className="ml-3 hover:text-hoverButton">
         <div
           className="cursor-pointer flex flex-row gap-1 items-center"
@@ -173,10 +188,11 @@ const ClientEditProduct = () => {
                   <div className="w-full flex flex-col justify-between gap-2 items-start text-[#fff]">
                     <label htmlFor="title">Title</label>
                     <input
+                      name="title"
                       type="text"
-                      value={title ?? item.title}
+                      value={stateValue.title ?? item.title}
                       className="w-full border-[1px] border-secondary dark:bg-primary dark:text-[#fff] focus:border-[#e0ed2e] font-light"
-                      onChange={(e) => handleChangeTitle(e)}
+                      onChange={(e) => handleChanges(e)}
                     />
                   </div>
 
@@ -187,10 +203,11 @@ const ClientEditProduct = () => {
                   <div className="w-full flex flex-col justify-between gap-2 items-start text-[#fff]">
                     <label htmlFor="price">Price</label>
                     <input
+                      name="price"
                       type="text"
-                      value={price ?? item.price}
+                      value={stateValue.price ?? item.price}
                       className="w-full border-[1px] border-secondary dark:bg-primary dark:text-[#fff] focus:border-[#e0ed2e] font-light"
-                      onChange={(e) => handleChangePrice(e)}
+                      onChange={(e) => handleChanges(e)}
                     />
                   </div>
 
