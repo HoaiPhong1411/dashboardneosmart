@@ -1,21 +1,21 @@
-table td {
-    padding: 15px 8px;
-    /* border: 1px solid rgba(136, 136, 136, 0.395); */
-    text-align: center;
-}
+
+
 
 label {
     font-size: 1rem;
     font-weight: normal;
+    color: #0f8f31;
+}
+.label-dark {
+    color:#d26513
 }
 
 input,textarea {
-    color:#fff;
+    color:#333;
     padding: 0.5rem 0.75rem;
     outline: none;
     font-size: 1rem;
     font-weight: 400;
-    background-color: #fcfbf3;
 }
 
 ::-webkit-scrollbar{
@@ -28,7 +28,7 @@ input,textarea {
 }
 
 ::-webkit-scrollbar-thumb{
-    background-color: #6c7293;
+    background-color: #f5eec8be;
     border-radius: 0.75rem;
 
 }

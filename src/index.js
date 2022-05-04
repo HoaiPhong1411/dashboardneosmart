@@ -8,13 +8,11 @@ import { store } from "../src/app/store";
 import { PersistGate } from "redux-persist/integration/react";
 
 ReactDOM.render(
-    <React.StrictMode>
         <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
                 <App />
             </PersistGate>
-        </Provider>
-    </React.StrictMode>,
+        </Provider>,
     document.getElementById("root")
 );
 

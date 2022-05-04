@@ -6,9 +6,10 @@ const ButtonCheck = (props) => {
     <>
       <label
         htmlFor={htmlFor}
-        className="inline-block p-[0.2rem] bg-secondary rounded-sm border-2 border-[#fff] cursor-pointer"
+        style={style}
+        className="inline-block p-[0.05rem] bg-lightSecondary rounded-sm border-2 border-primary cursor-pointer"
       >
-        <BsCheckLg id={idIcon} style={style} />
+        <BsCheckLg id={idIcon} className="text-[0.9rem] text-[#fff]" />
       </label>
     </>
   );

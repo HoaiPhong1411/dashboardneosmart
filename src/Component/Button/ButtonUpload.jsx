@@ -4,7 +4,7 @@ const ButtonUpload = (props) => {
   const { htmlFor } = props;
   return (
     <label htmlFor={htmlFor} className="py-1 px-4 bg-[transparent] ">
-      <AiOutlineCloudUpload className="text-[1.8rem] cursor-pointer hover:text-[#999]" />
+      <AiOutlineCloudUpload className="text-[1.8rem] cursor-pointer text-bgButton hover:text-hoverButton" />
     </label>
   );
 };

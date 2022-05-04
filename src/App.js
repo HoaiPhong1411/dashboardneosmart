@@ -1,12 +1,24 @@
 import "./App.css";
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ClientRoutes } from "./Router/Router";
 import ClientLayout from "./Layout/ClientLayout";
 import SignUp from "./Container/Auth/SignUp";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    useNavigate,
+} from "react-router-dom";
 import Login from "./Container/Auth/SignIn";
 function App() {
+    // const user = useSelector((state) => state.auth.login?.currentUser);
+    // const navigate = useNavigate();
+    // useEffect(() => {
+    //     if (!user) {
+    //         navigate("/signin");
+    //     }
+    // }, []);
     const renderLayout = (routes) => {
         return routes?.map((route) => {
             const { path, element, index } = route;

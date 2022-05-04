@@ -1,12 +1,10 @@
 import { IoMdArrowDropdown } from "react-icons/io";
+import { IoNotificationsSharp } from "react-icons/io5";
 import { MdOutlineLogout } from "react-icons/md";
-import { BsLightbulbFill, BsLightbulbOffFill } from "react-icons/bs";
-import { BiArrowBack } from "react-icons/bi";
+import { BsSunFill, BsMoonStarsFill } from "react-icons/bs";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { logOut } from "../app/apiRequest";
-import ButtonSwitch from "./Button/ButtonSwitch";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import useDark from "../useDark";
 
 const Header = () => {
@@ -22,7 +20,6 @@ const Header = () => {
   };
   const handleShowProfile = (e) => {
     setShow(!show);
-    console.log(show);
   };
   const handleLogOut = () => {
     localStorage.clear();
@@ -42,36 +39,38 @@ const Header = () => {
         <div className="s">
           {isDarkMode ? (
             <div
-              className="bg-gradient-to-b from-[#510aea] to-[#b969de] rounded-md  p-2 flex justify-between items-center cursor-pointer transition-all "
+              className="bg-gradient-to-b from-[#146910] to-[#bfda29] rounded-md  p-2 flex justify-between items-center cursor-pointer transition-all "
               onClick={toggleDarkMode}
             >
-              <BsLightbulbOffFill className="text-[black]" />
-              <p className="text-[black]">DarkMode</p>
+              <BsMoonStarsFill className="text-[black]" />
             </div>
           ) : (
             <div
               className="bg-gradient-to-t from-[#c2a016] to-[#b969de] shadow-md rounded-md p-2 flex justify-between items-center cursor-pointer transition-all "
               onClick={toggleDarkMode}
             >
-              <BsLightbulbFill
-                onClick={toggleDarkMode}
-                className="text-[#f5d450]"
-              />
-              <p className="text-[#f5d450]">LightMode</p>
+              <BsSunFill className="text-[#f5eec8be]" />
             </div>
           )}
         </div>
-        <div
-          onClick={(e) => handleShowProfile(e)}
-          className="flex flex-row justify-center items-center cursor-pointer"
-        >
+
+        <div className="flex flex-row justify-center gap-5 items-center cursor-pointer">
+          <div className="flex justify-center items-center">
+            <span className="p-2 bg-lightPrimary dark:bg-hoverButton dark:text-[#fff] dark:hover:bg-bgButton shadow-md hover:bg-[#e8dd97be] cursor-pointer rounded-[50%] ">
+              <IoNotificationsSharp />
+            </span>
+          </div>
           <img
+            onClick={(e) => handleShowProfile(e)}
             src="https://www.bootstrapdash.com/demo/corona-react-free/template/demo_1/preview/static/media/face15.736ec0d9.jpg"
             alt=""
             className="w-[2.25rem] h-[2.25rem] rounded-[50%]"
           />
 
-          <div className="flex flex-row justify-center items-center text-[#fff] ml-3 relative">
+          <div
+            onClick={(e) => handleShowProfile(e)}
+            className="flex flex-row justify-center items-center text-[#fff] relative"
+          >
             {user ? (
               <>
                 <div className="text-sm dark:text-[white] text-[black] ">
@@ -88,16 +87,16 @@ const Header = () => {
 
         <div
           style={show ? { display: "block" } : { display: "none" }}
-          className="profile absolute top-[11%] w-[180px] rounded-[4px] right-[1rem] shadow-xl dark:bg-[black] bg-[#ffffffc0] dark:text-[#fff] text-[black] "
+          className="profile absolute top-[11%] w-[180px] rounded-[4px] right-[1rem] shadow-md shadow-primary dark:bg-[black] bg-[#f5eec8] dark:text-[#fff] text-[black] z-[1000]"
         >
           <div className="text-[16px] font-medium border-b-[1px] border-secondary px-5 py-3 cursor-pointer">
             Profile
           </div>
           <div
             onClick={handleLogOut}
-            className=" pt-3 flex flex-row items-center cursor-pointer px-5 py-3"
+            className="group pt-3 flex flex-row items-center hover:bg-lightSecondary dark:hover:bg-nightSecondary cursor-pointer px-5 py-3"
           >
-            <span className="w-10 h-10 rounded-[50%] dark:bg-[#000] bg-[#ffffffc0] mr-3 flex justify-center items-center">
+            <span className="w-10 h-10 rounded-[50%] bg-[#ffffffc0] dark:bg-bgButton group-hover:bg-lightPrimary mr-3 flex justify-center items-center">
               <MdOutlineLogout className=" text-[red] text-[1.25rem]" />
             </span>
             <button> Log Out</button>

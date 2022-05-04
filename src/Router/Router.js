@@ -5,10 +5,19 @@ import ClientEditBlog from "../Container/Client/ClientEditBlog/ClientEditBlog";
 import ClientEditProduct from "../Container/Client/ClientEditProduct/ClientEditProduct";
 import ClientHome from "../Container/Client/ClientHome/ClientHome";
 import ClientProduct from "../Container/Client/ClientProduct/ClientProduct";
+<<<<<<< HEAD
 import ClientCategory from "../Container/Client/ClientCategory/ClientCategory"
 import ClientListBlog from "../Container/Client/ClientListBlog/ClientListBlog";
 import ClientAddListBlog from "../Container/Client/ClientAddListBlog/ClientAddListBlog";
 import ClientEditListBlog from "../Container/Client/ClientEditListBlog/ClientEditListBlog";
+=======
+import ClientCategory from "../Container/Client/ClientCategory/ClientCategory";
+import ClientUser from "../Container/Client/ClientUser/ClientUser";
+import ClientMenu from "../Container/Client/ClientMenu/ClientMenu";
+import ClientAddMenu from "../Container/Client/ClientMenu/ClientAddMenu";
+import ClientBlogList from "../Container/Client/ClientBlogList/ClientBlogList";
+import ClientMail from "../Container/Client/ClientMail/ClientMail";
+>>>>>>> origin/phong
 
 export const ClientRoutes = [
     {
@@ -53,6 +62,7 @@ export const ClientRoutes = [
     },
     {
         index: true,
+<<<<<<< HEAD
         element: <ClientListBlog />,
         path: "/listblog",
     },
@@ -65,5 +75,26 @@ export const ClientRoutes = [
         index: true,
         element: <ClientEditListBlog />,
         path: "/listblog/edit",
+=======
+        element: <ClientUser />,
+        path: "/user",
+    },
+    {
+        index: true,
+        element: <ClientMenu />,
+        path: "/menu",
+    },
+    {
+        index: true,
+        element: <ClientAddMenu />,
+        path: "/menu/add",
+        element: <ClientBlogList />,
+        path: "/bloglist",
+    },
+    {
+        index: true,
+        element: <ClientMail />,
+        path: "/mail",
+>>>>>>> origin/phong
     },
 ];

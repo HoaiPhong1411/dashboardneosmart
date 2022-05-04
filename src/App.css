@@ -2,13 +2,26 @@ body{
     font-family: 'Rubik', sans-serif;
 }
 
-
-/* Toast */
+/* NavBar */
 .active {
-    background-color:#292929;
+    background-color:#0f8f31;
     color: #fff;
     border-left-color: #fce355fb !important;
 }
+.active-sub-menu {
+    color: rgb(16, 181, 38);
+}
+
+/* Sub NavBar */
+
+.show-sub {
+    display:block;
+}
+
+/* End NavBar */
+
+
+/* Toast */
 
 #error {
     border-left: 0.5rem solid #e64141;
