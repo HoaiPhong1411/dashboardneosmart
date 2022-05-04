@@ -1,44 +1,3 @@
-<<<<<<< HEAD
-import axios from "axios";
-import { IoIosAddCircleOutline } from "react-icons/io";
-import { AiFillEdit } from "react-icons/ai";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-
-import ButtonDelete from "../../../Component/Button/ButtonDelete";
-import ButtonSwitch from "../../../Component/Button/ButtonSwitch";
-import { useDispatch, useSelector } from "react-redux";
-import { getFullBlog } from "../../../app/apiRequest.js";
-import { getAllBlogSuccess } from "../../../app/blogSlice.js";
-import { urlImg } from "../../../Component/Variable";
-
-
-const ClientBlog = () => {
-  const getBlog = useSelector((state) => state.blogs.blog.blog);
-  const dispath = useDispatch();
-  const [render, setRender] = useState(false);
-  const [dataListBlog, setDataListBlog] = useState();
-
-  const handleEdit = (e, blog) => {
-    dispath(getAllBlogSuccess(blog));
-  };
-
-  // get data Blog
-
-  useEffect(() => {
-    getFullBlog(dispath);
-  }, [render]);
-  // End data Blog
-
-  // get data listBlog
-  useEffect(() => {
-    const fecth = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8000/api/listblog/index"
-        );
-        setDataListBlog(response.data);
-=======
 import React from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -125,7 +84,6 @@ const ClientBlog = () => {
       try {
         const response = await clientApi.blogShow();
         setData(response.data);
->>>>>>> origin/phong
       } catch (error) {
         console.log(error);
       }
@@ -133,19 +91,6 @@ const ClientBlog = () => {
     fecth();
   }, [render]);
 
-<<<<<<< HEAD
-  // End data Category
-
-  // delete Blog
-
-  const handleRemove = (id) => {
-    const remove = async () => {
-      try {
-        await axios.delete(`http://localhost:8000/api/blog/delete/${id}`);
-        setRender(!render);
-      } catch (error) {
-        console.log(error);
-=======
   const handleRemove = (id) => {
     const remove = async () => {
       try {
@@ -154,17 +99,10 @@ const ClientBlog = () => {
         notify("success", "Xóa bài viết thành công!");
       } catch (error) {
         notify("error", "Xóa sản phẩm thất bại!");
->>>>>>> origin/phong
       }
     };
     remove();
   };
-<<<<<<< HEAD
-  // End delete blog
-
-  // -------
-=======
->>>>>>> origin/phong
 
   // Handle display
   const handleDisplay = (e, blog) => {
@@ -176,17 +114,10 @@ const ClientBlog = () => {
       if (item.id == blog.id) {
         if (check) {
           item.style.transform = "translateX(125%)";
-<<<<<<< HEAD
-          spanElement.style.backgroundColor = "#e64141";
-        } else {
-          item.style.transform = "translateX(20%)";
-          spanElement.style.backgroundColor = "#6c7293";
-=======
           spanElement.style.backgroundColor = "#0f8f31";
         } else {
           item.style.transform = "translateX(20%)";
           spanElement.style.backgroundColor = "#e64141";
->>>>>>> origin/phong
         }
       }
     });
@@ -196,22 +127,6 @@ const ClientBlog = () => {
     // Update display
     const updateDisplay = async (id, data) => {
       try {
-<<<<<<< HEAD
-        const res = await axios.post(
-          `http://localhost:8000/api/blog/update/${id}`,
-          data
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    const dataDisplay = new FormData();
-    dataDisplay.append("title", blog.title);
-    dataDisplay.append("photo", blog.photo);
-    dataDisplay.append("description", blog.description);
-    dataDisplay.append("content", blog.content);
-    dataDisplay.append("position", blog.position);
-=======
         await clientApi.blogDisplay(id, data);
         notify("success", "Cập nhật hiển thị thành công!");
       } catch (error) {
@@ -219,7 +134,6 @@ const ClientBlog = () => {
       }
     };
     const dataDisplay = new FormData();
->>>>>>> origin/phong
     if (check) {
       dataDisplay.append("display", 1);
       updateDisplay(blog.id, dataDisplay);
@@ -230,42 +144,6 @@ const ClientBlog = () => {
     // End Update display
   };
   // End handle display
-<<<<<<< HEAD
-  return (
-    <>
-      <div className="flex flex-row gap-5 w-full bg-primary py-3 px-5 rounded-xl">
-        {/* button add */}
-        <Link
-          to="/blog/add"
-          className="px-2 py-2 rounded-lg cursor-pointer hover:bg-[#e64141] text-[#fff] bg-secondary flex flex-row items-center"
-        >
-          <IoIosAddCircleOutline className="mr-4 text-xl" />
-          Add Blog
-        </Link>
-
-        {/* End button add */}
-
-        {/* Button Edit */}
-        <Link
-          to="/blog/edit"
-          className=" px-2 py-2 rounded-lg cursor-pointer hover:bg-[#e64141] text-[#fff] bg-secondary flex flex-row items-center"
-        >
-          <AiFillEdit className="mr-4 text-xl" />
-          Edit blog
-        </Link>
-
-        {/* End button edit */}
-      </div>
-      <div className="w-full bg-primary px-5 py-5 rounded-xl my-7">
-        {/* Table show blog */}
-        <table className="w-full text-secondary border-[1px] border-[#777]">
-          <thead>
-            <tr>
-              <td>Id</td>
-              <td>Title</td>
-              <td>Description</td>
-              <td>Content</td>
-=======
 
   // ---------------------------------------------
 
@@ -314,7 +192,6 @@ const ClientBlog = () => {
             <tr>
               <td>Title</td>
               <td>Description</td>
->>>>>>> origin/phong
               <td>Display</td>
               <td>Position</td>
               <td>List Blog</td>
@@ -322,18 +199,10 @@ const ClientBlog = () => {
             </tr>
           </thead>
           {/* show data Blog */}
-<<<<<<< HEAD
-          <tbody className="text-[#ffffff9e]">
-            {getBlog?.map((item) => (
-              <tr key={item.id}>
-                <td>{item.id}</td>
-                <td className="flex flex-row justify-start gap-2 w-40 items-center">
-=======
           <tbody className="text-[#333] dark:text-[#fff] font-light">
             {dataNew?.map((item) => (
               <tr key={item.id} className="dark:hover:hoverButton">
                 <td className="flex flex-row justify-start gap-2 items-center">
->>>>>>> origin/phong
                   <img
                     src={urlImg + item.photo}
                     alt=""
@@ -343,29 +212,12 @@ const ClientBlog = () => {
                   <Link
                     onClick={(e, blog) => handleEdit(e, item)}
                     to="/blog/edit"
-<<<<<<< HEAD
-                    className="break-words hover:text-secondary"
-=======
                     className="break-words hover:text-bgButton dark:hover:text-lightPrimary"
->>>>>>> origin/phong
                   >
                     {item.title}
                   </Link>
                 </td>
                 <td>{item.description}</td>
-<<<<<<< HEAD
-                <td className="w-36 break-words">{item.content}</td>
-                {/* <td>
-                  <img
-                    src={urlImg + item.photo}
-                    alt=""
-                    width="50px"
-                    height="50px"
-                  />
-                </td> */}
-=======
-
->>>>>>> origin/phong
                 {/* switched display */}
                 <td>
                   <ButtonSwitch
@@ -375,31 +227,6 @@ const ClientBlog = () => {
                   />
                 </td>
                 {/* End switched display */}
-<<<<<<< HEAD
-
-                <td>{item.position}</td>
-                {dataListBlog?.map((listblog, index) =>
-                  item.listblog_id === listblog.id ? (
-                    <td key={listblog.id}>{listblog.title}</td>
-                  ) : (
-                    ""
-                  )
-                )}
-
-                {/* Button delete */}
-                <td>
-                  <ButtonDelete handleClick={(id) => handleRemove(item.id)} />
-                </td>
-
-                {/* End button delete */}
-              </tr>
-            ))}
-          </tbody>
-          {/* End show data blog */}
-        </table>
-
-        {/* End table show blog */}
-=======
 
                 <td>{item.position}</td>
                 {listBlog?.map((blog) =>
@@ -531,7 +358,6 @@ const ClientBlog = () => {
         </Modal>
 
         {/* End show Detail Blog */}
->>>>>>> origin/phong
       </div>
     </>
   );

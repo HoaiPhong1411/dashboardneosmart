@@ -1,13 +1,6 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import authReducer from "./authSlice";
 import userReducer from "./userSlice";
-<<<<<<< HEAD
-import productsReducer from "./productsSlice"
-import productReducer from "./productSlice"
-import blogsReducer from "./blogsSlide"
-import blogReducer from "./blogSlice"
-import listBlogReducer from "./listBlogSlice"
-=======
 import productsReducer from "./productSlice/productsSlice";
 import productReducer from "./productSlice/productSlice";
 import categoryReducer from "./productSlice/categorySlice";
@@ -18,7 +11,6 @@ import blogByBlogListIdReducer from "./blogSlice/blogByBlogListIdSlice";
 import menuReducer from "./menuSlice/menuSlice";
 import messageReducer from "./messageSlice/messageSlice";
 
->>>>>>> origin/phong
 import {
     persistStore,
     persistReducer,
@@ -35,9 +27,6 @@ const persistConfig = {
     version: 1,
     storage,
 };
-<<<<<<< HEAD
-const rootReducer = combineReducers({ auth: authReducer, users: userReducer, products: productsReducer, product: productReducer,blogs:blogsReducer,blog:blogReducer,listBLog:listBlogReducer });
-=======
 const rootReducer = combineReducers({
     auth: authReducer,
     users: userReducer,
@@ -51,7 +40,6 @@ const rootReducer = combineReducers({
     menu: menuReducer,
     message: messageReducer,
 });
->>>>>>> origin/phong
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({

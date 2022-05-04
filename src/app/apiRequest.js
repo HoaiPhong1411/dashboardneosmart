@@ -14,10 +14,6 @@ import {
     getAllUserSuccess,
 } from "./userSlice";
 
-<<<<<<< HEAD
-import { getALlProductStart, getAllProductSuccess, getAllProductFailed } from "./productsSlice";
-import { getALlBlogStart, getAllBlogSuccess, getAllBlogFailed } from "./blogsSlide";
-=======
 import {
     getAllProductStart,
     getAllProductSuccess,
@@ -59,7 +55,6 @@ import {
     getMessageStart,
     getMessageSuccess,
 } from "./messageSlice/messageSlice";
->>>>>>> origin/phong
 
 export const loginUser = async (user, dispath, navigate) => {
     dispath(loginStart());
@@ -125,19 +120,6 @@ export const getAllProduct = async (dispath) => {
         dispath(getAllProductFailed());
     }
 };
-<<<<<<< HEAD
-export const getFullBlog = async (dispath) => {
-    dispath(getALlBlogStart())
-    try {
-        const urlBlog = "http://localhost:8000/api/blog/index"
-        const res = await axios.get(urlBlog)   
-        dispath(getAllBlogSuccess(res.data))
-    } catch (error) {
-        dispath(getAllBlogFailed())
-        // console.log(error);
-    }
-};
-=======
 
 // call api product by id
 
@@ -247,4 +229,3 @@ export const getMessageById = async (dispath, id) => {
 
 // End Call Api message
 // getMenuById
->>>>>>> origin/phong
