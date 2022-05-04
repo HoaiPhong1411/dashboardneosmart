@@ -366,10 +366,14 @@ const ClientAddProduct = () => {
                     onChange={(e) => handleChangeCategory(e)}
                     name="category_id"
                     id="category_id"
-                    className="text-[#333] dark:bg-primary dark:text-[#fff] border-[1px] border-[#888] rounded-md outline-none px-2 py-1"
+                    className="text-[#333] dark:bg-primary dark:text-[#fff] border-[1px] border-[#888] rounded-md outline-none px-2 py-1 cursor-pointer"
                   >
                     {dataCate?.map((item) => (
-                      <option value={item.id} key={item.id}>
+                      <option
+                        value={item.id}
+                        key={item.id}
+                        className="cursor-pointer"
+                      >
                         {item.title}
                       </option>
                     ))}

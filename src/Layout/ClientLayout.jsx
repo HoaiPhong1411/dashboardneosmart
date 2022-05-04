@@ -20,7 +20,6 @@ export default function ClientLayout() {
   const [show, setShow] = useState(false);
   const handleShow = () => {
     setShow(!show);
-    console.log(show);
   };
 
   const refreshToken = async () => {

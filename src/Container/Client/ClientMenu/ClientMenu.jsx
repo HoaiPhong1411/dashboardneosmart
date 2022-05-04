@@ -35,7 +35,7 @@ const ClientMenu = () => {
   };
   const upDateMenu = async (id, data) => {
     try {
-      const res = await clientApi.menuEdit(id, data);
+      await clientApi.menuEdit(id, data);
     } catch (error) {
       console.log(error);
     }

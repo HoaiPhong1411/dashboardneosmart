@@ -32,7 +32,7 @@ const Header = () => {
         <input
           onChange={(e) => handleChange(e)}
           type="text"
-          placeholder="Search Product"
+          placeholder="Search"
           value={inputValue}
           className="px-5 py-1 dark:bg-primary shadow-lg bg-[#fcfbf3] border-[1px] dark:text-[#fff] text-[black] outline-none placeholder:text-sm w-[40%] rounded-lg "
         />

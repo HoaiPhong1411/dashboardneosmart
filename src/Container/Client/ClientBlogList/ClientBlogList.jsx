@@ -194,7 +194,7 @@ const ClientBlogList = () => {
             {value !== ""
               ? dataNew?.map((item) => (
                   <tr key={item.id} className="dark:hover:hoverButton">
-                    <td className="flex flex-row justify-start gap-2 w-40 items-center">
+                    <td className="flex flex-row justify-start gap-2 items-center">
                       <img
                         src={urlImg + item.photo}
                         alt=""
@@ -204,12 +204,14 @@ const ClientBlogList = () => {
                       <Link
                         onClick={(e, blog) => handleEdit(e, item)}
                         to="/blog/edit"
-                        className="break-words hover:text-bgButton dark:hover:text-lightPrimary"
+                        className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
                       >
                         {item.title}
                       </Link>
                     </td>
-                    <td>{item.description}</td>
+                    <td
+                      dangerouslySetInnerHTML={{ __html: item.description }}
+                    ></td>
 
                     {/* switched display */}
                     <td>
@@ -230,6 +232,7 @@ const ClientBlogList = () => {
                         ""
                       )
                     )}
+
                     {/* Button delete */}
                     <td>
                       {/* <ButtonDelete handleClick={(id) => handleRemove(item.id)} /> */}
@@ -245,7 +248,7 @@ const ClientBlogList = () => {
                 ))
               : getBlogByListBlog[0]?.map((item) => (
                   <tr key={item.id} className="dark:hover:hoverButton">
-                    <td className="flex flex-row justify-start gap-2 w-40 items-center">
+                    <td className="flex flex-row justify-start gap-2 items-center">
                       <img
                         src={urlImg + item.photo}
                         alt=""
@@ -255,7 +258,7 @@ const ClientBlogList = () => {
                       <Link
                         onClick={(e, blog) => handleEdit(e, item)}
                         to="/blog/edit"
-                        className="break-words hover:text-bgButton dark:hover:text-lightPrimary"
+                        className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
                       >
                         {item.title}
                       </Link>

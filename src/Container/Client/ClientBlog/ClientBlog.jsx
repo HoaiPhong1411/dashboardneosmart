@@ -201,7 +201,7 @@ const ClientBlog = () => {
           {/* show data Blog */}
           <tbody className="text-[#333] dark:text-[#fff] font-light">
             {dataNew?.map((item) => (
-              <tr key={item.id} className="dark:hover:hoverButton">
+              <tr key={item.id} className="dark:hover:bg-hoverButton">
                 <td className="flex flex-row justify-start gap-2 items-center">
                   <img
                     src={urlImg + item.photo}
@@ -212,14 +212,13 @@ const ClientBlog = () => {
                   <Link
                     onClick={(e, blog) => handleEdit(e, item)}
                     to="/blog/edit"
-                    className="break-words hover:text-bgButton dark:hover:text-lightPrimary"
+                    className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
                   >
                     {item.title}
                   </Link>
                 </td>
-                <td>{item.description}</td>
+                <td dangerouslySetInnerHTML={{ __html: item.description }}></td>
 
-                {/* switched display */}
                 <td>
                   <ButtonSwitch
                     id={item.id}
@@ -231,7 +230,7 @@ const ClientBlog = () => {
 
                 <td>{item.position}</td>
                 {listBlog?.map((blog) =>
-                  item.category_id == blog.id ? (
+                  item.listblog_id == blog.id ? (
                     <td key={blog.id}>{blog.title}</td>
                   ) : (
                     ""
@@ -242,7 +241,7 @@ const ClientBlog = () => {
                 <td>
                   <ButtonActions
                     handleSeen={(id) => handleOpen(item.id)}
-                    handleRemove={(id) => handleRemove(item.id)}
+                    HandleDelete={(id) => handleRemove(item.id)}
                     handleEdit={(e, blog) => handleEdit(e, item)}
                   />
                 </td>
@@ -252,7 +251,7 @@ const ClientBlog = () => {
             )) ??
               dataBlog?.map((item) => (
                 <tr key={item.id} className="dark:hover:bg-hoverButton">
-                  <td className="flex flex-row justify-start gap-2 w-40 items-center">
+                  <td className="flex flex-row justify-start gap-2 items-center">
                     <img
                       src={urlImg + item.photo}
                       alt=""
@@ -262,7 +261,7 @@ const ClientBlog = () => {
                     <Link
                       onClick={(e, blog) => handleEdit(e, item)}
                       to="/blog/edit"
-                      className="break-words hover:text-bgButton dark:hover:text-lightPrimary"
+                      className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
                     >
                       {item.title}
                     </Link>

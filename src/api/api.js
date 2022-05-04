@@ -27,6 +27,9 @@ export const clientApi = {
             "DELETE"
         );
     },
+    productPagination(page, limit) {
+        return callApi(`http://localhost:8000/api/product/paginate/${limit}?page=${page}`)
+    },
 
     // End Api Product
 
