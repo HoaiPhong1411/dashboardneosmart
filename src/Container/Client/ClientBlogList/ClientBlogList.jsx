@@ -43,12 +43,10 @@ const ClientBlogList = () => {
   ) => toast[type](content);
 
   const getBlogByListBlog = useSelector(
-    (state) => state.blogByBlogListId.blogByBlogListId.blogByBlogListId
+    (state) => state.blogs.blogs.blogByBlogListId
   );
   const getListBlog = useSelector((state) => state.listBlog.listBlog.listBlog);
-  const getCurrentBlog = useSelector(
-    (state) => state.blogByBlogListId.blogByBlogListId.currentBlog
-  );
+  const getCurrentBlog = useSelector((state) => state.blogs.blogs.currentBlog);
 
   // show Detail
   const handleOpen = (id) => {

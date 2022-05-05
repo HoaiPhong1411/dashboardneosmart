@@ -272,7 +272,7 @@ const ClientAddBlog = () => {
                   onChange={(e) => handleImage(e)}
                   className="hidden"
                 />
-                <div className="w-full flex flex-col justify-center items-center">
+                <div className="relative group w-full flex flex-col justify-center items-center">
                   <img
                     src={img ?? notimg}
                     alt=""

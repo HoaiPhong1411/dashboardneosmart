@@ -6,6 +6,9 @@ import { IoMdAddCircle } from "react-icons/io";
 import { TiArrowBack } from "react-icons/ti";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import CircularProgress from "@mui/material/CircularProgress";
+import { green } from "@mui/material/colors";
+import Button from "@mui/material/Button";
 
 import { clientApi } from "../../../api/api";
 import ButtonCheck from "../../../Component/Button/ButtonCheck";
@@ -26,8 +29,27 @@ const ClientAddProduct = () => {
   const [categoryId, setCategoryId] = useState();
   const navigate = useNavigate();
   const editorRef = useRef(null);
-  const notify = (type = "error", content = "Thêm sản phẩm thành công!") =>
+  const notify = (type = "success", content = "Thêm sản phẩm thành công!") =>
     toast[type](content);
+
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const buttonSx = {
+    ...(success
+      ? {
+          bgcolor: green[500],
+          "&:hover": {
+            bgcolor: green[700],
+          },
+        }
+      : {
+          bgcolor: "#0f8f31",
+          "&:hover": {
+            bgcolor: "#0e6726",
+          },
+        }),
+  };
 
   useEffect(() => {
     const fecthCategory = async () => {
@@ -121,11 +143,19 @@ const ClientAddProduct = () => {
   });
   const addProduct = async (data) => {
     try {
-      await clientApi.productAdd(data);
-      notify();
-      navigate("/product", data);
+      setSuccess(false);
+      setLoading(true);
+      const res = await clientApi.productAdd(data);
+      if (res) {
+        setSuccess(true);
+        setLoading(false);
+        notify();
+        // navigate("/product/add");
+      }
     } catch (error) {
       notify("error", "Thêm sản phẩm thất bại!");
+      setSuccess(true);
+      setLoading(false);
     }
   };
 
@@ -278,7 +308,7 @@ const ClientAddProduct = () => {
                   onChange={(e) => handleImage(e)}
                   className="hidden"
                 />
-                <div className="w-full flex flex-col justify-center items-center">
+                <div className="relative group w-full flex flex-col justify-center items-center">
                   <img
                     src={img ?? notimg}
                     alt=""
@@ -393,12 +423,31 @@ const ClientAddProduct = () => {
           <div>
             {/* Button Add */}
             <div className="flex flex-row justify-center items-center">
-              <button
+              <button type="submit" className="relative">
+                <Button variant="contained" sx={buttonSx} disabled={loading}>
+                  <IoMdAddCircle />
+                  Thêm sản phẩm
+                </Button>
+                {loading && (
+                  <CircularProgress
+                    size={24}
+                    sx={{
+                      color: green[500],
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      marginTop: "-12px",
+                      marginLeft: "-12px",
+                    }}
+                  />
+                )}
+                {/* <button
                 type="submit"
                 className="flex flex-row justify-center items-center rounded-lg gap-3 px-4 py-2 hover:bg-hoverButton text-[#fff] bg-bgButton text-[1.25rem]"
               >
                 <IoMdAddCircle />
                 Add Product
+              </button> */}
               </button>
             </div>
 

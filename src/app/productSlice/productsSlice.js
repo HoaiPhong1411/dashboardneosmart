@@ -5,10 +5,12 @@ const productsSlice = createSlice( {
     name: 'products',
     initialState: {
         product: {
-            product: [],
+            products: [],
             isFetching: false,
             failed: false,
-            productById: []
+            productById: null,
+            productByCateId: [],
+            product: [],
         }
     },
     reducers: {
@@ -18,7 +20,7 @@ const productsSlice = createSlice( {
         getAllProductSuccess: (state, action) => {
             state.product.isFetching = true;
             state.product.failed = true;
-            state.product.product = action.payload
+            state.product.products = action.payload
         },
         getAllProductFailed: (state) => {
             state.product.isFetching = false
@@ -26,7 +28,22 @@ const productsSlice = createSlice( {
         },
         getProductByIdSuccess: (state, action) => {
             state.product.productById = [action.payload]
-        }
+        },
+        getProductByCategorySuccess: (state, action) => {
+            state.product.productByCateId = [action.payload];
+        },
+        getProductStart: (state) => {
+            state.product.isFetching = true
+        },
+        getProductSuccess: (state, action) => {
+            state.product.isFetching = false;
+            state.product.failed = false;
+            state.product.product = [action.payload]
+        },
+        getProductFailed: (state) => {
+            state.product.isFetching = false
+            state.product.failed = true
+        } 
 
     }
 });
@@ -35,7 +52,11 @@ export const {
     getAllProductStart,
     getAllProductSuccess,
     getAllProductFailed,
-    getProductByIdSuccess
+    getProductByIdSuccess,
+    getProductByCategorySuccess,
+    getProductStart,
+    getProductSuccess,
+    getProductFailed
 } = productsSlice.actions;
 
 export default productsSlice.reducer;

@@ -270,7 +270,7 @@ const ClientEditBlog = () => {
                     {/* === Image === */}
                     <div className="w-full flex flex-col gap-5 justify-between items-center text-[#fff]">
                       <div
-                        className="flex flex-col w-full justify-between items-center
+                        className="relative group flex flex-col w-full justify-between items-center
                    gap-2"
                       >
                         <img

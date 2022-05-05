@@ -6,6 +6,7 @@ import { getAllMessage } from "../../../app/apiRequest";
 import { getMessageById } from "../../../app/apiRequest";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { LinearProgress } from "@mui/material";
 
 import "../ClientProduct/ClientProduct.css";
 import InputSearch from "../../../Component/Input/InputSearch";
@@ -13,6 +14,7 @@ import ButtonActions from "../../../Component/Button/ButtonActions";
 import { clientApi } from "../../../api/api";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
+import SkeletonTable from "../../../Component/Skeleton/SkeletonTable";
 
 const style = {
   position: "absolute",
@@ -35,7 +37,7 @@ const ClientMail = () => {
   );
   const [render, setRender] = useState(false);
   // -------------------
-  const [mess, setMess] = useState([]);
+  const [mess, setMess] = useState(null);
   const [dataNew, setDataNew] = useState(null);
   //  value input search
   const [value, setValue] = useState();
@@ -118,41 +120,20 @@ const ClientMail = () => {
       <div className="w-full bg-lightSecondary p-3 dark:bg-nightSecondary shadow-lg rounded-xl my-7 ">
         {/* Table show product */}
         <table className="w-full text-bgButton font-medium">
-          {/* show data Product */}
-          <tbody className="text-[#333] dark:text-[#fff] font-light">
-            {dataNew?.map((item) => (
-              <tr
-                style={item.status == 0 ? { backgroundColor: "#f5eec8" } : {}}
-                key={item.id}
-                className="dark:hover:bg-hoverButton"
-              >
-                <td className="flex flex-row justify-start gap-2 items-center">
-                  <div className="flex flex-col">
-                    <span className="text-xl font-normal">{item.fullname}</span>
-                    <p className="text-[#777777a7] dark:text-[#ffffff90]">
-                      {item.email}
-                    </p>
-                  </div>
-                </td>
-                <td>
-                  <p className="w-80 truncate">{item.message}</p>
-                </td>
-                <td>{item.status == 0 ? "Chưa xử lý" : "Đã xử lý"}</td>
-                {/* End switched display */}
+          <thead>
+            <tr>
+              <td>Email</td>
+              <td>Message</td>
+              <td>Status</td>
+              <td>Create_at</td>
+              <td>Actions</td>
+            </tr>
+          </thead>
 
-                <td>
-                  {new Date(item.created_at).toLocaleDateString("vi-VI")}{" "}
-                  {new Date(item.created_at).toLocaleTimeString("vi-VI")}
-                </td>
-                <td>
-                  <ButtonActions
-                    id={item.id}
-                    handleSeen={(id) => handleOpen(item.id)}
-                  />
-                </td>
-              </tr>
-            )) ??
-              mess?.map((item) => (
+          {/* show data Product */}
+          {mess ? (
+            <tbody className="text-[#333] dark:text-[#fff] font-light">
+              {dataNew?.map((item) => (
                 <tr
                   style={item.status == 0 ? { backgroundColor: "#f5eec8" } : {}}
                   key={item.id}
@@ -171,13 +152,7 @@ const ClientMail = () => {
                   <td>
                     <p className="w-80 truncate">{item.message}</p>
                   </td>
-                  <td
-                    style={
-                      item.status == 0 ? { color: "red" } : { color: "black" }
-                    }
-                  >
-                    {item.status == 0 ? "Chưa xử lý" : "Đã xử lý"}
-                  </td>
+                  <td>{item.status == 0 ? "Chưa xử lý" : "Đã xử lý"}</td>
                   {/* End switched display */}
 
                   <td>
@@ -191,8 +166,54 @@ const ClientMail = () => {
                     />
                   </td>
                 </tr>
-              ))}
-          </tbody>
+              )) ??
+                mess?.map((item) => (
+                  <tr
+                    style={
+                      item.status == 0 ? { backgroundColor: "#f5eec8" } : {}
+                    }
+                    key={item.id}
+                    className="dark:hover:bg-hoverButton"
+                  >
+                    <td className="flex flex-row justify-start gap-2 items-center">
+                      <div className="flex flex-col">
+                        <span className="text-xl font-normal">
+                          {item.fullname}
+                        </span>
+                        <p className="text-[#777777a7] dark:text-[#ffffff90]">
+                          {item.email}
+                        </p>
+                      </div>
+                    </td>
+                    <td>
+                      <p className="w-80 truncate">{item.message}</p>
+                    </td>
+                    <td
+                      style={
+                        item.status == 0 ? { color: "red" } : { color: "black" }
+                      }
+                    >
+                      {item.status == 0 ? "Chưa xử lý" : "Đã xử lý"}
+                    </td>
+                    {/* End switched display */}
+
+                    <td>
+                      {new Date(item.created_at).toLocaleDateString("vi-VI")}{" "}
+                      {new Date(item.created_at).toLocaleTimeString("vi-VI")}
+                    </td>
+                    <td>
+                      <ButtonActions
+                        id={item.id}
+                        handleSeen={(id) => handleOpen(item.id)}
+                      />
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          ) : (
+            <SkeletonTable rows={4} columns={3} />
+          )}
+
           {/* End show data product */}
         </table>
         <Modal

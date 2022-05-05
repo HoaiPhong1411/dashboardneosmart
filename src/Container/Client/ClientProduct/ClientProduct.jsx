@@ -4,9 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { ToastContainer, toast } from "react-toastify";
+import { LinearProgress } from "@mui/material";
 
 import { getAllProduct, getProductById } from "../../../app/apiRequest";
-import { getAllProductSuccess } from "../../../app/productSlice/productSlice";
+import {
+  getProductByIdSuccess,
+  getProductSuccess,
+} from "../../../app/productSlice/productsSlice";
 import { clientApi } from "../../../api/api";
 import ButtonSwitch from "../../../Component/Button/ButtonSwitch";
 import InputSearch from "../../../Component/Input/InputSearch";
@@ -16,6 +20,7 @@ import { urlImg } from "../../../Component/Variable";
 import "react-toastify/dist/ReactToastify.css";
 import "./ClientProduct.css";
 import ClientPagination from "../../../Component/Pagination/ClientPagination";
+import SkeletonTable from "../../../Component/Skeleton/SkeletonTable";
 
 // Style Modal show detail
 const style = {
@@ -37,6 +42,22 @@ const ClientProduct = () => {
   const [dataNew, setDataNew] = useState(null);
   //  value input search
   const [value, setValue] = useState();
+  const dispath = useDispatch();
+  const navigate = useNavigate();
+  // pagination
+  const [pagination, setPagination] = useState({
+    current_page: 0,
+    to: 10,
+    totalRows: 18,
+    totalPages: 2,
+  });
+  //  End pagination
+
+  const [filter, setFilter] = useState({
+    current_page: 0,
+    to: 10,
+  });
+
   const [getProduct, setGetProduct] = useState(null);
   const notify = (type = "success", content = "Cập nhật thành công!") =>
     toast[type](content);
@@ -48,20 +69,7 @@ const ClientProduct = () => {
   const productById = useSelector(
     (state) => state.products.product.productById
   );
-  const dispath = useDispatch();
-  const navigate = useNavigate();
 
-  const [pagination, setPagination] = useState({
-    current_page: 1,
-    to: 10,
-    totalRows: 18,
-    totalPages: 2,
-  });
-
-  const [filter, setFilter] = useState({
-    current_page: 1,
-    to: 10,
-  });
   useEffect(() => {
     const getProductPagination = async () => {
       try {
@@ -93,7 +101,7 @@ const ClientProduct = () => {
   };
 
   const handleEdit = (e, product) => {
-    dispath(getAllProductSuccess(product));
+    dispath(getProductSuccess(product));
     navigate("/product/edit", product);
   };
 
@@ -102,7 +110,10 @@ const ClientProduct = () => {
     getProductById(dispath, id);
     setOpen(true);
   };
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    getProductByIdSuccess(null);
+    setOpen(false);
+  };
   // End show Detail
 
   // get data Product
@@ -239,58 +250,9 @@ const ClientProduct = () => {
           </thead>
 
           {/* show data Product */}
-          <tbody className="text-[#333] dark:text-[#fff] font-light overflow-y-auto ">
-            {dataNew?.map((item) => (
-              <tr key={item.id} className="dark:hover:bg-hoverButton">
-                <td className="flex flex-row justify-start gap-2 items-center">
-                  <img
-                    src={urlImg + item.photo}
-                    alt=""
-                    width="50px"
-                    height="50px"
-                  />
-                  <Link
-                    onClick={(e, product) => handleEdit(e, item)}
-                    to="/product/edit"
-                    className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
-                  >
-                    {item.title}
-                  </Link>
-                </td>
-                <td dangerouslySetInnerHTML={{ __html: item.description }}></td>
-                <td>{Intl.NumberFormat().format(Number(item.price))} VNĐ</td>
-
-                <td>
-                  <ButtonSwitch
-                    id={item.id}
-                    name={item.display}
-                    handleChange={(e, product) => handleDisplay(e, item)}
-                  />
-                </td>
-                {/* End switched display */}
-
-                <td>{item.position}</td>
-                {dataCategory?.map((cate) =>
-                  item.category_id == cate.id ? (
-                    <td key={cate.id}>{cate.title}</td>
-                  ) : (
-                    ""
-                  )
-                )}
-
-                {/* Button delete */}
-                <td>
-                  <ButtonActions
-                    handleSeen={(id) => handleOpen(item.id)}
-                    HandleDelete={(id) => handleRemove(item.id)}
-                    handleEdit={(e, product) => handleEdit(e, item)}
-                  />
-                </td>
-
-                {/* End button delete */}
-              </tr>
-            )) ??
-              getProduct?.map((item) => (
+          {getProduct ? (
+            <tbody className="text-[#333] dark:text-[#fff] font-light overflow-y-auto ">
+              {dataNew?.map((item) => (
                 <tr key={item.id} className="dark:hover:bg-hoverButton">
                   <td className="flex flex-row justify-start gap-2 items-center">
                     <img
@@ -341,8 +303,66 @@ const ClientProduct = () => {
 
                   {/* End button delete */}
                 </tr>
-              ))}
-          </tbody>
+              )) ??
+                getProduct?.map((item) => (
+                  <tr key={item.id} className="dark:hover:bg-hoverButton">
+                    <td className="flex flex-row justify-start gap-2 items-center">
+                      <img
+                        src={urlImg + item.photo}
+                        alt=""
+                        width="50px"
+                        height="50px"
+                      />
+                      <Link
+                        onClick={(e, product) => handleEdit(e, item)}
+                        to="/product/edit"
+                        className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
+                      >
+                        {item.title}
+                      </Link>
+                    </td>
+                    <td
+                      dangerouslySetInnerHTML={{ __html: item.description }}
+                    ></td>
+                    <td>
+                      {Intl.NumberFormat().format(Number(item.price))} VNĐ
+                    </td>
+
+                    <td>
+                      <ButtonSwitch
+                        id={item.id}
+                        name={item.display}
+                        handleChange={(e, product) => handleDisplay(e, item)}
+                      />
+                    </td>
+                    {/* End switched display */}
+
+                    <td>{item.position}</td>
+                    {dataCategory?.map((cate) =>
+                      item.category_id == cate.id ? (
+                        <td key={cate.id}>{cate.title}</td>
+                      ) : (
+                        ""
+                      )
+                    )}
+
+                    {/* Button delete */}
+                    <td>
+                      <ButtonActions
+                        handleSeen={(id) => handleOpen(item.id)}
+                        HandleDelete={(id) => handleRemove(item.id)}
+                        handleEdit={(e, product) => handleEdit(e, item)}
+                      />
+                    </td>
+
+                    {/* End button delete */}
+                  </tr>
+                ))}
+            </tbody>
+          ) : (
+            <SkeletonTable rows={10} columns={5} image={true} />
+          )}
+
           <tfoot>
             <tr className="shadow-none">
               <td colSpan="7">
@@ -402,13 +422,17 @@ const ClientProduct = () => {
                   </div>
                   <div
                     className="text-[13px] font-light"
-                    dangerouslySetInnerHTML={{ __html: productById[0]?.detail }}
+                    dangerouslySetInnerHTML={{
+                      __html: productById[0]?.detail,
+                    }}
                   ></div>
                 </div>
               </div>
               <div>
                 <p
-                  dangerouslySetInnerHTML={{ __html: productById[0]?.content }}
+                  dangerouslySetInnerHTML={{
+                    __html: productById[0]?.content,
+                  }}
                   className="text-md font-normal text-[#000]"
                 ></p>
               </div>

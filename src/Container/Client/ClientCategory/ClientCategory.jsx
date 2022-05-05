@@ -1,19 +1,22 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { LinearProgress } from "@mui/material";
 
 import { clientApi } from "../../../api/api";
 import { getProductByCategory, getProductById } from "../../../app/apiRequest";
-import { getAllProductSuccess } from "../../../app/productSlice/productSlice";
+import { getAllProductSuccess } from "../../../app/productSlice/productsSlice";
 import { urlImg } from "../../../Component/Variable";
 import ButtonAdd from "../../../Component/Button/ButtonAdd";
 import InputSearch from "../../../Component/Input/InputSearch";
 import ButtonSwitch from "../../../Component/Button/ButtonSwitch";
 import ButtonActions from "../../../Component/Button/ButtonActions";
+import ClientPagination from "../../../Component/Pagination/ClientPagination";
+import SkeletonTable from "../../../Component/Skeleton/SkeletonTable";
 
 // Style Modal show detail
 const style = {
@@ -29,13 +32,30 @@ const style = {
 // End Style Modal show detail
 
 const ClientCategory = () => {
+  let { id } = useParams();
+
   const [render, setRender] = useState(false);
+  const [currentIdCategory, setCurrentIdCategory] = useState();
   const [dataProduct, setDataProduct] = useState([]);
+  const [getProductByCategoryId, setGetProductByCategoryId] = useState(null);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const [value, setValue] = useState("");
   const dispath = useDispatch();
   const [dataNew, setDataNew] = useState(null);
+  // pagination
+  const [pagination, setPagination] = useState({
+    current_page: 0,
+    to: 10,
+    totalRows: 18,
+    totalPages: 1,
+  });
+  //  End pagination
+
+  const [filter, setFilter] = useState({
+    current_page: 0,
+    to: 10,
+  });
   const notify = (
     type = "success",
     content = "Cập nhật hiển thị thành công!"
@@ -43,11 +63,11 @@ const ClientCategory = () => {
   const dataCategory = useSelector(
     (state) => state.category.category.category[0]
   );
-  const CurrentCategory = useSelector(
+  const currentCategory = useSelector(
     (state) => state.category.category.currentCategory
   );
   const productByCateId = useSelector(
-    (state) => state.productByCateId.productByCateId
+    (state) => state.products.product.productByCateId
   );
   const productById = useSelector(
     (state) => state.products.product.productById
@@ -60,6 +80,42 @@ const ClientCategory = () => {
   };
   const handleClose = () => setOpen(false);
   // End show Detail
+
+  useEffect(() => {
+    const getProductByCategoryPagination = async () => {
+      try {
+        setCurrentIdCategory(id);
+        if (currentIdCategory !== id) {
+          setGetProductByCategoryId(null);
+        }
+        const res = await clientApi.productPaginationByCategoryId(
+          id,
+          filter.current_page,
+          filter.to
+        );
+        const result = res.data.result;
+        setGetProductByCategoryId(result.data);
+        setPagination({
+          ...pagination,
+          to: result.to,
+          totalRows: result.total,
+          totalPages: result.last_page,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getProductByCategoryPagination();
+  }, [id, filter]);
+
+  const handlePageChange = (newPage, rowsPerPage) => {
+    setFilter({
+      ...filter,
+      current_page: newPage,
+      to: rowsPerPage,
+    });
+    console.log(newPage);
+  };
 
   // get data Product
   useEffect(() => {
@@ -160,7 +216,7 @@ const ClientCategory = () => {
   }, [value]);
 
   useEffect(() => {
-    getProductByCategory(dispath, CurrentCategory[0].id);
+    getProductByCategory(dispath, currentCategory[0].id);
   }, [render]);
   // delete Product
 
@@ -206,121 +262,138 @@ const ClientCategory = () => {
             </tr>
           </thead>
           {/* show data Product */}
-          <tbody className="text-[#333] dark:text-[#fff] font-light">
-            {value !== ""
-              ? dataNew?.map((item) => (
-                  <tr key={item.id} className="dark:hover:hoverButton">
-                    <td className="flex flex-row justify-start gap-2 w-40 items-center">
-                      <img
-                        src={urlImg + item.photo}
-                        alt=""
-                        width="50px"
-                        height="50px"
-                      />
-                      <Link
-                        onClick={(e, product) => handleEdit(e, item)}
-                        to="/product/edit"
-                        className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
-                      >
-                        {item.title}
-                      </Link>
-                    </td>
-                    <td
-                      dangerouslySetInnerHTML={{ __html: item.description }}
-                    ></td>
-                    <td>
-                      {Intl.NumberFormat().format(Number(item.price))} VNĐ
-                    </td>
+          {getProductByCategoryId ? (
+            <tbody className="text-[#333] dark:text-[#fff] font-light">
+              {value !== ""
+                ? dataNew?.map((item) => (
+                    <tr key={item.id} className="dark:hover:hoverButton">
+                      <td className="flex flex-row justify-start gap-2 w-40 items-center">
+                        <img
+                          src={urlImg + item.photo}
+                          alt=""
+                          width="50px"
+                          height="50px"
+                        />
+                        <Link
+                          onClick={(e, product) => handleEdit(e, item)}
+                          to="/product/edit"
+                          className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
+                        >
+                          {item.title}
+                        </Link>
+                      </td>
+                      <td
+                        dangerouslySetInnerHTML={{ __html: item.description }}
+                      ></td>
+                      <td>
+                        {Intl.NumberFormat().format(Number(item.price))} VNĐ
+                      </td>
 
-                    {/* switched display */}
-                    <td>
-                      <ButtonSwitch
-                        id={item.id}
-                        name={item.display}
-                        handleChange={(e, product) => handleDisplay(e, item)}
-                      />
-                    </td>
-                    {/* End switched display */}
+                      {/* switched display */}
+                      <td>
+                        <ButtonSwitch
+                          id={item.id}
+                          name={item.display}
+                          handleChange={(e, product) => handleDisplay(e, item)}
+                        />
+                      </td>
+                      {/* End switched display */}
 
-                    <td>{item.position}</td>
+                      <td>{item.position}</td>
 
-                    {dataCategory?.map((cate) =>
-                      item.category_id == cate.id ? (
-                        <td key={cate.id}>{cate.title}</td>
-                      ) : (
-                        ""
-                      )
-                    )}
+                      {dataCategory?.map((cate) =>
+                        item.category_id == cate.id ? (
+                          <td key={cate.id}>{cate.title}</td>
+                        ) : (
+                          ""
+                        )
+                      )}
 
-                    {/* Button delete */}
-                    <td>
-                      <ButtonActions
-                        handleSeen={(id) => handleOpen(item.id)}
-                        HandleDelete={(id) => handleRemove(item.id)}
-                        handleEdit={(e, product) => handleEdit(e, item)}
-                      />
-                    </td>
+                      {/* Button delete */}
+                      <td>
+                        <ButtonActions
+                          handleSeen={(id) => handleOpen(item.id)}
+                          HandleDelete={(id) => handleRemove(item.id)}
+                          handleEdit={(e, product) => handleEdit(e, item)}
+                        />
+                      </td>
 
-                    {/* End button delete */}
-                  </tr>
-                ))
-              : productByCateId[0]?.map((item) => (
-                  <tr key={item.id} className="dark:hover:hoverButton">
-                    <td className="flex flex-row justify-start gap-2 items-center">
-                      <img
-                        src={urlImg + item.photo}
-                        alt=""
-                        width="50px"
-                        height="50px"
-                      />
-                      <Link
-                        onClick={(e, product) => handleEdit(e, item)}
-                        to="/product/edit"
-                        className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
-                      >
-                        {item.title}
-                      </Link>
-                    </td>
-                    <td
-                      dangerouslySetInnerHTML={{ __html: item.description }}
-                    ></td>
-                    <td>
-                      {Intl.NumberFormat().format(Number(item.price))} VNĐ
-                    </td>
+                      {/* End button delete */}
+                    </tr>
+                  ))
+                : getProductByCategoryId?.map((item) => (
+                    <tr key={item.id} className="dark:hover:hoverButton">
+                      <td className="flex flex-row justify-start gap-2 items-center">
+                        <img
+                          src={urlImg + item.photo}
+                          alt=""
+                          width="50px"
+                          height="50px"
+                        />
+                        <Link
+                          onClick={(e, product) => handleEdit(e, item)}
+                          to="/product/edit"
+                          className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
+                        >
+                          {item.title}
+                        </Link>
+                      </td>
+                      <td
+                        dangerouslySetInnerHTML={{ __html: item.description }}
+                      ></td>
+                      <td>
+                        {Intl.NumberFormat().format(Number(item.price))} VNĐ
+                      </td>
 
-                    {/* switched display */}
-                    <td>
-                      <ButtonSwitch
-                        id={item.id}
-                        name={item.display}
-                        handleChange={(e, product) => handleDisplay(e, item)}
-                      />
-                    </td>
-                    {/* End switched display */}
+                      {/* switched display */}
+                      <td>
+                        <ButtonSwitch
+                          id={item.id}
+                          name={item.display}
+                          handleChange={(e, product) => handleDisplay(e, item)}
+                        />
+                      </td>
+                      {/* End switched display */}
 
-                    <td>{item.position}</td>
+                      <td>{item.position}</td>
 
-                    {dataCategory?.map((cate) =>
-                      item.category_id == cate.id ? (
-                        <td key={cate.id}>{cate.title}</td>
-                      ) : (
-                        ""
-                      )
-                    )}
+                      {dataCategory?.map((cate) =>
+                        item.category_id == cate.id ? (
+                          <td key={cate.id}>{cate.title}</td>
+                        ) : (
+                          ""
+                        )
+                      )}
 
-                    {/* Button delete */}
-                    <td>
-                      <ButtonActions
-                        handleSeen={(id) => handleOpen(item.id)}
-                        HandleDelete={(id) => handleRemove(item.id)}
-                        handleEdit={(e, product) => handleEdit(e, item)}
-                      />
-                    </td>
+                      {/* Button delete */}
+                      <td>
+                        <ButtonActions
+                          handleSeen={(id) => handleOpen(item.id)}
+                          HandleDelete={(id) => handleRemove(item.id)}
+                          handleEdit={(e, product) => handleEdit(e, item)}
+                        />
+                      </td>
 
-                    {/* End button delete */}
-                  </tr>
-                ))}
-          </tbody>
+                      {/* End button delete */}
+                    </tr>
+                  ))}
+            </tbody>
+          ) : (
+            <SkeletonTable rows={10} columns={5} image={true} />
+          )}
+
+          <tfoot>
+            <tr className="shadow-none">
+              <td colSpan="7">
+                <div className="flex flex-row justify-end">
+                  <ClientPagination
+                    pagination={pagination}
+                    onPageChange={handlePageChange}
+                  />
+                </div>
+              </td>
+            </tr>
+          </tfoot>
           {/* End show data product */}
         </table>
 

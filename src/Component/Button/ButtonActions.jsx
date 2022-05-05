@@ -78,16 +78,18 @@ const ButtonActions = (props) => {
         }}
       >
         {!handleEdit
-          ? optionSee.map((option) => (
+          ? optionSee.map((option, index) => (
               <MenuItem
+                key={index}
                 onClick={option.onC}
                 style={{ height: "25px", fontSize: "13px", fontWeight: "600" }}
               >
                 {option.action}
               </MenuItem>
             ))
-          : options.map((option) => (
+          : options.map((option, index) => (
               <MenuItem
+                key={index}
                 onClick={option.onC}
                 style={{ height: "25px", fontSize: "13px", fontWeight: "600" }}
               >
@@ -96,52 +98,6 @@ const ButtonActions = (props) => {
             ))}
       </Menu>
     </>
-    // </div>
-    // <div className="relative flex justify-center items-center">
-    //   <span
-    //     onClick={(e) => handleShow(e)}
-    //     className="p-2 rounded-[50%] hover:bg-lightPrimary dark:hover:bg-bgButton cursor-pointer"
-    //   >
-    //     <BsThreeDotsVertical />
-    //   </span>
-    //   <ul
-    //     id={idUl}
-    //     className="hidden absolute bottom-[-180%] left-[-10%] bg-buttonAction dark:bg-lightSecondary p-3 rounded-md shadow-lg z-20 "
-    //   >
-    //     {handleSeen ? (
-    //       <li
-    //         onClick={handleSeen}
-    //         className="text-[0.8rem] font-medium text-bgButton cursor-pointer"
-    //       >
-    //         Xem
-    //       </li>
-    //     ) : (
-    //       ""
-    //     )}
-    //     {handleEdit ? (
-    //       <Link to={`/${path}/edit`}>
-    //         <li
-    //           onClick={handleEdit}
-    //           className="text-[0.8rem] font-medium text-bgButton cursor-pointer"
-    //         >
-    //           Edit
-    //         </li>
-    //       </Link>
-    //     ) : (
-    //       ""
-    //     )}
-    //     {HandleDelete ? (
-    //       <li
-    //         onClick={HandleDelete}
-    //         className="text-[0.8rem] font-medium text-[#e64141] cursor-pointer"
-    //       >
-    //         Delete
-    //       </li>
-    //     ) : (
-    //       ""
-    //     )}
-    //   </ul>
-    // </div>
   );
 };
 
