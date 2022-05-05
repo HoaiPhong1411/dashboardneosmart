@@ -14,8 +14,8 @@ module.exports = {
             buttonAction: '#f5eec8'
         },
         screens: {
-            'tablet': '640px',
-            'desktop': '1280px',
+            'tb': '640px',
+            'dt': '1280px',
           },
     },
     plugins: [],

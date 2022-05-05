@@ -17,3 +17,8 @@ table tbody tr {
 table tbody tr:hover {
     background-color: #f5eec8be !important;
 }
+@media screen and (max-width: 768px) {
+    .responsive{
+        overflow-x: scroll !important;
+    }
+}

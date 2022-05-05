@@ -1,5 +1,6 @@
 import { IoMdArrowDropdown } from "react-icons/io";
 import { IoNotificationsSharp } from "react-icons/io5";
+import { FiAlignJustify } from "react-icons/fi"
 import { MdOutlineLogout } from "react-icons/md";
 import { BsSunFill, BsMoonStarsFill } from "react-icons/bs";
 import { useState } from "react";
@@ -7,7 +8,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import useDark from "../useDark";
 
-const Header = () => {
+const Header = ({handleShowRespon}) => {
   const [isDarkMode, toggleDarkMode] = useDark();
   const user = useSelector((state) => state.auth.login.currentUser);
   // const dispath = useDispatch();
@@ -26,9 +27,12 @@ const Header = () => {
     window.location.href = "/signin";
   };
 
+
   return (
     <>
-      <div className="flex justify-between">
+      <div className="flex items-center justify-between">
+      <a href="/"><img src={require('../assets/images/logo.png')} alt="#" className="h-full dt:w-[150px] tb:w-[120px] "/></a>
+        <FiAlignJustify className="tb:block dt:hidden p-[2px] text-[38px] cursor-pointer translate-x-[-0.5rem] mr-[20px] dark:text-[#fff]" onClick={(e)=>handleShowRespon(e)}/>
         <input
           onChange={(e) => handleChange(e)}
           type="text"

@@ -109,7 +109,7 @@ const ClientMail = () => {
   };
   return (
     <>
-      <div className="relative flex flex-row items-center gap-5 w-full dark:bg-nightSecondary bg-lightSecondary shadow-lg py-3 px-5 rounded-xl">
+      <div className="flex flex-row items-center gap-5 w-full dark:bg-nightSecondary bg-lightSecondary shadow-lg py-3 px-5 rounded-xl">
         {/* Input search */}
 
         <InputSearch handleChange={(e) => handleChange(e)} value={value} />

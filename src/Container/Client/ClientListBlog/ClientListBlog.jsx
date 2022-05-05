@@ -65,9 +65,9 @@ const ClientListBlog = () => {
 
         {/* End button edit */}
       </div>
-      <div className="w-full bg-[#fefce8] shadow-lg rounded-xl my-7">
+      <div className="tb:text-xs tb:overflow-x-scrollw-full bg-[#fefce8] shadow-lg rounded-xl my-7">
         {/* Table show product */}
-        <table className="w-full text-secondary font-medium">
+        <table className="tb:text-xs tb:overflow-x-scroll text-secondary font-medium">
           <thead>
             <tr>
               <td>Id</td>

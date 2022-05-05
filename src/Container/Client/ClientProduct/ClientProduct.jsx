@@ -223,9 +223,9 @@ if (check) {
         <InputSearch handleChange={(e) => handleChange(e)} value={value} />
         {/* End Input search */}
       </div>
-      <div className="w-full bg-lightSecondary p-3 dark:bg-nightSecondary shadow-lg rounded-xl my-7">
+      <div className="tb:text-xs tb:overflow-x-scroll w-full bg-lightSecondary p-3 dark:bg-nightSecondary shadow-lg rounded-xl my-7">
         {/* Table show product */}
-        <table className="w-full text-bgButton font-medium ">
+        <table className="tb:w-[1000px] dt:w-full text-bgButton font-medium ">
           <thead>
             <tr>
               <td>Title</td>
@@ -243,11 +243,9 @@ if (check) {
             {dataNew?.map((item) => (
               <tr key={item.id} className="dark:hover:bg-hoverButton">
                 <td className="flex flex-row justify-start gap-2 items-center">
-                  <img
+                  <img className="tb:w-[30px] tb:h-[30px] w-[50px] h-[50px]"
                     src={urlImg + item.photo}
                     alt=""
-                    width="50px"
-                    height="50px"
                   />
                   <Link
                     onClick={(e, product) => handleEdit(e, item)}

@@ -1,18 +1,10 @@
-.dashboard-menu{
-    width: 100px;
-    transition: all 0.5s ease;
+.show{
+    position:fixed;
+    display: flex;
+    background-color: #fefce8;
 }
-.active-menu{
-    opacity: 0;
-    display: none;
-    transition: all 0.2s ease;
-}
-.hide-navMenu li span:first-child{
-    font-size: 1rem;
-    transition: all 0.5s ease;
-}
-.hide-navMenu li span:last-child{
-    opacity: 0;
-    display: none;
-    transition: all 0.3s ease;
+.backgound{
+    background-color: rgba(0, 0, 0, 0.6);
+    width: 100%;
+    height: 100vh;
 }
