@@ -16,7 +16,6 @@ import { urlImg } from "../../../Component/Variable";
 import "react-toastify/dist/ReactToastify.css";
 import "./ClientProduct.css";
 import ClientPagination from "../../../Component/Pagination/ClientPagination";
-import { callApi } from "../../../config/configApi";
 
 // Style Modal show detail
 const style = {
@@ -46,7 +45,6 @@ const ClientProduct = () => {
   const dataCategory = useSelector(
     (state) => state.category.category.category[0]
   );
-  // const getProduct = useSelector((state) => state.products.product.product);
   const productById = useSelector(
     (state) => state.products.product.productById
   );
@@ -225,9 +223,9 @@ if (check) {
         <InputSearch handleChange={(e) => handleChange(e)} value={value} />
         {/* End Input search */}
       </div>
-      <div className="w-full bg-lightSecondary p-3 dark:bg-nightSecondary shadow-lg rounded-xl my-7 ">
+      <div className="w-full bg-lightSecondary p-3 dark:bg-nightSecondary shadow-lg rounded-xl my-7">
         {/* Table show product */}
-        <table className="w-full text-bgButton font-medium">
+        <table className="w-full text-bgButton font-medium ">
           <thead>
             <tr>
               <td>Title</td>
@@ -241,8 +239,7 @@ if (check) {
           </thead>
 
           {/* show data Product */}
-
-          <tbody className="text-[#333] dark:text-[#fff] font-light">
+          <tbody className="text-[#333] dark:text-[#fff] font-light overflow-y-auto ">
             {dataNew?.map((item) => (
               <tr key={item.id} className="dark:hover:bg-hoverButton">
                 <td className="flex flex-row justify-start gap-2 items-center">
@@ -364,7 +361,8 @@ if (check) {
         {/* End table show product */}
 
         {/* Show Detail Blog */}
-
+      </div>
+      <div>
         <Modal
           open={open}
           onClose={handleClose}
