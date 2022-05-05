@@ -80,7 +80,7 @@ const ClientMail = () => {
         let dataSearch = [];
         const res = getMail?.forEach((item, i) => {
           if (
-            item.message.toLowerCase().includes(value.trim().toLowerCase(), 0)
+            item.email.toLowerCase().includes(value.trim().toLowerCase(), 0)
           ) {
             return dataSearch.push(item);
           }
@@ -124,16 +124,19 @@ const ClientMail = () => {
               <tr
                 style={item.status == 0 ? { backgroundColor: "#f5eec8" } : {}}
                 key={item.id}
-                className="dark:hover:hoverButton"
+                className="dark:hover:bg-hoverButton"
               >
-                <td className="flex flex-row justify-start gap-2 w-40 items-center">
-                  <span>{item.fullname}</span>
-                  <p>{item.email}</p>
+                <td className="flex flex-row justify-start gap-2 items-center">
+                  <div className="flex flex-col">
+                    <span className="text-xl font-normal">{item.fullname}</span>
+                    <p className="text-[#777777a7] dark:text-[#ffffff90]">
+                      {item.email}
+                    </p>
+                  </div>
                 </td>
-                <td>{item.phone_number}</td>
-                <td className="w-24 break-words">{item.message}</td>
-
-                {/* switched display */}
+                <td>
+                  <p className="w-80 truncate">{item.message}</p>
+                </td>
                 <td>{item.status == 0 ? "Chưa xử lý" : "Đã xử lý"}</td>
                 {/* End switched display */}
 

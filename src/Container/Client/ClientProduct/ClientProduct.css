@@ -7,6 +7,9 @@ table td {
 table tr {
     box-shadow: 2px 2px 3px #cdcdcdbe;
 }
+table tbody tr:nth-child(even) {
+    background-color: #fdf7d8be;
+}
 table tbody tr {
     font-size: 0.85rem;
 

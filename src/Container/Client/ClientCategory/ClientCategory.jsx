@@ -220,17 +220,17 @@ const ClientCategory = () => {
                       <Link
                         onClick={(e, product) => handleEdit(e, item)}
                         to="/product/edit"
-                        className="break-words hover:text-bgButton dark:hover:text-lightPrimary"
+                        className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
                       >
                         {item.title}
                       </Link>
                     </td>
-                    <td>{item.description}</td>
+                    <td
+                      dangerouslySetInnerHTML={{ __html: item.description }}
+                    ></td>
                     <td>
                       {Intl.NumberFormat().format(Number(item.price))} VNĐ
                     </td>
-                    <td className="w-24 break-words">{item.detail}</td>
-                    <td className="w-36 break-words">{item.content}</td>
 
                     {/* switched display */}
                     <td>
@@ -243,6 +243,7 @@ const ClientCategory = () => {
                     {/* End switched display */}
 
                     <td>{item.position}</td>
+
                     {dataCategory?.map((cate) =>
                       item.category_id == cate.id ? (
                         <td key={cate.id}>{cate.title}</td>
@@ -253,7 +254,6 @@ const ClientCategory = () => {
 
                     {/* Button delete */}
                     <td>
-                      {/* <ButtonDelete handleClick={(id) => handleRemove(item.id)} /> */}
                       <ButtonActions
                         handleSeen={(id) => handleOpen(item.id)}
                         HandleDelete={(id) => handleRemove(item.id)}
@@ -266,7 +266,7 @@ const ClientCategory = () => {
                 ))
               : productByCateId[0]?.map((item) => (
                   <tr key={item.id} className="dark:hover:hoverButton">
-                    <td className="flex flex-row justify-start gap-2 w-40 items-center">
+                    <td className="flex flex-row justify-start gap-2 items-center">
                       <img
                         src={urlImg + item.photo}
                         alt=""
@@ -276,7 +276,7 @@ const ClientCategory = () => {
                       <Link
                         onClick={(e, product) => handleEdit(e, item)}
                         to="/product/edit"
-                        className="break-words hover:text-bgButton dark:hover:text-lightPrimary"
+                        className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
                       >
                         {item.title}
                       </Link>

@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 import { getAllProduct, getProductById } from "../../../app/apiRequest";
 import { getAllProductSuccess } from "../../../app/productSlice/productSlice";
@@ -14,7 +13,10 @@ import InputSearch from "../../../Component/Input/InputSearch";
 import ButtonActions from "../../../Component/Button/ButtonActions";
 import ButtonAdd from "../../../Component/Button/ButtonAdd";
 import { urlImg } from "../../../Component/Variable";
+import "react-toastify/dist/ReactToastify.css";
 import "./ClientProduct.css";
+import ClientPagination from "../../../Component/Pagination/ClientPagination";
+import { callApi } from "../../../config/configApi";
 
 // Style Modal show detail
 const style = {
@@ -31,26 +33,66 @@ const style = {
 
 const ClientProduct = () => {
   const [render, setRender] = useState(false);
-  // -------------------
   // input search
-  const [data, setData] = useState([]);
-  const [product, setProduct] = useState(null);
   const [open, setOpen] = useState(false);
   const [dataNew, setDataNew] = useState(null);
   //  value input search
   const [value, setValue] = useState();
+  const [getProduct, setGetProduct] = useState(null);
   const notify = (type = "success", content = "Cập nhật thành công!") =>
     toast[type](content);
   // -----------------------
+
   const dataCategory = useSelector(
     (state) => state.category.category.category[0]
   );
-  const getProduct = useSelector((state) => state.products.product.product);
+  // const getProduct = useSelector((state) => state.products.product.product);
   const productById = useSelector(
     (state) => state.products.product.productById
   );
   const dispath = useDispatch();
   const navigate = useNavigate();
+
+  const [pagination, setPagination] = useState({
+    current_page: 1,
+    to: 10,
+    totalRows: 18,
+    totalPages: 2,
+  });
+
+  const [filter, setFilter] = useState({
+    current_page: 1,
+    to: 10,
+  });
+  useEffect(() => {
+    const getProductPagination = async () => {
+      try {
+        const res = await clientApi.productPagination(
+          filter.current_page,
+          filter.to
+        );
+        const result = res.data.result;
+        setGetProduct(result.data);
+        setPagination({
+          ...pagination,
+          to: result.to,
+          totalRows: result.total,
+          totalPages: result.last_page,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getProductPagination();
+  }, [filter]);
+
+  const handlePageChange = (newPage, rowsPerPage) => {
+    setFilter({
+      ...filter,
+      current_page: newPage,
+      to: rowsPerPage,
+    });
+  };
 
   const handleEdit = (e, product) => {
     dispath(getAllProductSuccess(product));
@@ -151,21 +193,26 @@ if (check) {
     const handleSearch = async () => {
       try {
         let dataSearch = [];
-        const res = getProduct?.forEach((item, i) => {
-          if (
-            item.title.toLowerCase().includes(value.trim().toLowerCase(), 0)
-          ) {
-            return dataSearch.push(item);
-          }
-        });
-        setDataNew(dataSearch);
+        if (getProduct) {
+          await getProduct?.forEach((item, i) => {
+            if (value !== "") {
+              if (
+                item.title.toLowerCase().includes(value.trim().toLowerCase(), 0)
+              ) {
+                return dataSearch.push(item);
+              }
+              setDataNew(dataSearch);
+            } else {
+              setDataNew(null);
+            }
+          });
+        }
       } catch (error) {
         console.log(error);
       }
     };
     handleSearch();
   }, [value]);
-
   return (
     <>
       <div className="flex flex-row items-center gap-5 w-full dark:bg-nightSecondary bg-lightSecondary shadow-lg py-3 px-5 rounded-xl">
@@ -186,18 +233,19 @@ if (check) {
               <td>Title</td>
               <td>Description</td>
               <td>Price</td>
-              {/* <td>Photo</td> */}
               <td>Display</td>
               <td>Position</td>
-              <td>CategoryId</td>
+              <td>Category</td>
               <td>Actions</td>
             </tr>
           </thead>
+
           {/* show data Product */}
+
           <tbody className="text-[#333] dark:text-[#fff] font-light">
             {dataNew?.map((item) => (
-              <tr key={item.id} className="dark:hover:hoverButton">
-                <td className="flex flex-row justify-start gap-2 w-40 items-center">
+              <tr key={item.id} className="dark:hover:bg-hoverButton">
+                <td className="flex flex-row justify-start gap-2 items-center">
                   <img
                     src={urlImg + item.photo}
                     alt=""
@@ -207,15 +255,14 @@ if (check) {
                   <Link
                     onClick={(e, product) => handleEdit(e, item)}
                     to="/product/edit"
-                    className="break-words hover:text-bgButton dark:hover:text-lightPrimary"
+                    className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
                   >
                     {item.title}
                   </Link>
                 </td>
-                <td>{item.description}</td>
+                <td dangerouslySetInnerHTML={{ __html: item.description }}></td>
                 <td>{Intl.NumberFormat().format(Number(item.price))} VNĐ</td>
 
-                {/* switched display */}
                 <td>
                   <ButtonSwitch
                     id={item.id}
@@ -236,10 +283,9 @@ if (check) {
 
                 {/* Button delete */}
                 <td>
-                  {/* <ButtonDelete handleClick={(id) => handleRemove(item.id)} /> */}
                   <ButtonActions
                     handleSeen={(id) => handleOpen(item.id)}
-                    handleRemove={(id) => handleRemove(item.id)}
+                    HandleDelete={(id) => handleRemove(item.id)}
                     handleEdit={(e, product) => handleEdit(e, item)}
                   />
                 </td>
@@ -249,7 +295,7 @@ if (check) {
             )) ??
               getProduct?.map((item) => (
                 <tr key={item.id} className="dark:hover:bg-hoverButton">
-                  <td className="flex flex-row justify-start gap-2 w-40 items-center">
+                  <td className="flex flex-row justify-start gap-2 items-center">
                     <img
                       src={urlImg + item.photo}
                       alt=""
@@ -259,7 +305,7 @@ if (check) {
                     <Link
                       onClick={(e, product) => handleEdit(e, item)}
                       to="/product/edit"
-                      className="break-words hover:text-bgButton dark:hover:text-lightPrimary"
+                      className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
                     >
                       {item.title}
                     </Link>
@@ -289,7 +335,6 @@ if (check) {
 
                   {/* Button delete */}
                   <td>
-                    {/* <ButtonDelete handleClick={(id) => handleRemove(item.id)} /> */}
                     <ButtonActions
                       handleSeen={(id) => handleOpen(item.id)}
                       HandleDelete={(id) => handleRemove(item.id)}
@@ -301,6 +346,18 @@ if (check) {
                 </tr>
               ))}
           </tbody>
+          <tfoot>
+            <tr className="shadow-none">
+              <td colSpan="7">
+                <div className="flex flex-row justify-end">
+                  <ClientPagination
+                    pagination={pagination}
+                    onPageChange={handlePageChange}
+                  />
+                </div>
+              </td>
+            </tr>
+          </tfoot>
           {/* End show data product */}
         </table>
 
