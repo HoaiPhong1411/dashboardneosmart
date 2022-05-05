@@ -13,6 +13,10 @@ module.exports = {
             nightSecondary: "#094418",
             buttonAction: '#f5eec8'
         },
+        screens: {
+            'tablet': '640px',
+            'desktop': '1280px',
+          },
     },
     plugins: [],
 };

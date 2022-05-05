@@ -171,7 +171,13 @@ const ClientMail = () => {
                   <td>
                     <p className="w-80 truncate">{item.message}</p>
                   </td>
-                  <td>{item.status == 0 ? "Chưa xử lý" : "Đã xử lý"}</td>
+                  <td
+                    style={
+                      item.status == 0 ? { color: "red" } : { color: "black" }
+                    }
+                  >
+                    {item.status == 0 ? "Chưa xử lý" : "Đã xử lý"}
+                  </td>
                   {/* End switched display */}
 
                   <td>
