@@ -186,7 +186,7 @@ const ClientProduct = () => {
     dataDisplay.append("content", product.content);
     dataDisplay.append("description", product.description);
     dataDisplay.append("position", product.position);
-    if (check) {
+if (check) {
       dataDisplay.append("display", 1);
       updateDisplay(product.id, dataDisplay);
     } else {
@@ -242,9 +242,9 @@ const ClientProduct = () => {
         <InputSearch handleChange={(e) => handleChange(e)} value={value} />
         {/* End Input search */}
       </div>
-      <div className="w-full bg-lightSecondary p-3 dark:bg-nightSecondary shadow-lg rounded-xl my-7">
+      <div className="tb:text-xs tb:overflow-x-scroll w-full bg-lightSecondary p-3 dark:bg-nightSecondary shadow-lg rounded-xl my-7">
         {/* Table show product */}
-        <table className="w-full text-bgButton font-medium ">
+        <table className="tb:w-[1000px] dt:w-full text-bgButton font-medium ">
           <thead>
             <tr>
               <td>Title</td>
@@ -258,9 +258,62 @@ const ClientProduct = () => {
           </thead>
 
           {/* show data Product */}
+<<<<<<< HEAD:src/Container/Client/ClientProducts/ClientProduct/ClientProduct.jsx
           {getProduct ? (
             <tbody className="text-[#333] dark:text-[#fff] font-light overflow-y-auto ">
               {dataNew?.map((item) => (
+=======
+          <tbody className="text-[#333] dark:text-[#fff] font-light overflow-y-auto ">
+            {dataNew?.map((item) => (
+              <tr key={item.id} className="dark:hover:bg-hoverButton">
+                <td className="flex flex-row justify-start gap-2 items-center">
+                  <img className="tb:w-[30px] tb:h-[30px] w-[50px] h-[50px]"
+                    src={urlImg + item.photo}
+                    alt=""
+                  />
+                  <Link
+                    onClick={(e, product) => handleEdit(e, item)}
+                    to="/product/edit"
+                    className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
+                  >
+                    {item.title}
+                  </Link>
+                </td>
+                <td dangerouslySetInnerHTML={{ __html: item.description }}></td>
+                <td>{Intl.NumberFormat().format(Number(item.price))} VNĐ</td>
+
+                <td>
+                  <ButtonSwitch
+                    id={item.id}
+                    name={item.display}
+                    handleChange={(e, product) => handleDisplay(e, item)}
+                  />
+                </td>
+                {/* End switched display */}
+
+                <td>{item.position}</td>
+                {dataCategory?.map((cate) =>
+                  item.category_id == cate.id ? (
+                    <td key={cate.id}>{cate.title}</td>
+                  ) : (
+                    ""
+                  )
+                )}
+
+                {/* Button delete */}
+                <td>
+                  <ButtonActions
+                    handleSeen={(id) => handleOpen(item.id)}
+                    HandleDelete={(id) => handleRemove(item.id)}
+                    handleEdit={(e, product) => handleEdit(e, item)}
+                  />
+                </td>
+
+                {/* End button delete */}
+              </tr>
+            )) ??
+              getProduct?.map((item) => (
+>>>>>>> thuan:src/Container/Client/ClientProduct/ClientProduct.jsx
                 <tr key={item.id} className="dark:hover:bg-hoverButton">
                   <td className="flex flex-row justify-start gap-2 items-center">
                     <img

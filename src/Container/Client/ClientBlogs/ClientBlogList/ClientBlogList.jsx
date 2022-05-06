@@ -178,9 +178,15 @@ const ClientBlogList = () => {
         <InputSearch handleChange={(e) => handleChange(e)} value={value} />
         {/* End Input search */}
       </div>
+<<<<<<< HEAD:src/Container/Client/ClientBlogs/ClientBlogList/ClientBlogList.jsx
       <div className="w-full bg-lightSecondary p-3 dark:bg-nightSecondary shadow-lg rounded-xl my-7 ">
         {/* Table show blog */}
         <table className="w-full text-bgButton font-medium">
+=======
+      <div className="tb:text-xs tb:overflow-x-scroll w-full bg-lightSecondary p-3 dark:bg-nightSecondary shadow-lg rounded-xl my-7 ">
+        {/* Table show product */}
+        <table className="tb:w-[1000px] dt:w-full text-bgButton font-medium">
+>>>>>>> thuan:src/Container/Client/ClientCategory/ClientCategory.jsx
           <thead>
             <tr>
               <td>Title</td>

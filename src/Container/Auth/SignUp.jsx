@@ -38,10 +38,10 @@ const Signin = () => {
     //             null,
     //             "Mật khẩu không khớp, vui lòng nhập lại",
     //         ]),
-    onSubmit: (values) => {
-      alert("adsdasd");
-      registerUser(values, dispath, navigate);
-    },
+    // onSubmit: (values) => {
+    //   alert("adsdasd");
+    //   registerUser(values, dispath, navigate);
+    // },
   });
   return (
     <div>
