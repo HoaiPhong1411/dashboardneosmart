@@ -5,14 +5,14 @@ import { useFormik, Field } from "formik";
 import { useSelector } from "react-redux";
 import { TiArrowBack } from "react-icons/ti";
 import { Editor } from "@tinymce/tinymce-react";
-import { location } from "../../../Component/Variable";
+import { location } from "../../../../Component/Variable";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import ButtonCheck from "../../../Component/Button/ButtonCheck";
-import ButtonUpload from "../../../Component/Button/ButtonUpload";
-import notimg from "../../../assets/images/No-image-found.jpg";
-import { clientApi } from "../../../api/api";
+import ButtonCheck from "../../../../Component/Button/ButtonCheck";
+import ButtonUpload from "../../../../Component/Button/ButtonUpload";
+import notimg from "../../../../assets/images/No-image-found.jpg";
+import { clientApi } from "../../../../api/api";
 
 // config upload img
 const init = {

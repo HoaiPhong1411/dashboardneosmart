@@ -6,12 +6,12 @@ import { TiArrowBack } from "react-icons/ti";
 import { Editor } from "@tinymce/tinymce-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ButtonUpload from "../../../Component/Button/ButtonUpload";
+import ButtonUpload from "../../../../Component/Button/ButtonUpload";
 
-import { clientApi } from "../../../api/api";
-import { getProductSuccess } from "../../../app/productSlice/productsSlice";
-import { urlImg } from "../../../Component/Variable";
-import ButtonCheck from "../../../Component/Button/ButtonCheck";
+import { clientApi } from "../../../../api/api";
+import { getProductSuccess } from "../../../../app/productSlice/productsSlice";
+import { urlImg } from "../../../../Component/Variable";
+import ButtonCheck from "../../../../Component/Button/ButtonCheck";
 import "./ClientEditProduct.css";
 
 const ClientEditProduct = () => {

@@ -9,16 +9,17 @@ import "react-toastify/dist/ReactToastify.css";
 import { LinearProgress } from "@mui/material";
 
 // Component Button
-import { urlImg } from "../../../Component/Variable";
-import InputSearch from "../../../Component/Input/InputSearch";
-import ButtonActions from "../../../Component/Button/ButtonActions";
-import ButtonSwitch from "../../../Component/Button/ButtonSwitch";
-import ButtonAdd from "../../../Component/Button/ButtonAdd";
-import { getAllBlog } from "../../../app/apiRequest";
-import { addBlogSuccess } from "../../../app/blogSlice/blogsSlice";
-import { clientApi } from "../../../api/api";
-import ClientPagination from "../../../Component/Pagination/ClientPagination";
-import SkeletonTable from "../../../Component/Skeleton/SkeletonTable";
+import { urlImg } from "../../../../Component/Variable";
+import InputSearch from "../../../../Component/Input/InputSearch";
+import ButtonActions from "../../../../Component/Button/ButtonActions";
+import ButtonSwitch from "../../../../Component/Button/ButtonSwitch";
+import ButtonAdd from "../../../../Component/Button/ButtonAdd";
+import { getAllBlog } from "../../../../app/apiRequest";
+import { addBlogSuccess } from "../../../../app/blogSlice/blogsSlice";
+import { clientApi } from "../../../../api/api";
+import ClientPagination from "../../../../Component/Pagination/ClientPagination";
+import SkeletonTable from "../../../../Component/Skeleton/SkeletonTable";
+import SkeletonDetailBlog from "../../../../Component/Skeleton/SkeletonDetailBlog";
 
 // Style Modal show detail
 const style = {
@@ -114,7 +115,10 @@ const ClientBlog = () => {
     getBlogById();
     setOpen(true);
   };
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setBlogById(null);
+    setOpen(false);
+  };
   // End show Detail
 
   useEffect(() => {
@@ -379,48 +383,56 @@ const ClientBlog = () => {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <Box sx={style}>
-            <div className="flex flex-col px-10 py-16 gap-5 h-[600px] overflow-y-scroll">
-              <div className="flex flex-col gap-5 ">
-                <div className="w-full flex justify-center items-center">
-                  <img
-                    src={urlImg + blogById?.photo}
-                    alt=""
-                    className="w-[80%] h-[250px] border-[1px] border-[#333]"
-                  />
-                </div>
-                <div className="w-full flex flex-row gap-3 justify-between items-center">
-                  <div className="flex flex-col gap-1">
-                    <h2 className="text-4xl font-normal">{blogById?.title}</h2>
+          {blogById ? (
+            <Box sx={style}>
+              <div className="flex flex-col px-10 py-16 gap-5 h-[600px] overflow-y-scroll">
+                <div className="flex flex-col gap-5 ">
+                  <div className="w-full flex justify-center items-center">
+                    <img
+                      src={urlImg + blogById?.photo}
+                      alt=""
+                      className="w-[80%] h-[250px] border-[1px] border-[#333]"
+                    />
                   </div>
-                  <div className="flex flex-col items-end">
-                    <p>
-                      {new Date(blogById?.created_at).toLocaleDateString(
-                        "vi-VI"
-                      )}
-                    </p>
-                    <p className="text-[#666] text-md font-light">
-                      {new Date(blogById?.created_at).toLocaleTimeString(
-                        "vi-VI"
-                      )}
-                    </p>
+                  <div className="w-full flex flex-row gap-3 justify-between items-center">
+                    <div className="flex flex-col gap-1">
+                      <h2 className="text-4xl font-normal">
+                        {blogById?.title}
+                      </h2>
+                    </div>
+                    <div className="flex flex-col items-end">
+                      <p>
+                        {new Date(blogById?.created_at).toLocaleDateString(
+                          "vi-VI"
+                        )}
+                      </p>
+                      <p className="text-[#666] text-md font-light">
+                        {new Date(blogById?.created_at).toLocaleTimeString(
+                          "vi-VI"
+                        )}
+                      </p>
+                    </div>
                   </div>
                 </div>
+                <div>
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: blogById?.description,
+                    }}
+                    className="text-md font-normal italic"
+                  ></span>
+                </div>
+                <div
+                  dangerouslySetInnerHTML={{ __html: blogById?.detail }}
+                ></div>
+                <div
+                  dangerouslySetInnerHTML={{ __html: blogById?.content }}
+                ></div>
               </div>
-              <div>
-                <span
-                  dangerouslySetInnerHTML={{
-                    __html: blogById?.description,
-                  }}
-                  className="text-md font-normal italic"
-                ></span>
-              </div>
-              <div dangerouslySetInnerHTML={{ __html: blogById?.detail }}></div>
-              <div
-                dangerouslySetInnerHTML={{ __html: blogById?.content }}
-              ></div>
-            </div>
-          </Box>
+            </Box>
+          ) : (
+            <SkeletonDetailBlog style={style} />
+          )}
         </Modal>
 
         {/* End show Detail Blog */}

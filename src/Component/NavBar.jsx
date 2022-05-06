@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { MdOutlineSmartToy } from "react-icons/md";
-import { BiCategory, BiMailSend } from "react-icons/bi";
+import { BiCategory, BiCategoryAlt, BiMailSend } from "react-icons/bi";
 import { FaMicroblog } from "react-icons/fa";
 import { HiOutlineUserGroup } from "react-icons/hi";
 import { useSelector } from "react-redux";
@@ -61,6 +61,12 @@ const NavBar = ({ show }) => {
       path: "/product",
       icon: <MdOutlineSmartToy />,
       cate: <SubNavBar dataCate={dataCate} name="category" />,
+    },
+    {
+      name: "Category",
+      path: "/category",
+      icon: <BiCategoryAlt />,
+      cate: "",
     },
     {
       name: "Blog",

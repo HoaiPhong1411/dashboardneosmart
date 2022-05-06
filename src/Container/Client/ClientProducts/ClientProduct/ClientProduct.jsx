@@ -6,21 +6,22 @@ import Box from "@mui/material/Box";
 import { ToastContainer, toast } from "react-toastify";
 import { LinearProgress } from "@mui/material";
 
-import { getAllProduct, getProductById } from "../../../app/apiRequest";
+import { getAllProduct, getProductById } from "../../../../app/apiRequest";
 import {
   getProductByIdSuccess,
   getProductSuccess,
-} from "../../../app/productSlice/productsSlice";
-import { clientApi } from "../../../api/api";
-import ButtonSwitch from "../../../Component/Button/ButtonSwitch";
-import InputSearch from "../../../Component/Input/InputSearch";
-import ButtonActions from "../../../Component/Button/ButtonActions";
-import ButtonAdd from "../../../Component/Button/ButtonAdd";
-import { urlImg } from "../../../Component/Variable";
+} from "../../../../app/productSlice/productsSlice";
+import { clientApi } from "../../../../api/api";
+import ButtonSwitch from "../../../../Component/Button/ButtonSwitch";
+import InputSearch from "../../../../Component/Input/InputSearch";
+import ButtonActions from "../../../../Component/Button/ButtonActions";
+import ButtonAdd from "../../../../Component/Button/ButtonAdd";
+import { urlImg } from "../../../../Component/Variable";
 import "react-toastify/dist/ReactToastify.css";
 import "./ClientProduct.css";
-import ClientPagination from "../../../Component/Pagination/ClientPagination";
-import SkeletonTable from "../../../Component/Skeleton/SkeletonTable";
+import ClientPagination from "../../../../Component/Pagination/ClientPagination";
+import SkeletonTable from "../../../../Component/Skeleton/SkeletonTable";
+import SkeletonDetailProduct from "../../../../Component/Skeleton/SkeletonDetailProduct";
 
 // Style Modal show detail
 const style = {
@@ -44,6 +45,8 @@ const ClientProduct = () => {
   const [value, setValue] = useState();
   const dispath = useDispatch();
   const navigate = useNavigate();
+  const [productById, setProductById] = useState(null);
+
   // pagination
   const [pagination, setPagination] = useState({
     current_page: 0,
@@ -65,9 +68,6 @@ const ClientProduct = () => {
 
   const dataCategory = useSelector(
     (state) => state.category.category.category[0]
-  );
-  const productById = useSelector(
-    (state) => state.products.product.productById
   );
 
   useEffect(() => {
@@ -107,11 +107,19 @@ const ClientProduct = () => {
 
   // show Detail
   const handleOpen = (id) => {
-    getProductById(dispath, id);
+    const getProductDetail = async () => {
+      try {
+        const res = await clientApi.productShowById(id);
+        setProductById(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getProductDetail();
     setOpen(true);
   };
   const handleClose = () => {
-    getProductByIdSuccess(null);
+    setProductById(null);
     setOpen(false);
   };
   // End show Detail
@@ -389,55 +397,57 @@ const ClientProduct = () => {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <Box sx={style}>
-            <div className="flex flex-col px-10 py-16 h-[600px] overflow-y-scroll gap-5">
-              <div className="flex flex-row gap-5 ">
-                <div className="w-[40%]">
-                  <img
-                    src={urlImg + productById[0]?.photo}
-                    alt=""
-                    className="w-full h-[200px] border-[1px] border-[#333]"
-                  />
-                </div>
-                <div className="w-[60%] flex flex-col gap-3">
-                  <div>
-                    <h2 className="text-2xl font-medium">
-                      {productById[0]?.title}
-                    </h2>
-                    <span
+          {productById ? (
+            <Box sx={style}>
+              <div className="flex flex-col px-10 py-16 h-[600px] overflow-y-scroll gap-5">
+                <div className="flex flex-row gap-5 ">
+                  <div className="w-[40%]">
+                    <img
+                      src={urlImg + productById?.photo}
+                      alt=""
+                      className="w-full h-[200px] border-[1px] border-[#333]"
+                    />
+                  </div>
+                  <div className="w-[60%] flex flex-col gap-3">
+                    <div>
+                      <h2 className="text-2xl font-medium">
+                        {productById?.title}
+                      </h2>
+                      <span
+                        dangerouslySetInnerHTML={{
+                          __html: productById?.description,
+                        }}
+                        className="text-md font-normal italic text-[#777]"
+                      ></span>
+                    </div>
+                    <div>
+                      <span>Giá: </span>
+                      <strong className="text-[#ff6363] text-xl font-medium">
+                        {Intl.NumberFormat().format(Number(productById?.price))}{" "}
+                        VNĐ
+                      </strong>
+                    </div>
+                    <div
+                      className="text-[13px] font-light"
                       dangerouslySetInnerHTML={{
-                        __html: productById[0]?.description,
+                        __html: productById?.detail,
                       }}
-                      className="text-md font-normal italic text-[#777]"
-                    ></span>
+                    ></div>
                   </div>
-                  <div>
-                    <span>Giá: </span>
-                    <strong className="text-[#ff6363] text-xl font-medium">
-                      {Intl.NumberFormat().format(
-                        Number(productById[0]?.price)
-                      )}{" "}
-                      VNĐ
-                    </strong>
-                  </div>
-                  <div
-                    className="text-[13px] font-light"
+                </div>
+                <div>
+                  <p
                     dangerouslySetInnerHTML={{
-                      __html: productById[0]?.detail,
+                      __html: productById?.content,
                     }}
-                  ></div>
+                    className="text-md font-normal text-[#000]"
+                  ></p>
                 </div>
               </div>
-              <div>
-                <p
-                  dangerouslySetInnerHTML={{
-                    __html: productById[0]?.content,
-                  }}
-                  className="text-md font-normal text-[#000]"
-                ></p>
-              </div>
-            </div>
-          </Box>
+            </Box>
+          ) : (
+            <SkeletonDetailProduct style={style} />
+          )}
         </Modal>
 
         {/*End Show Detail Blog */}

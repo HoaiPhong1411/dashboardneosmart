@@ -7,16 +7,21 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { LinearProgress } from "@mui/material";
 
-import { clientApi } from "../../../api/api";
-import { getProductByCategory, getProductById } from "../../../app/apiRequest";
-import { getAllProductSuccess } from "../../../app/productSlice/productsSlice";
-import { urlImg } from "../../../Component/Variable";
-import ButtonAdd from "../../../Component/Button/ButtonAdd";
-import InputSearch from "../../../Component/Input/InputSearch";
-import ButtonSwitch from "../../../Component/Button/ButtonSwitch";
-import ButtonActions from "../../../Component/Button/ButtonActions";
-import ClientPagination from "../../../Component/Pagination/ClientPagination";
-import SkeletonTable from "../../../Component/Skeleton/SkeletonTable";
+import { clientApi } from "../../../../api/api";
+import {
+  getProductByCategory,
+  getProductById,
+} from "../../../../app/apiRequest";
+import { getAllProductSuccess } from "../../../../app/productSlice/productsSlice";
+import { urlImg } from "../../../../Component/Variable";
+import ButtonAdd from "../../../../Component/Button/ButtonAdd";
+import InputSearch from "../../../../Component/Input/InputSearch";
+import ButtonSwitch from "../../../../Component/Button/ButtonSwitch";
+import ButtonActions from "../../../../Component/Button/ButtonActions";
+import ClientPagination from "../../../../Component/Pagination/ClientPagination";
+import SkeletonTable from "../../../../Component/Skeleton/SkeletonTable";
+import { callApi } from "../../../../config/configApi";
+import SkeletonDetailProduct from "../../../../Component/Skeleton/SkeletonDetailProduct";
 
 // Style Modal show detail
 const style = {
@@ -43,6 +48,7 @@ const ClientCategory = () => {
   const [value, setValue] = useState("");
   const dispath = useDispatch();
   const [dataNew, setDataNew] = useState(null);
+  const [productById, setProductById] = useState(null);
   // pagination
   const [pagination, setPagination] = useState({
     current_page: 0,
@@ -69,18 +75,27 @@ const ClientCategory = () => {
   const productByCateId = useSelector(
     (state) => state.products.product.productByCateId
   );
-  const productById = useSelector(
-    (state) => state.products.product.productById
-  );
 
   // show Detail
   const handleOpen = (id) => {
-    getProductById(dispath, id);
+    const getProductDetail = async () => {
+      try {
+        const res = await clientApi.productShowById(id);
+        setProductById(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getProductDetail();
     setOpen(true);
   };
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setProductById(null);
+    setOpen(false);
+  };
   // End show Detail
 
+  // Pagination
   useEffect(() => {
     const getProductByCategoryPagination = async () => {
       try {
@@ -116,6 +131,7 @@ const ClientCategory = () => {
     });
     console.log(newPage);
   };
+  // End Pagination
 
   // get data Product
   useEffect(() => {
@@ -407,49 +423,53 @@ const ClientCategory = () => {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <Box sx={style}>
-            <div className="flex flex-col px-10 py-16 gap-5">
-              <div className="flex flex-row gap-5 ">
-                <div className="w-[40%]">
-                  <img
-                    src={urlImg + productById[0]?.photo}
-                    alt=""
-                    className="w-full h-[200px] border-[1px] border-[#333]"
-                  />
-                </div>
-                <div className="w-[60%] flex flex-col gap-3">
-                  <div>
-                    <h2 className="text-2xl font-medium">
-                      {productById[0]?.title}
-                    </h2>
-                    <span
+          {productById ? (
+            <Box sx={style}>
+              <div className="flex flex-col px-10 py-16 gap-5">
+                <div className="flex flex-row gap-5 ">
+                  <div className="w-[40%]">
+                    <img
+                      src={urlImg + productById?.photo}
+                      alt=""
+                      className="w-full h-[200px] border-[1px] border-[#333]"
+                    />
+                  </div>
+                  <div className="w-[60%] flex flex-col gap-3">
+                    <div>
+                      <h2 className="text-2xl font-medium">
+                        {productById?.title}
+                      </h2>
+                      <span
+                        dangerouslySetInnerHTML={{
+                          __html: productById?.description,
+                        }}
+                        className="text-md font-normal italic text-[#777]"
+                      ></span>
+                    </div>
+                    <div>
+                      <span>Giá: </span>
+                      <strong className="text-[#ff6363] text-xl font-medium">
+                        {Intl.NumberFormat().format(Number(productById?.price))}{" "}
+                        VNĐ
+                      </strong>
+                    </div>
+                    <div
                       dangerouslySetInnerHTML={{
-                        __html: productById[0]?.description,
+                        __html: productById?.detail,
                       }}
-                      className="text-md font-normal italic text-[#777]"
-                    ></span>
+                    ></div>
+                    <p></p>
                   </div>
-                  <div>
-                    <span>Giá: </span>
-                    <strong className="text-[#ff6363] text-xl font-medium">
-                      {Intl.NumberFormat().format(
-                        Number(productById[0]?.price)
-                      )}{" "}
-                      VNĐ
-                    </strong>
-                  </div>
-                  <div
-                    dangerouslySetInnerHTML={{ __html: productById[0]?.detail }}
-                  ></div>
-                  <p></p>
                 </div>
+                <div
+                  dangerouslySetInnerHTML={{ __html: productById?.content }}
+                  className="text-lg font-light text-[#000]"
+                ></div>
               </div>
-              <div
-                dangerouslySetInnerHTML={{ __html: productById[0]?.content }}
-                className="text-lg font-light text-[#000]"
-              ></div>
-            </div>
-          </Box>
+            </Box>
+          ) : (
+            <SkeletonDetailProduct style={style} />
+          )}
         </Modal>
 
         {/*End Show Detail Blog */}

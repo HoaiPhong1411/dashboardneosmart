@@ -10,11 +10,11 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { green } from "@mui/material/colors";
 import Button from "@mui/material/Button";
 
-import { clientApi } from "../../../api/api";
-import ButtonCheck from "../../../Component/Button/ButtonCheck";
-import ButtonUpload from "../../../Component/Button/ButtonUpload";
+import { clientApi } from "../../../../api/api";
+import ButtonCheck from "../../../../Component/Button/ButtonCheck";
+import ButtonUpload from "../../../../Component/Button/ButtonUpload";
 
-import notimg from "../../../assets/images/No-image-found.jpg";
+import notimg from "../../../../assets/images/No-image-found.jpg";
 import "./ClientAddProduct.css";
 
 const ClientAddProduct = () => {

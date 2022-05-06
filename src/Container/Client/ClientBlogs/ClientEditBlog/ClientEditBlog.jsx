@@ -8,11 +8,11 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { TiArrowBack } from "react-icons/ti";
 
-import { urlImg } from "../../../Component/Variable";
-import "../ClientEditProduct/ClientEditProduct.css";
-import ButtonCheck from "../../../Component/Button/ButtonCheck";
-import ButtonUpload from "../../../Component/Button/ButtonUpload";
-import { clientApi } from "../../../api/api";
+import { urlImg } from "../../../../Component/Variable";
+import "../../ClientProducts/ClientEditProduct/ClientEditProduct.css";
+import ButtonCheck from "../../../../Component/Button/ButtonCheck";
+import ButtonUpload from "../../../../Component/Button/ButtonUpload";
+import { clientApi } from "../../../../api/api";
 
 const ClientEditBlog = () => {
   // getApi
