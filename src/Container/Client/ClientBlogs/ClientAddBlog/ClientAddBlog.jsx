@@ -13,6 +13,8 @@ import ButtonCheck from "../../../../Component/Button/ButtonCheck";
 import ButtonUpload from "../../../../Component/Button/ButtonUpload";
 import notimg from "../../../../assets/images/No-image-found.jpg";
 import { clientApi } from "../../../../api/api";
+import { Button, CircularProgress } from "@mui/material";
+import { green } from "@mui/material/colors";
 
 // config upload img
 const init = {
@@ -62,6 +64,25 @@ const ClientAddBlog = () => {
   const dataListBlog = useSelector((state) => state.listBlog.listBlog.listBlog);
   const notify = (type = "error", content = "Vui lòng nhập đầy đủ!") =>
     toast[type](content);
+
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const buttonSx = {
+    ...(success
+      ? {
+          bgcolor: green[500],
+          "&:hover": {
+            bgcolor: green[700],
+          },
+        }
+      : {
+          bgcolor: "#0f8f31",
+          "&:hover": {
+            bgcolor: "#0e6726",
+          },
+        }),
+  };
 
   const editorRef = useRef(null);
 
@@ -117,10 +138,19 @@ const ClientAddBlog = () => {
   //   FunctionAdd
   const addBlog = async (data) => {
     try {
-      await clientApi.blogAdd(data);
-      notify("success", "Thêm sản phẩm thành công!");
+      setSuccess(false);
+      setLoading(true);
+      const res = await clientApi.blogAdd(data);
+      if (res) {
+        setSuccess(true);
+        setLoading(false);
+        notify("success", "Thêm sản phẩm thành công!");
+        // navigate("/product/add");
+      }
     } catch (error) {
       notify();
+      setSuccess(true);
+      setLoading(false);
     }
   };
 
@@ -276,7 +306,7 @@ const ClientAddBlog = () => {
                   <img
                     src={img ?? notimg}
                     alt=""
-                    className="w-full h-[250px] object-cover border-2 border-secondary"
+                    className="w-full h-[250px] object-cover shadow-lg rounded-md"
                   />
                   <ButtonUpload htmlFor="photo" />
                 </div>
@@ -370,17 +400,30 @@ const ClientAddBlog = () => {
             {/*=== End Right ===*/}
           </div>
           {/* === End Input === */}
+
           {/* Button Add */}
 
           <div>
             {/* Button Add */}
             <div className="flex flex-row justify-center items-center">
-              <button
-                type="submit"
-                className="flex flex-row justify-center items-center rounded-lg gap-3 px-4 py-2 hover:bg-hoverButton text-[#fff] bg-bgButton text-[1.25rem]"
-              >
-                <IoMdAddCircle />
-                Add Blog
+              <button type="submit" className="relative">
+                <Button variant="contained" sx={buttonSx} disabled={loading}>
+                  <IoMdAddCircle className="mr-1" />
+                  Thêm Bài Viết
+                </Button>
+                {loading && (
+                  <CircularProgress
+                    size={24}
+                    sx={{
+                      color: green[500],
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      marginTop: "-12px",
+                      marginLeft: "-12px",
+                    }}
+                  />
+                )}
               </button>
             </div>
 

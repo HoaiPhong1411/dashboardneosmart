@@ -30,12 +30,14 @@ const style = {
   width: 700,
   backgroundColor: "#fff",
   border: "none",
+  borderRadius: 1,
   boxShadow: 24,
 };
 // End Style Modal show detail
 
 const ClientBlog = () => {
   const [render, setRender] = useState(false);
+
   // -------------------
   // input search
   const [data, setData] = useState([]);
@@ -125,9 +127,8 @@ const ClientBlog = () => {
     getAllBlog(dispath);
   }, [render]);
 
-  const handleEdit = (e, blog) => {
-    dispath(addBlogSuccess(blog));
-    navigate("/blog/edit", blog);
+  const handleEdit = (e, id) => {
+    navigate(`/blog/edit/id=${id}`);
   };
   // getBlog
   useEffect(() => {
@@ -262,8 +263,7 @@ const ClientBlog = () => {
                       height="50px"
                     />
                     <Link
-                      onClick={(e, blog) => handleEdit(e, item)}
-                      to="/blog/edit"
+                      to={`/blog/edit/id=${item.id}`}
                       className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
                     >
                       {item.title}
@@ -296,7 +296,7 @@ const ClientBlog = () => {
                     <ButtonActions
                       handleSeen={(id) => handleOpen(item.id)}
                       HandleDelete={(id) => handleRemove(item.id)}
-                      handleEdit={(e, blog) => handleEdit(e, item)}
+                      handleEdit={(e, id) => handleEdit(e, item.id)}
                     />
                   </td>
 
@@ -313,8 +313,7 @@ const ClientBlog = () => {
                         height="50px"
                       />
                       <Link
-                        onClick={(e, blog) => handleEdit(e, item)}
-                        to="/blog/edit"
+                        to={`/blog/edit/id=${item.id}`}
                         className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
                       >
                         {item.title}
@@ -347,7 +346,7 @@ const ClientBlog = () => {
                       <ButtonActions
                         handleSeen={(id) => handleOpen(item.id)}
                         HandleDelete={(id) => handleRemove(item.id)}
-                        handleEdit={(e, blog) => handleEdit(e, item)}
+                        handleEdit={(e, id) => handleEdit(e, item.id)}
                       />
                     </td>
 
@@ -391,7 +390,7 @@ const ClientBlog = () => {
                     <img
                       src={urlImg + blogById?.photo}
                       alt=""
-                      className="w-[80%] h-[250px] border-[1px] border-[#333]"
+                      className="w-[80%] h-[250px] rounded-lg shadow-lg"
                     />
                   </div>
                   <div className="w-full flex flex-row gap-3 justify-between items-center">

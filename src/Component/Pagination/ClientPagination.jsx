@@ -1,13 +1,21 @@
 import Pagination from "@mui/material/Pagination";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TablePagination from "@mui/material/TablePagination";
 
 const ClientPagination = (props) => {
-  const { pagination, onPageChange } = props;
+  const { pagination, onPageChange, id } = props;
   const { current_page, to, totalRows, totalPages } = pagination;
   const [page, setPage] = useState(current_page);
   const [rowsPerPage, setRowsPerPage] = useState(to);
-
+  const [currentId, setCurrentId] = useState(id);
+  console.log("render", page);
+  useEffect(() => {
+    setCurrentId(id);
+    if (currentId != id) {
+      setPage(0);
+      onPageChange(0, rowsPerPage);
+    }
+  }, [id]);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
     if (onPageChange) {

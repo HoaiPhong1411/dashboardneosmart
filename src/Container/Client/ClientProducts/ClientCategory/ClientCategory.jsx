@@ -129,7 +129,6 @@ const ClientCategory = () => {
       current_page: newPage,
       to: rowsPerPage,
     });
-    console.log(newPage);
   };
   // End Pagination
 
@@ -148,9 +147,8 @@ const ClientCategory = () => {
   // End data Product
   // ------------------------------------
 
-  const handleEdit = (e, product) => {
-    dispath(getAllProductSuccess(product));
-    navigate("/product/edit", product);
+  const handleEdit = (e, id) => {
+    navigate(`/product/category/edit/id=${id}`);
   };
 
   // -------
@@ -231,9 +229,6 @@ const ClientCategory = () => {
     handleSearch();
   }, [value]);
 
-  useEffect(() => {
-    getProductByCategory(dispath, currentCategory[0].id);
-  }, [render]);
   // delete Product
 
   const handleRemove = (id) => {
@@ -291,8 +286,7 @@ const ClientCategory = () => {
                           height="50px"
                         />
                         <Link
-                          onClick={(e, product) => handleEdit(e, item)}
-                          to="/product/edit"
+                          to={`/product/category/edit/id=${item.id}`}
                           className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
                         >
                           {item.title}
@@ -310,7 +304,7 @@ const ClientCategory = () => {
                         <ButtonSwitch
                           id={item.id}
                           name={item.display}
-                          handleChange={(e, product) => handleDisplay(e, item)}
+                          handleChange={(e, id) => handleDisplay(e, item.id)}
                         />
                       </td>
                       {/* End switched display */}
@@ -330,7 +324,7 @@ const ClientCategory = () => {
                         <ButtonActions
                           handleSeen={(id) => handleOpen(item.id)}
                           HandleDelete={(id) => handleRemove(item.id)}
-                          handleEdit={(e, product) => handleEdit(e, item)}
+                          handleEdit={(e, id) => handleEdit(e, item.id)}
                         />
                       </td>
 
@@ -347,8 +341,7 @@ const ClientCategory = () => {
                           height="50px"
                         />
                         <Link
-                          onClick={(e, product) => handleEdit(e, item)}
-                          to="/product/edit"
+                          to={`/product/category/edit/id=${item.id}`}
                           className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
                         >
                           {item.title}
@@ -386,7 +379,7 @@ const ClientCategory = () => {
                         <ButtonActions
                           handleSeen={(id) => handleOpen(item.id)}
                           HandleDelete={(id) => handleRemove(item.id)}
-                          handleEdit={(e, product) => handleEdit(e, item)}
+                          handleEdit={(e, id) => handleEdit(e, item.id)}
                         />
                       </td>
 
@@ -403,6 +396,7 @@ const ClientCategory = () => {
               <td colSpan="7">
                 <div className="flex flex-row justify-end">
                   <ClientPagination
+                    id={id}
                     pagination={pagination}
                     onPageChange={handlePageChange}
                   />

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,9 +13,10 @@ import { urlImg } from "../../../../Component/Variable";
 import ButtonAdd from "../../../../Component/Button/ButtonAdd";
 import ButtonSwitch from "../../../../Component/Button/ButtonSwitch";
 import ButtonActions from "../../../../Component/Button/ButtonActions";
-import { getBlogByBlogListId } from "../../../../app/apiRequest";
 import { clientApi } from "../../../../api/api";
 import SkeletonDetailBlog from "../../../../Component/Skeleton/SkeletonDetailBlog";
+import ClientPagination from "../../../../Component/Pagination/ClientPagination";
+import SkeletonTable from "../../../../Component/Skeleton/SkeletonTable";
 
 // Style Modal show detail
 const style = {
@@ -31,6 +32,8 @@ const style = {
 // End Style Modal show detail
 
 const ClientBlogList = () => {
+  const { id } = useParams();
+  const [currentIdBlog, setCurrentIdBlog] = useState(id);
   const [render, setRender] = useState(false);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
@@ -38,16 +41,64 @@ const ClientBlogList = () => {
   const navigate = useNavigate();
   const [dataNew, setDataNew] = useState(null);
   const [blogById, setBlogById] = useState([]);
+  const [blogByListBlog, setBlogByListBlog] = useState(null);
   const notify = (
     type = "error",
     content = "Cập nhật hiển thị không thành công!"
   ) => toast[type](content);
 
-  const getBlogByListBlog = useSelector(
-    (state) => state.blogs.blogs.blogByBlogListId
-  );
+  // pagination
+  const [pagination, setPagination] = useState({
+    current_page: 0,
+    to: 10,
+    totalRows: 10,
+    totalPages: 1,
+  });
+  //  End pagination
+
+  const [filter, setFilter] = useState({
+    current_page: 1,
+    to: 10,
+  });
+
   const getListBlog = useSelector((state) => state.listBlog.listBlog.listBlog);
-  const getCurrentBlog = useSelector((state) => state.blogs.blogs.currentBlog);
+
+  useEffect(() => {
+    const getBlogByBlogListId = async () => {
+      try {
+        setCurrentIdBlog(id);
+        if (currentIdBlog !== id) {
+          setBlogByListBlog(null);
+        }
+        const res = await clientApi.blogPaginationByBlogListId(
+          id,
+          filter.current_page,
+          filter.to
+        );
+        const result = res.data.result;
+        setBlogByListBlog(result.data);
+        setPagination({
+          ...pagination,
+          to: result.to,
+          totalRows: result.total,
+          totalPages: result.last_page,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getBlogByBlogListId();
+  }, [filter, id]);
+
+  // change Pagination
+  const handlePageChange = (newPage, rowsPerPage) => {
+    setFilter({
+      ...filter,
+      current_page: newPage,
+      to: rowsPerPage,
+    });
+    console.log("pagenew", newPage);
+  };
 
   // show Detail
   const handleOpen = (id) => {
@@ -68,9 +119,8 @@ const ClientBlogList = () => {
   };
   // End show Detail
 
-  const handleEdit = (e, blog) => {
-    dispath(addBlogSuccess(blog));
-    navigate("/blog/edit", blog);
+  const handleEdit = (e, idBlog) => {
+    navigate(`/blog/bloglist_id=${id}/edit/id=${idBlog}`);
   };
 
   // -------
@@ -126,7 +176,7 @@ const ClientBlogList = () => {
     const handleSearch = async () => {
       try {
         let dataSearch = [];
-        getBlogByListBlog[0]?.forEach((item, i) => {
+        blogByListBlog?.forEach((item, i) => {
           if (
             item.title.toLowerCase().includes(value.trim().toLowerCase(), 0)
           ) {
@@ -135,7 +185,7 @@ const ClientBlogList = () => {
         });
         setDataNew(dataSearch);
         if (value == "") {
-          setDataNew([]);
+          setDataNew(null);
         }
       } catch (error) {
         console.log(error);
@@ -145,10 +195,6 @@ const ClientBlogList = () => {
   }, [value]);
 
   // delete blog
-
-  useEffect(() => {
-    getBlogByBlogListId(dispath, getCurrentBlog[0].id);
-  }, [render]);
 
   const handleRemove = (id) => {
     const remove = async () => {
@@ -178,15 +224,9 @@ const ClientBlogList = () => {
         <InputSearch handleChange={(e) => handleChange(e)} value={value} />
         {/* End Input search */}
       </div>
-<<<<<<< HEAD:src/Container/Client/ClientBlogs/ClientBlogList/ClientBlogList.jsx
       <div className="w-full bg-lightSecondary p-3 dark:bg-nightSecondary shadow-lg rounded-xl my-7 ">
         {/* Table show blog */}
         <table className="w-full text-bgButton font-medium">
-=======
-      <div className="tb:text-xs tb:overflow-x-scroll w-full bg-lightSecondary p-3 dark:bg-nightSecondary shadow-lg rounded-xl my-7 ">
-        {/* Table show product */}
-        <table className="tb:w-[1000px] dt:w-full text-bgButton font-medium">
->>>>>>> thuan:src/Container/Client/ClientCategory/ClientCategory.jsx
           <thead>
             <tr>
               <td>Title</td>
@@ -199,116 +239,135 @@ const ClientBlogList = () => {
           </thead>
           {/* show data blog */}
           <tbody className="text-[#333] dark:text-[#fff] font-light">
-            {value !== ""
-              ? dataNew?.map((item) => (
-                  <tr key={item.id} className="dark:hover:hoverButton">
-                    <td className="flex flex-row justify-start gap-2 items-center">
-                      <img
-                        src={urlImg + item.photo}
-                        alt=""
-                        width="50px"
-                        height="50px"
-                      />
-                      <Link
-                        onClick={(e, blog) => handleEdit(e, item)}
-                        to="/blog/edit"
-                        className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
-                      >
-                        {item.title}
-                      </Link>
-                    </td>
-                    <td
-                      dangerouslySetInnerHTML={{ __html: item.description }}
-                    ></td>
+            {blogByListBlog ? (
+              dataNew?.map((item) => (
+                <tr key={item.id} className="dark:hover:hoverButton">
+                  <td className="flex flex-row justify-start gap-2 items-center">
+                    <img
+                      src={urlImg + item.photo}
+                      alt=""
+                      width="50px"
+                      height="50px"
+                    />
+                    <Link
+                      to={`/blog/bloglist_id=${id}/edit/id=${item.id}`}
+                      className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
+                    >
+                      {item.title}
+                    </Link>
+                  </td>
+                  <td
+                    dangerouslySetInnerHTML={{ __html: item.description }}
+                  ></td>
 
-                    {/* switched display */}
-                    <td>
-                      <ButtonSwitch
-                        id={item.id}
-                        name={item.display}
-                        handleChange={(e, blog) => handleDisplay(e, item)}
-                      />
-                    </td>
-                    {/* End switched display */}
+                  {/* switched display */}
+                  <td>
+                    <ButtonSwitch
+                      id={item.id}
+                      name={item.display}
+                      handleChange={(e, blog) => handleDisplay(e, item)}
+                    />
+                  </td>
+                  {/* End switched display */}
 
-                    <td>{item.position}</td>
+                  <td>{item.position}</td>
 
-                    {getListBlog?.map((blog) =>
-                      item.listblog_id == blog.id ? (
-                        <td key={blog.id}>{blog.title}</td>
-                      ) : (
-                        ""
-                      )
-                    )}
+                  {getListBlog?.map((blog) =>
+                    item.listblog_id == blog.id ? (
+                      <td key={blog.id}>{blog.title}</td>
+                    ) : (
+                      ""
+                    )
+                  )}
 
-                    {/* Button delete */}
-                    <td>
-                      {/* <ButtonDelete handleClick={(id) => handleRemove(item.id)} /> */}
-                      <ButtonActions
-                        handleSeen={(id) => handleOpen(item.id)}
-                        HandleDelete={(id) => handleRemove(item.id)}
-                        handleEdit={(e, blog) => handleEdit(e, item)}
-                      />
-                    </td>
+                  {/* Button delete */}
+                  <td>
+                    {/* <ButtonDelete handleClick={(id) => handleRemove(item.id)} /> */}
+                    <ButtonActions
+                      handleSeen={(id) => handleOpen(item.id)}
+                      HandleDelete={(id) => handleRemove(item.id)}
+                      handleEdit={(e, idBlog) => handleEdit(e, item.id)}
+                    />
+                  </td>
 
-                    {/* End button delete */}
-                  </tr>
-                ))
-              : getBlogByListBlog[0]?.map((item) => (
-                  <tr key={item.id} className="dark:hover:hoverButton">
-                    <td className="flex flex-row justify-start gap-2 items-center">
-                      <img
-                        src={urlImg + item.photo}
-                        alt=""
-                        width="50px"
-                        height="50px"
-                      />
-                      <Link
-                        onClick={(e, blog) => handleEdit(e, item)}
-                        to="/blog/edit"
-                        className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
-                      >
-                        {item.title}
-                      </Link>
-                    </td>
-                    <td
-                      dangerouslySetInnerHTML={{ __html: item.description }}
-                    ></td>
+                  {/* End button delete */}
+                </tr>
+              )) ??
+              blogByListBlog.map((item) => (
+                <tr key={item.id} className="dark:hover:hoverButton">
+                  <td className="flex flex-row justify-start gap-2 items-center">
+                    <img
+                      src={urlImg + item.photo}
+                      alt=""
+                      width="50px"
+                      height="50px"
+                    />
+                    <Link
+                      to={`/blog/bloglist_id=${id}/edit/id=${item.id}`}
+                      className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
+                    >
+                      {item.title}
+                    </Link>
+                  </td>
+                  <td
+                    dangerouslySetInnerHTML={{ __html: item.description }}
+                  ></td>
 
-                    {/* switched display */}
-                    <td>
-                      <ButtonSwitch
-                        id={item.id}
-                        name={item.display}
-                        handleChange={(e, blog) => handleDisplay(e, item)}
-                      />
-                    </td>
-                    {/* End switched display */}
+                  {/* switched display */}
+                  <td>
+                    <ButtonSwitch
+                      id={item.id}
+                      name={item.display}
+                      handleChange={(e, blog) => handleDisplay(e, item)}
+                    />
+                  </td>
+                  {/* End switched display */}
 
-                    <td>{item.position}</td>
+                  <td>{item.position}</td>
 
-                    {getListBlog?.map((blog) =>
-                      item.listblog_id == blog.id ? (
-                        <td key={blog.id}>{blog.title}</td>
-                      ) : (
-                        ""
-                      )
-                    )}
+                  {getListBlog?.map((blog) =>
+                    item.listblog_id == blog.id ? (
+                      <td key={blog.id}>{blog.title}</td>
+                    ) : (
+                      ""
+                    )
+                  )}
 
-                    {/* Button delete */}
-                    <td>
-                      {/* <ButtonDelete handleClick={(id) => handleRemove(item.id)} /> */}
-                      <ButtonActions
-                        handleSeen={(id) => handleOpen(item.id)}
-                        HandleDelete={(id) => handleRemove(item.id)}
-                        handleEdit={(e, blog) => handleEdit(e, item)}
-                      />
-                    </td>
+                  {/* Button delete */}
+                  <td>
+                    {/* <ButtonDelete handleClick={(id) => handleRemove(item.id)} /> */}
+                    <ButtonActions
+                      handleSeen={(id) => handleOpen(item.id)}
+                      HandleDelete={(id) => handleRemove(item.id)}
+                      handleEdit={(e, idBlog) => handleEdit(e, item.id)}
+                    />
+                  </td>
 
-                    {/* End button delete */}
-                  </tr>
-                ))}
+                  {/* End button delete */}
+                </tr>
+              ))
+            ) : (
+              <SkeletonTable rows={10} columns={5} image={true} />
+            )}
           </tbody>
+          {/* footer pagination */}
+
+          <tfoot>
+            <tr className="shadow-none">
+              <td colSpan="7">
+                <div className="flex flex-row justify-end">
+                  <ClientPagination
+                    id={id}
+                    pagination={pagination}
+                    onPageChange={handlePageChange}
+                  />
+                </div>
+              </td>
+            </tr>
+          </tfoot>
+
+          {/* End footer pagination */}
+
           {/* End show data blog */}
         </table>
 

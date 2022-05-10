@@ -16,7 +16,7 @@ import ButtonSwitch from "../../../../Component/Button/ButtonSwitch";
 import InputSearch from "../../../../Component/Input/InputSearch";
 import ButtonActions from "../../../../Component/Button/ButtonActions";
 import ButtonAdd from "../../../../Component/Button/ButtonAdd";
-import { urlImg } from "../../../../Component/Variable";
+import { convertViToEn, urlImg } from "../../../../Component/Variable";
 import "react-toastify/dist/ReactToastify.css";
 import "./ClientProduct.css";
 import ClientPagination from "../../../../Component/Pagination/ClientPagination";
@@ -100,9 +100,8 @@ const ClientProduct = () => {
     });
   };
 
-  const handleEdit = (e, product) => {
-    dispath(getProductSuccess(product));
-    navigate("/product/edit", product);
+  const handleEdit = (e, id) => {
+    navigate(`/product/edit/id=${id}`);
   };
 
   // show Detail
@@ -186,7 +185,7 @@ const ClientProduct = () => {
     dataDisplay.append("content", product.content);
     dataDisplay.append("description", product.description);
     dataDisplay.append("position", product.position);
-if (check) {
+    if (check) {
       dataDisplay.append("display", 1);
       updateDisplay(product.id, dataDisplay);
     } else {
@@ -213,9 +212,7 @@ if (check) {
         if (getProduct) {
           await getProduct?.forEach((item, i) => {
             if (value !== "") {
-              if (
-                item.title.toLowerCase().includes(value.trim().toLowerCase(), 0)
-              ) {
+              if (convertViToEn(item.title).includes(convertViToEn(value), 0)) {
                 return dataSearch.push(item);
               }
               setDataNew(dataSearch);
@@ -258,62 +255,9 @@ if (check) {
           </thead>
 
           {/* show data Product */}
-<<<<<<< HEAD:src/Container/Client/ClientProducts/ClientProduct/ClientProduct.jsx
           {getProduct ? (
             <tbody className="text-[#333] dark:text-[#fff] font-light overflow-y-auto ">
               {dataNew?.map((item) => (
-=======
-          <tbody className="text-[#333] dark:text-[#fff] font-light overflow-y-auto ">
-            {dataNew?.map((item) => (
-              <tr key={item.id} className="dark:hover:bg-hoverButton">
-                <td className="flex flex-row justify-start gap-2 items-center">
-                  <img className="tb:w-[30px] tb:h-[30px] w-[50px] h-[50px]"
-                    src={urlImg + item.photo}
-                    alt=""
-                  />
-                  <Link
-                    onClick={(e, product) => handleEdit(e, item)}
-                    to="/product/edit"
-                    className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
-                  >
-                    {item.title}
-                  </Link>
-                </td>
-                <td dangerouslySetInnerHTML={{ __html: item.description }}></td>
-                <td>{Intl.NumberFormat().format(Number(item.price))} VNĐ</td>
-
-                <td>
-                  <ButtonSwitch
-                    id={item.id}
-                    name={item.display}
-                    handleChange={(e, product) => handleDisplay(e, item)}
-                  />
-                </td>
-                {/* End switched display */}
-
-                <td>{item.position}</td>
-                {dataCategory?.map((cate) =>
-                  item.category_id == cate.id ? (
-                    <td key={cate.id}>{cate.title}</td>
-                  ) : (
-                    ""
-                  )
-                )}
-
-                {/* Button delete */}
-                <td>
-                  <ButtonActions
-                    handleSeen={(id) => handleOpen(item.id)}
-                    HandleDelete={(id) => handleRemove(item.id)}
-                    handleEdit={(e, product) => handleEdit(e, item)}
-                  />
-                </td>
-
-                {/* End button delete */}
-              </tr>
-            )) ??
-              getProduct?.map((item) => (
->>>>>>> thuan:src/Container/Client/ClientProduct/ClientProduct.jsx
                 <tr key={item.id} className="dark:hover:bg-hoverButton">
                   <td className="flex flex-row justify-start gap-2 items-center">
                     <img
@@ -323,8 +267,7 @@ if (check) {
                       height="50px"
                     />
                     <Link
-                      onClick={(e, product) => handleEdit(e, item)}
-                      to="/product/edit"
+                      to={`/product/edit/id=${item.id}`}
                       className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
                     >
                       {item.title}
@@ -358,7 +301,7 @@ if (check) {
                     <ButtonActions
                       handleSeen={(id) => handleOpen(item.id)}
                       HandleDelete={(id) => handleRemove(item.id)}
-                      handleEdit={(e, product) => handleEdit(e, item)}
+                      handleEdit={(e, id) => handleEdit(e, item.id)}
                     />
                   </td>
 
@@ -375,8 +318,7 @@ if (check) {
                         height="50px"
                       />
                       <Link
-                        onClick={(e, product) => handleEdit(e, item)}
-                        to="/product/edit"
+                        to={`/product/edit/id=${item.id}`}
                         className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
                       >
                         {item.title}
@@ -412,7 +354,7 @@ if (check) {
                       <ButtonActions
                         handleSeen={(id) => handleOpen(item.id)}
                         HandleDelete={(id) => handleRemove(item.id)}
-                        handleEdit={(e, product) => handleEdit(e, item)}
+                        handleEdit={(e, id) => handleEdit(e, item.id)}
                       />
                     </td>
 

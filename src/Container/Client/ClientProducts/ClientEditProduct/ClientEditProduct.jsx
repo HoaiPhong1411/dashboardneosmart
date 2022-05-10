@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FiSave } from "react-icons/fi";
 import { TiArrowBack } from "react-icons/ti";
 import { Editor } from "@tinymce/tinymce-react";
@@ -8,15 +8,37 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ButtonUpload from "../../../../Component/Button/ButtonUpload";
 
+import SkeletonEditProduct from "../../../../Component/Skeleton/SkeletonEditProduct";
 import { clientApi } from "../../../../api/api";
 import { getProductSuccess } from "../../../../app/productSlice/productsSlice";
 import { urlImg } from "../../../../Component/Variable";
 import ButtonCheck from "../../../../Component/Button/ButtonCheck";
 import "./ClientEditProduct.css";
+import { Button, CircularProgress } from "@mui/material";
+import { green } from "@mui/material/colors";
 
 const ClientEditProduct = () => {
   // getApi
+  const { id } = useParams();
 
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const buttonSx = {
+    ...(success
+      ? {
+          bgcolor: green[500],
+          "&:hover": {
+            bgcolor: green[700],
+          },
+        }
+      : {
+          bgcolor: "#0f8f31",
+          "&:hover": {
+            bgcolor: "#0e6726",
+          },
+        }),
+  };
   // show Product Choose
   const [load, setLoad] = useState(false);
   // get File Image
@@ -34,9 +56,8 @@ const ClientEditProduct = () => {
   const [position, setPosition] = useState();
   const editorRef = useRef(null);
 
-  const [editPro, setEditPro] = useState([]);
+  const [editPro, setEditPro] = useState(null);
   const dispath = useDispatch();
-  const getEdit = useSelector((state) => state.products.product.product);
   const [getTheme, setGetTheme] = useState();
   const navigate = useNavigate();
   const notify = (type = "success", content = "Sửa sản phẩm thành công!") =>
@@ -55,8 +76,16 @@ const ClientEditProduct = () => {
   // --------------------------------
 
   useEffect(() => {
-    setEditPro(getEdit);
-  }, []);
+    const getProductEdit = async () => {
+      try {
+        const res = await clientApi.productShowById(id);
+        setEditPro(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getProductEdit();
+  }, [id]);
 
   // Change title và price
   const handleChanges = (e) => {
@@ -112,67 +141,70 @@ const ClientEditProduct = () => {
   // Submit Form
   const handleSubmit = (e) => {
     e.preventDefault();
-    const id = document.querySelector(".id").innerHTML;
+    const idElement = document.querySelector(".id").innerHTML;
     const dataUpdate = new FormData();
 
     // update
-    dataUpdate.append("title", stateValue.title ?? editPro[0].title);
-    dataUpdate.append("description", des ?? editPro[0].description);
-    dataUpdate.append("detail", detail ?? editPro[0].detail);
-    dataUpdate.append("content", content ?? editPro[0].content);
-    dataUpdate.append("price", stateValue.price ?? editPro[0].price);
-    dataUpdate.append("photo", file ?? editPro[0].photo);
-    if (display ?? editPro[0].display) {
+    dataUpdate.append("title", stateValue.title ?? editPro.title);
+    dataUpdate.append("description", des ?? editPro.description);
+    dataUpdate.append("detail", detail ?? editPro.detail);
+    dataUpdate.append("content", content ?? editPro.content);
+    dataUpdate.append("price", stateValue.price ?? editPro.price);
+    dataUpdate.append("photo", file ?? editPro.photo);
+    if (display ?? editPro.display) {
       dataUpdate.append("display", 1);
     } else {
       dataUpdate.append("display", 0);
     }
-    if (position ?? editPro[0].position) {
+    if (position ?? editPro.position) {
       dataUpdate.append("position", 1);
     } else {
       dataUpdate.append("position", 0);
     }
-    updateProduct(id, dataUpdate);
-    dispath(getProductSuccess([]));
-    setEditPro([]);
-    setLoad(!load);
+    updateProduct(idElement, dataUpdate);
   };
 
   const updateProduct = async (id, data) => {
     try {
-      await clientApi.productEdit(id, data);
-      notify();
-      setTimeout(() => {
-        navigate("/product", data);
-      }, 3000);
+      setSuccess(false);
+      setLoading(true);
+      const res = await clientApi.productEdit(id, data);
+      if (res) {
+        notify();
+        setSuccess(true);
+        setLoading(false);
+        setTimeout(() => {
+          navigate("/product", data);
+        }, 2000);
+      }
     } catch (error) {
       notify("error", "Cập nhật sản phẩm thất bại!");
+      setSuccess(true);
+      setLoading(false);
     }
-  };
-
-  const handleNavigate = () => {
-    navigate(-1);
   };
 
   return (
     <>
       <ToastContainer />
 
-      <div className="ml-3 hover:text-hoverButton">
-        <div
-          className="cursor-pointer flex flex-row gap-1 items-center"
-          onClick={() => handleNavigate()}
+      <div className="flex justify-start items-center hover:text-hoverButton">
+        <span
+          onClick={() => navigate(-1)}
+          className=" px-5 py-1 cursor-pointer text-center"
         >
-          <span>Back</span>
-          <TiArrowBack />
-        </div>
+          <div>
+            Back
+            <TiArrowBack className="float-right translate-y-1" />
+          </div>
+        </span>
       </div>
 
       <div className="flex flex-row gap-5 w-full dark:bg-nightSecondary bg-lightSecondary shadow-lg py-5 px-10 rounded-xl ">
         <form className="w-full" action="" onSubmit={(e) => handleSubmit(e)}>
-          {editPro?.map((item) => (
+          {editPro ? (
             <table
-              key={item.id}
+              key={editPro.id}
               className="w-full text-secondary flex flex-col justify-between gap-5"
             >
               {/* === Input === */}
@@ -182,7 +214,7 @@ const ClientEditProduct = () => {
                   {/* === Id === */}
 
                   <div className="hidden">
-                    <label className="id">{item.id}</label>
+                    <label className="id">{editPro.id}</label>
                   </div>
                   {/* === End Id === */}
 
@@ -193,7 +225,7 @@ const ClientEditProduct = () => {
                     <input
                       name="title"
                       type="text"
-                      value={stateValue.title ?? item.title}
+                      value={stateValue.title ?? editPro.title}
                       className="w-full border-[1px] border-secondary dark:bg-primary dark:text-[#fff] focus:border-[#e0ed2e] font-light"
                       onChange={(e) => handleChanges(e)}
                     />
@@ -208,7 +240,7 @@ const ClientEditProduct = () => {
                     <input
                       name="price"
                       type="text"
-                      value={stateValue.price ?? item.price}
+                      value={stateValue.price ?? editPro.price}
                       className="w-full border-[1px] border-secondary dark:bg-primary dark:text-[#fff] focus:border-[#e0ed2e] font-light"
                       onChange={(e) => handleChanges(e)}
                     />
@@ -224,7 +256,7 @@ const ClientEditProduct = () => {
                     <Editor
                       apiKey="9ksw8tn5zsdmdzj74e4l69xoewcxuqnmdgy3uf06wunsn404"
                       onInit={(evt, editor) => (editorRef.current = editor)}
-                      initialValue={item.description}
+                      initialValue={editPro.description}
                       onEditorChange={(newText) => setDes(newText)}
                       init={{
                         height: 250,
@@ -247,7 +279,7 @@ const ClientEditProduct = () => {
                     <Editor
                       apiKey="9ksw8tn5zsdmdzj74e4l69xoewcxuqnmdgy3uf06wunsn404"
                       onInit={(evt, editor) => (editorRef.current = editor)}
-                      initialValue={item.detail}
+                      initialValue={editPro.detail}
                       onEditorChange={(newText) => setDetail(newText)}
                       init={{
                         height: 250,
@@ -270,7 +302,7 @@ const ClientEditProduct = () => {
                     <Editor
                       apiKey="9ksw8tn5zsdmdzj74e4l69xoewcxuqnmdgy3uf06wunsn404"
                       onInit={(evt, editor) => (editorRef.current = editor)}
-                      initialValue={item.content}
+                      initialValue={editPro.content}
                       onEditorChange={(newText) => setContent(newText)}
                       init={{
                         height: 500,
@@ -298,9 +330,9 @@ const ClientEditProduct = () => {
                    gap-2"
                     >
                       <img
-                        src={img ?? urlImg + item.photo}
+                        src={img ?? urlImg + editPro.photo}
                         alt=""
-                        className=" w-full h-[250px] bg-cover border-2 border-secondary"
+                        className=" w-full h-[250px] bg-cover shadow-lg rounded-md"
                       />
                       {/* <label
                         htmlFor="photo"
@@ -330,7 +362,7 @@ const ClientEditProduct = () => {
                           htmlFor="display"
                           idIcon="btn-display"
                           style={
-                            item.display !== 1
+                            editPro.display !== 1
                               ? {
                                   backgroundColor: "#fff",
                                 }
@@ -342,7 +374,7 @@ const ClientEditProduct = () => {
                       </div>
                       <input
                         type="checkbox"
-                        defaultChecked={item.display == 1 ? true : false}
+                        defaultChecked={editPro.display == 1 ? true : false}
                         id="display"
                         className="hidden"
                         onChange={(e) => handleChangeDiplay(e)}
@@ -360,7 +392,7 @@ const ClientEditProduct = () => {
                           htmlFor="position"
                           idIcon="btn-position"
                           style={
-                            item.position !== 1
+                            editPro.position !== 1
                               ? {
                                   backgroundColor: "#fff",
                                 }
@@ -374,7 +406,7 @@ const ClientEditProduct = () => {
                         type="checkbox"
                         id="position"
                         className="hidden"
-                        defaultChecked={item.position == 1 ? true : false}
+                        defaultChecked={editPro.position == 1 ? true : false}
                         onChange={(e) => handleChangePosition(e)}
                       />
                     </div>
@@ -393,12 +425,27 @@ const ClientEditProduct = () => {
                 {/* === Button Submit === */}
 
                 <div className="flex justify-center items-center">
-                  <button
-                    type="submit"
-                    className="flex flex-row justify-center items-center py-2 px-4 rounded-lg cursor-pointer hover:bg-hoverButton text-[#fff] bg-bgButton"
-                  >
-                    <FiSave className="text-lg mr-4" />
-                    Save
+                  <button type="submit" className="relative">
+                    <Button
+                      variant="contained"
+                      sx={buttonSx}
+                      disabled={loading}
+                    >
+                      <FiSave className="mr-1" /> Lưu Thay Đổi
+                    </Button>
+                    {loading && (
+                      <CircularProgress
+                        size={24}
+                        sx={{
+                          color: green[500],
+                          position: "absolute",
+                          top: "50%",
+                          left: "50%",
+                          marginTop: "-12px",
+                          marginLeft: "-12px",
+                        }}
+                      />
+                    )}
                   </button>
                 </div>
 
@@ -407,7 +454,9 @@ const ClientEditProduct = () => {
 
               {/* === End Button Save === */}
             </table>
-          ))}
+          ) : (
+            <SkeletonEditProduct />
+          )}
           {/* End pick from product */}
         </form>
       </div>

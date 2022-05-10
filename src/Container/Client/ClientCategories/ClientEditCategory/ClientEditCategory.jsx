@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { FiSave } from "react-icons/fi";
 import { TiArrowBack } from "react-icons/ti";
 import { Editor } from "@tinymce/tinymce-react";
 import { ToastContainer, toast } from "react-toastify";
@@ -58,6 +57,7 @@ const ClientEditCategory = () => {
   const navigate = useNavigate();
   const notify = (type = "success", content = "Sửa danh mục thành công!") =>
     toast[type](content);
+
   const getChangeTheme = async () => {
     try {
       window.addEventListener("click", (e) => {
@@ -76,7 +76,6 @@ const ClientEditCategory = () => {
       try {
         const res = await clientApi.categoryShowById(id);
         setEditCategory(res.data);
-        console.log(res.data);
       } catch (error) {
         console.log(error);
       }
@@ -127,8 +126,6 @@ const ClientEditCategory = () => {
 
   const updateProduct = async (idElement, data) => {
     try {
-      setSuccess(false);
-      setLoading(true);
       const res = await clientApi.categoryEdit(idElement, data);
       if (res) {
         setSuccess(true);
@@ -146,7 +143,7 @@ const ClientEditCategory = () => {
   };
 
   const handleNavigate = () => {
-    navigate(-1);
+    navigate(-2);
   };
 
   return (
@@ -155,7 +152,7 @@ const ClientEditCategory = () => {
 
       <div className="ml-3 hover:text-hoverButton">
         <div
-          className="cursor-pointer flex flex-row gap-1 items-center"
+          className=" cursor-pointer flex flex-row gap-1 items-center"
           onClick={() => handleNavigate()}
         >
           <span>Back</span>
@@ -231,7 +228,7 @@ const ClientEditCategory = () => {
                       <img
                         src={img ?? urlImg + editCategory.photo}
                         alt=""
-                        className=" w-full h-[250px] bg-cover border-2 border-secondary"
+                        className=" w-full h-[250px] bg-cover shadow-lg rounded-md"
                       />
                       {/* <label
                         htmlFor="photo"

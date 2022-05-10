@@ -99,6 +99,9 @@ export const clientApi = {
     blogPagination(page, limit) {
         return callApi(`http://localhost:8000/api/blog/paginate/limit-${limit}?page=${page}`)
     },
+    blogPaginationByBlogListId(id, page, limit) {
+        return callApi(`http://localhost:8000/api/blog/list-${id}/paginate-${limit}?page=${page}`)
+    },
 
     // End Api Blog
 

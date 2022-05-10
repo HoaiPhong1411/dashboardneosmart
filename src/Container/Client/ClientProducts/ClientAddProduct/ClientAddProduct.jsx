@@ -161,21 +161,18 @@ const ClientAddProduct = () => {
 
   // End formik handle
   // ---------------------------------------
-  const handleNavigate = () => {
-    navigate(-1);
-  };
 
   return (
     <>
       <ToastContainer />
-      <div className="ml-3 hover:text-hoverButton">
-        <div
-          className="cursor-pointer flex flex-row gap-1 items-center"
-          onClick={() => handleNavigate()}
+      <div className="flex justify-start items-center hover:text-hoverButton">
+        <span
+          onClick={() => navigate(-1)}
+          className=" px-5 py-1 cursor-pointer text-center"
         >
-          <span>Back</span>
-          <TiArrowBack />
-        </div>
+          Back
+          <TiArrowBack className="float-right translate-y-1" />
+        </span>
       </div>
       <div
         onSubmit={formik.handleSubmit}
@@ -312,7 +309,7 @@ const ClientAddProduct = () => {
                   <img
                     src={img ?? notimg}
                     alt=""
-                    className="w-full h-[250px] object-cover border-2 border-secondary"
+                    className="w-full h-[250px] object-cover shadow-lg rounded-md"
                   />
                   <ButtonUpload htmlFor="photo" />
                 </div>
@@ -425,7 +422,7 @@ const ClientAddProduct = () => {
             <div className="flex flex-row justify-center items-center">
               <button type="submit" className="relative">
                 <Button variant="contained" sx={buttonSx} disabled={loading}>
-                  <IoMdAddCircle />
+                  <IoMdAddCircle className="mr-1" />
                   Thêm sản phẩm
                 </Button>
                 {loading && (
@@ -441,13 +438,6 @@ const ClientAddProduct = () => {
                     }}
                   />
                 )}
-                {/* <button
-                type="submit"
-                className="flex flex-row justify-center items-center rounded-lg gap-3 px-4 py-2 hover:bg-hoverButton text-[#fff] bg-bgButton text-[1.25rem]"
-              >
-                <IoMdAddCircle />
-                Add Product
-              </button> */}
               </button>
             </div>
 

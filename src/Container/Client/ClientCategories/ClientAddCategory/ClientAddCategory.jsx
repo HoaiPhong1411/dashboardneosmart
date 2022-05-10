@@ -194,7 +194,7 @@ const ClientAddCategory = () => {
                   <img
                     src={img ?? notimg}
                     alt=""
-                    className="w-full h-[250px] object-cover border-2 border-secondary"
+                    className="w-full h-[250px] object-cover shadow-lg rounded-md"
                   />
                   <ButtonUpload htmlFor="photo" />
                 </div>
@@ -238,7 +238,6 @@ const ClientAddCategory = () => {
 
           {/* ------------------------------------ */}
         </form>
-        <p id="err" className="text-[red] text-[2rem] font-light"></p>
       </div>
     </>
   );

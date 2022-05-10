@@ -36,7 +36,12 @@ const SubNavBar = (props) => {
   return (
     <>
       {dataCate?.map((item) => (
-        <Link to={`/${name}/${item.id}`} key={item.id}>
+        <Link
+          to={`${name == "category" ? "product" : "blog"}/${name}_id=${
+            item.id
+          }`}
+          key={item.id}
+        >
           <li
             onClick={(e, data) => handleActive(e, item)}
             className="sub-menu flex flex-row items-center text-[0.8rem] pl-8 py-2 w-full rounded-br-3xl rounded-tr-3xl text-[#777] hover:text-bgButton border-l-4 border-[#fefce8] dark:border-[black] cursor-pointer"

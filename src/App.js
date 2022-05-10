@@ -12,13 +12,8 @@ import {
 } from "react-router-dom";
 import Login from "./Container/Auth/SignIn";
 function App() {
-    // const user = useSelector((state) => state.auth.login?.currentUser);
-    // const navigate = useNavigate();
-    // useEffect(() => {
-    //     if (!user) {
-    //         navigate("/signin");
-    //     }
-    // }, []);
+    const user = useSelector((state) => state.auth.login?.currentUser);
+
     const renderLayout = (routes) => {
         return routes?.map((route) => {
             const { path, element, index } = route;
@@ -32,14 +27,18 @@ function App() {
             );
         });
     };
+    
+
     return (
         <>
-            <Router>
+            <Router> 
                 <Routes>
-                    <Route path="/" element={<ClientLayout />}>
+                    <Route path="/" element={user ? <ClientLayout /> : <Login />}>
                         {renderLayout(ClientRoutes)}
-                    </Route>
-                    <Route path="/signin" element={<Login />} />
+                    </Route> 
+                    <Route path="/login" element={<Login />} />
+                    
+                    
                     <Route path="/signup" element={<SignUp />} />
                     <Route
                         path="*"

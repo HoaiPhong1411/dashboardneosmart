@@ -8,12 +8,11 @@ import ClientProduct from "../Container/Client/ClientProducts/ClientProduct/Clie
 import ClientCategory from "../Container/Client/ClientProducts/ClientCategory/ClientCategory";
 import ClientUser from "../Container/Client/ClientUser/ClientUser";
 import ClientMenu from "../Container/Client/ClientMenu/ClientMenu";
-import ClientAddMenu from "../Container/Client/ClientMenu/ClientAddMenu";
 import ClientBlogList from "../Container/Client/ClientBlogs/ClientBlogList/ClientBlogList";
 import ClientMail from "../Container/Client/ClientMail/ClientMail";
-import ClientShowCategory from "../Container/Client/ClientCategorys/ClientShowCategory/ClientShowCategory";
-import ClientAddCategory from "../Container/Client/ClientCategorys/ClientAddCategory/ClientAddCategory";
-import ClientEditCategory from "../Container/Client/ClientCategorys/ClientEditCategory/ClientEditCategory";
+import ClientShowCategory from "../Container/Client/ClientCategories/ClientShowCategory/ClientShowCategory";
+import ClientAddCategory from "../Container/Client/ClientCategories/ClientAddCategory/ClientAddCategory";
+import ClientEditCategory from "../Container/Client/ClientCategories/ClientEditCategory/ClientEditCategory";
 
 export const ClientRoutes = [
     {
@@ -29,7 +28,7 @@ export const ClientRoutes = [
     {
         index: true,
         element: <ClientEditProduct />,
-        path: "/product/edit",
+        path: "/product/edit/id=:id",
     },
     {
         index: true,
@@ -39,7 +38,12 @@ export const ClientRoutes = [
     {
         index: true,
         element: <ClientCategory />,
-        path: "/category/:id",
+        path: "/product/category_id=:id",
+    },
+    {
+        index: true,
+        element: <ClientEditProduct />,
+        path: "/product/category/edit/id=:id",
     },
     {
         index: true,
@@ -69,12 +73,17 @@ export const ClientRoutes = [
     {
         index: true,
         element: <ClientEditBlog />,
-        path: "/blog/edit",
+        path: "/blog/edit/id=:id",
     },
     {
         index: true,
         element: <ClientBlogList />,
-        path: "/bloglist/:id",
+        path: "blog/bloglist_id=:id",
+    },
+    {
+        index: true,
+        element: <ClientEditBlog />,
+        path: "blog/bloglist_id=:idcate/edit/id=:id",
     },
     {
         index: true,

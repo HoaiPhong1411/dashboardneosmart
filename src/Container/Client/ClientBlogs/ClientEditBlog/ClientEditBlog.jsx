@@ -1,7 +1,7 @@
 import { FiSave } from "react-icons/fi";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,11 +13,34 @@ import "../../ClientProducts/ClientEditProduct/ClientEditProduct.css";
 import ButtonCheck from "../../../../Component/Button/ButtonCheck";
 import ButtonUpload from "../../../../Component/Button/ButtonUpload";
 import { clientApi } from "../../../../api/api";
+import SkeletonEditProduct from "../../../../Component/Skeleton/SkeletonEditProduct";
+import { IoSave } from "react-icons/io5";
+import { Button, CircularProgress } from "@mui/material";
+import { green } from "@mui/material/colors";
 
 const ClientEditBlog = () => {
+  const { id } = useParams();
   // getApi
   // const [data, setData] = useState([]);
 
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const buttonSx = {
+    ...(success
+      ? {
+          bgcolor: green[500],
+          "&:hover": {
+            bgcolor: green[700],
+          },
+        }
+      : {
+          bgcolor: "#0f8f31",
+          "&:hover": {
+            bgcolor: "#0e6726",
+          },
+        }),
+  };
   // show Product Choose
   const [load, setLoad] = useState(false);
   // get File Image
@@ -30,9 +53,9 @@ const ClientEditBlog = () => {
   const [display, setDisplay] = useState();
   const [position, setPosition] = useState();
   const [detail, setDetail] = useState();
-
+  const [blogEdit, setBlogEdit] = useState(null);
   const dispath = useDispatch();
-  const getEdit = useSelector((state) => state.blogs.blogs.blog);
+  // const getEdit = useSelector((state) => state.blogs.blogs.blog);
   const [getTheme, setGetTheme] = useState();
   const navigate = useNavigate();
 
@@ -52,18 +75,25 @@ const ClientEditBlog = () => {
   };
   getChangeTheme();
 
+  useEffect(() => {
+    const getDataBlogEdit = async () => {
+      try {
+        const res = await clientApi.blogShowById(id);
+        setBlogEdit(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getDataBlogEdit();
+  }, [id]);
+
   // --------------------------------
 
   // onChange data update
   const handleChangeTitle = (e) => {
     setTitle(e.target.value);
   };
-  const handleChangeDes = (e) => {
-    setDes(e.target.value);
-  };
-  const handleChangeContent = (e) => {
-    setContent(e.target.value);
-  };
+
   const handleChangeImage = (e) => {
     setFile(e.target.files[0]);
     const reader = new FileReader();
@@ -110,17 +140,17 @@ const ClientEditBlog = () => {
     const dataUpdate = new FormData();
 
     // update
-    dataUpdate.append("title", title ?? getEdit[0].title);
-    dataUpdate.append("detail", detail ?? getEdit[0].detail);
-    dataUpdate.append("description", des ?? getEdit[0].description);
-    dataUpdate.append("photo", file ?? getEdit[0].photo);
-    dataUpdate.append("content", content ?? getEdit[0].content);
-    if (display ?? getEdit[0].display) {
+    dataUpdate.append("title", title ?? blogEdit.title);
+    dataUpdate.append("detail", detail ?? blogEdit.detail);
+    dataUpdate.append("description", des ?? blogEdit.description);
+    dataUpdate.append("photo", file ?? blogEdit.photo);
+    dataUpdate.append("content", content ?? blogEdit.content);
+    if (display ?? blogEdit.display) {
       dataUpdate.append("display", 1);
     } else {
       dataUpdate.append("display", 0);
     }
-    if (position ?? getEdit[0].position) {
+    if (position ?? blogEdit.position) {
       dataUpdate.append("position", 1);
     } else {
       dataUpdate.append("position", 0);
@@ -131,40 +161,44 @@ const ClientEditBlog = () => {
 
   const updateBlog = async (id, data) => {
     try {
-      await clientApi.blogEdit(id, data);
-      notify("success", "Cập nhật bài viết thành công!");
-      setTimeout(() => {
-        navigate("/blog", data);
-      }, 2000);
+      setSuccess(false);
+      setLoading(true);
+      const res = await clientApi.blogEdit(id, data);
+      if (res) {
+        notify("success", "Cập nhật bài viết thành công!");
+        setSuccess(true);
+        setLoading(false);
+        setTimeout(() => {
+          navigate("/blog", data);
+        }, 2000);
+      }
     } catch (error) {
       notify();
+      setSuccess(true);
+      setLoading(false);
     }
-  };
-
-  const handleNavigate = () => {
-    navigate(-1);
   };
 
   return (
     <>
       <ToastContainer />
-      <div className="ml-3 hover:text-hoverButton">
-        <div
-          className="cursor-pointer flex flex-row gap-1 items-center"
-          onClick={() => handleNavigate()}
+      <div className="flex justify-start items-center hover:text-hoverButton">
+        <span
+          onClick={() => navigate(-1)}
+          className=" px-5 py-1 cursor-pointer text-center"
         >
-          <span>Back</span>
-          <TiArrowBack />
-        </div>
+          Back
+          <TiArrowBack className="float-right translate-y-1" />
+        </span>
       </div>
 
       <div className="flex flex-row gap-5 w-full dark:bg-nightSecondary bg-lightSecondary shadow-lg py-5 px-10 rounded-xl ">
         <form className="w-full" action="" onSubmit={(e) => handleSubmit(e)}>
           {
             // pick from product
-            getEdit?.map((item) => (
+            blogEdit ? (
               <table
-                key={item.id}
+                key={blogEdit.id}
                 className="w-full text-secondary flex flex-col justify-between gap-5"
               >
                 {/* === Input === */}
@@ -174,7 +208,7 @@ const ClientEditBlog = () => {
                     {/* === Id === */}
 
                     <div className="hidden">
-                      <label className="id">{item.id}</label>
+                      <label className="id">{blogEdit.id}</label>
                     </div>
                     {/* === End Id === */}
 
@@ -184,7 +218,7 @@ const ClientEditBlog = () => {
                       <label htmlFor="title">Title</label>
                       <input
                         type="text"
-                        value={title ?? item.title}
+                        value={title ?? blogEdit.title}
                         className="w-full border-[1px] border-secondary dark:bg-primary dark:text-[#fff] focus:border-[#e0ed2e] font-light"
                         onChange={(e) => handleChangeTitle(e)}
                       />
@@ -200,7 +234,7 @@ const ClientEditBlog = () => {
                       <Editor
                         apiKey="9ksw8tn5zsdmdzj74e4l69xoewcxuqnmdgy3uf06wunsn404"
                         onInit={(evt, editor) => (editorRef.current = editor)}
-                        initialValue={item.description}
+                        initialValue={blogEdit.description}
                         onEditorChange={(newText) => setDes(newText)}
                         init={{
                           height: 250,
@@ -223,7 +257,7 @@ const ClientEditBlog = () => {
                       <Editor
                         apiKey="9ksw8tn5zsdmdzj74e4l69xoewcxuqnmdgy3uf06wunsn404"
                         onInit={(evt, editor) => (editorRef.current = editor)}
-                        initialValue={item.detail}
+                        initialValue={blogEdit.detail}
                         onEditorChange={(newText) => setDetail(newText)}
                         init={{
                           height: 250,
@@ -246,7 +280,7 @@ const ClientEditBlog = () => {
                       <Editor
                         apiKey="9ksw8tn5zsdmdzj74e4l69xoewcxuqnmdgy3uf06wunsn404"
                         onInit={(evt, editor) => (editorRef.current = editor)}
-                        initialValue={item.content}
+                        initialValue={blogEdit.content}
                         onEditorChange={(newText) => setContent(newText)}
                         init={{
                           height: 500,
@@ -274,9 +308,9 @@ const ClientEditBlog = () => {
                    gap-2"
                       >
                         <img
-                          src={img ?? urlImg + item.photo}
+                          src={img ?? urlImg + blogEdit.photo}
                           alt=""
-                          className="w-full h-[250px] bg-cover border-2 border-secondary"
+                          className="w-full h-[250px] bg-cover shadow-lg rounded-md"
                         />
                         <input
                           type="file"
@@ -299,7 +333,7 @@ const ClientEditBlog = () => {
                             htmlFor="display"
                             idIcon="btn-display"
                             style={
-                              item.display !== 1
+                              blogEdit.display !== 1
                                 ? { backgroundColor: "#fff" }
                                 : { backgroundColor: "#0f8f31" }
                             }
@@ -307,7 +341,7 @@ const ClientEditBlog = () => {
                         </div>
                         <input
                           type="checkbox"
-                          defaultChecked={item.display == 1 ? true : false}
+                          defaultChecked={blogEdit.display == 1 ? true : false}
                           id="display"
                           className="hidden"
                           onChange={(e) => handleChangeDiplay(e)}
@@ -325,7 +359,7 @@ const ClientEditBlog = () => {
                             htmlFor="position"
                             idIcon="btn-position"
                             style={
-                              item.position !== 1
+                              blogEdit.position !== 1
                                 ? { backgroundColor: "#fff" }
                                 : { backgroundColor: "#0f8f31" }
                             }
@@ -335,7 +369,7 @@ const ClientEditBlog = () => {
                           type="checkbox"
                           id="position"
                           className="hidden"
-                          defaultChecked={item.position == 1 ? true : false}
+                          defaultChecked={blogEdit.position == 1 ? true : false}
                           onChange={(e) => handleChangePosition(e)}
                         />
                       </div>
@@ -355,12 +389,27 @@ const ClientEditBlog = () => {
                   {/* === Button Submit === */}
 
                   <div className="flex justify-center items-center">
-                    <button
-                      type="submit"
-                      className="flex flex-row justify-center items-center py-2 px-4 rounded-lg cursor-pointer hover:bg-hoverButton text-[#fff] bg-bgButton"
-                    >
-                      <FiSave className="text-lg mr-4" />
-                      Save
+                    <button type="submit" className="relative">
+                      <Button
+                        variant="contained"
+                        sx={buttonSx}
+                        disabled={loading}
+                      >
+                        <FiSave className="mr-1" /> Lưu Thay Đổi
+                      </Button>
+                      {loading && (
+                        <CircularProgress
+                          size={24}
+                          sx={{
+                            color: green[500],
+                            position: "absolute",
+                            top: "50%",
+                            left: "50%",
+                            marginTop: "-12px",
+                            marginLeft: "-12px",
+                          }}
+                        />
+                      )}
                     </button>
                   </div>
 
@@ -369,7 +418,9 @@ const ClientEditBlog = () => {
 
                 {/* === End Button Save === */}
               </table>
-            ))
+            ) : (
+              <SkeletonEditProduct price={false} />
+            )
           }
           {/* End pick from product */}
         </form>
