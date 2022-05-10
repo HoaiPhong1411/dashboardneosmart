@@ -8,12 +8,14 @@ import ClientProduct from "../Container/Client/ClientProducts/ClientProduct/Clie
 import ClientCategory from "../Container/Client/ClientProducts/ClientCategory/ClientCategory";
 import ClientUser from "../Container/Client/ClientUser/ClientUser";
 import ClientMenu from "../Container/Client/ClientMenu/ClientMenu";
-import ClientAddMenu from "../Container/Client/ClientMenu/ClientAddMenu";
-import ClientBlogList from "../Container/Client/ClientBlogs/ClientBlogList/ClientBlogList";
 import ClientMail from "../Container/Client/ClientMail/ClientMail";
 import ClientShowCategory from "../Container/Client/ClientCategorys/ClientShowCategory/ClientShowCategory";
 import ClientAddCategory from "../Container/Client/ClientCategorys/ClientAddCategory/ClientAddCategory";
 import ClientEditCategory from "../Container/Client/ClientCategorys/ClientEditCategory/ClientEditCategory";
+import ClientBlogList from "../Container/Client/ClientBlogs/ClientBlogList/ClientBlogList";
+import ClientShowListBlogs from "../Container/Client/ClientListBlog/ClientShowListBlogs/ClientShowListBlogs";
+import ClientAddListBlog from "../Container/Client/ClientListBlog/ClientAddListBlog/ClientAddListBlog";
+import ClientEditListBlog from "../Container/Client/ClientListBlog/ClientEditListBlog/ClientEditListBlog";
 
 export const ClientRoutes = [
     {
@@ -75,6 +77,21 @@ export const ClientRoutes = [
         index: true,
         element: <ClientBlogList />,
         path: "/bloglist/:id",
+    },
+    {
+        index: true,
+        element: <ClientShowListBlogs/>,
+        path: "/listblog/",
+    },
+    {
+        index: true,
+        element: <ClientAddListBlog />,
+        path: "/listblog/add",
+    },
+    {
+        index: true,
+        element: <ClientEditListBlog />,
+        path: "/listblog/edit/:id",
     },
     {
         index: true,
