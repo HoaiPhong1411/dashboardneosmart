@@ -4,18 +4,24 @@ import { useDispatch, useSelector } from "react-redux";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { ToastContainer, toast } from "react-toastify";
+import { LinearProgress } from "@mui/material";
 
-import { getAllProduct, getProductById } from "../../../app/apiRequest";
-import { getAllProductSuccess } from "../../../app/productSlice/productSlice";
-import { clientApi } from "../../../api/api";
-import ButtonSwitch from "../../../Component/Button/ButtonSwitch";
-import InputSearch from "../../../Component/Input/InputSearch";
-import ButtonActions from "../../../Component/Button/ButtonActions";
-import ButtonAdd from "../../../Component/Button/ButtonAdd";
-import { urlImg } from "../../../Component/Variable";
+import { getAllProduct, getProductById } from "../../../../app/apiRequest";
+import {
+  getProductByIdSuccess,
+  getProductSuccess,
+} from "../../../../app/productSlice/productsSlice";
+import { clientApi } from "../../../../api/api";
+import ButtonSwitch from "../../../../Component/Button/ButtonSwitch";
+import InputSearch from "../../../../Component/Input/InputSearch";
+import ButtonActions from "../../../../Component/Button/ButtonActions";
+import ButtonAdd from "../../../../Component/Button/ButtonAdd";
+import { urlImg } from "../../../../Component/Variable";
 import "react-toastify/dist/ReactToastify.css";
 import "./ClientProduct.css";
-import ClientPagination from "../../../Component/Pagination/ClientPagination";
+import ClientPagination from "../../../../Component/Pagination/ClientPagination";
+import SkeletonTable from "../../../../Component/Skeleton/SkeletonTable";
+import SkeletonDetailProduct from "../../../../Component/Skeleton/SkeletonDetailProduct";
 
 // Style Modal show detail
 const style = {
@@ -37,6 +43,24 @@ const ClientProduct = () => {
   const [dataNew, setDataNew] = useState(null);
   //  value input search
   const [value, setValue] = useState();
+  const dispath = useDispatch();
+  const navigate = useNavigate();
+  const [productById, setProductById] = useState(null);
+
+  // pagination
+  const [pagination, setPagination] = useState({
+    current_page: 0,
+    to: 10,
+    totalRows: 18,
+    totalPages: 2,
+  });
+  //  End pagination
+
+  const [filter, setFilter] = useState({
+    current_page: 0,
+    to: 10,
+  });
+
   const [getProduct, setGetProduct] = useState(null);
   const notify = (type = "success", content = "Cập nhật thành công!") =>
     toast[type](content);
@@ -45,23 +69,7 @@ const ClientProduct = () => {
   const dataCategory = useSelector(
     (state) => state.category.category.category[0]
   );
-  const productById = useSelector(
-    (state) => state.products.product.productById
-  );
-  const dispath = useDispatch();
-  const navigate = useNavigate();
 
-  const [pagination, setPagination] = useState({
-    current_page: 1,
-    to: 10,
-    totalRows: 18,
-    totalPages: 2,
-  });
-
-  const [filter, setFilter] = useState({
-    current_page: 1,
-    to: 10,
-  });
   useEffect(() => {
     const getProductPagination = async () => {
       try {
@@ -93,16 +101,27 @@ const ClientProduct = () => {
   };
 
   const handleEdit = (e, product) => {
-    dispath(getAllProductSuccess(product));
+    dispath(getProductSuccess(product));
     navigate("/product/edit", product);
   };
 
   // show Detail
   const handleOpen = (id) => {
-    getProductById(dispath, id);
+    const getProductDetail = async () => {
+      try {
+        const res = await clientApi.productShowById(id);
+        setProductById(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getProductDetail();
     setOpen(true);
   };
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setProductById(null);
+    setOpen(false);
+  };
   // End show Detail
 
   // get data Product
@@ -239,56 +258,9 @@ if (check) {
           </thead>
 
           {/* show data Product */}
-          <tbody className="text-[#333] dark:text-[#fff] font-light overflow-y-auto ">
-            {dataNew?.map((item) => (
-              <tr key={item.id} className="dark:hover:bg-hoverButton">
-                <td className="flex flex-row justify-start gap-2 items-center">
-                  <img className="tb:w-[30px] tb:h-[30px] w-[50px] h-[50px]"
-                    src={urlImg + item.photo}
-                    alt=""
-                  />
-                  <Link
-                    onClick={(e, product) => handleEdit(e, item)}
-                    to="/product/edit"
-                    className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
-                  >
-                    {item.title}
-                  </Link>
-                </td>
-                <td dangerouslySetInnerHTML={{ __html: item.description }}></td>
-                <td>{Intl.NumberFormat().format(Number(item.price))} VNĐ</td>
-
-                <td>
-                  <ButtonSwitch
-                    id={item.id}
-                    name={item.display}
-                    handleChange={(e, product) => handleDisplay(e, item)}
-                  />
-                </td>
-                {/* End switched display */}
-
-                <td>{item.position}</td>
-                {dataCategory?.map((cate) =>
-                  item.category_id == cate.id ? (
-                    <td key={cate.id}>{cate.title}</td>
-                  ) : (
-                    ""
-                  )
-                )}
-
-                {/* Button delete */}
-                <td>
-                  <ButtonActions
-                    handleSeen={(id) => handleOpen(item.id)}
-                    HandleDelete={(id) => handleRemove(item.id)}
-                    handleEdit={(e, product) => handleEdit(e, item)}
-                  />
-                </td>
-
-                {/* End button delete */}
-              </tr>
-            )) ??
-              getProduct?.map((item) => (
+          {getProduct ? (
+            <tbody className="text-[#333] dark:text-[#fff] font-light overflow-y-auto ">
+              {dataNew?.map((item) => (
                 <tr key={item.id} className="dark:hover:bg-hoverButton">
                   <td className="flex flex-row justify-start gap-2 items-center">
                     <img
@@ -339,8 +311,66 @@ if (check) {
 
                   {/* End button delete */}
                 </tr>
-              ))}
-          </tbody>
+              )) ??
+                getProduct?.map((item) => (
+                  <tr key={item.id} className="dark:hover:bg-hoverButton">
+                    <td className="flex flex-row justify-start gap-2 items-center">
+                      <img
+                        src={urlImg + item.photo}
+                        alt=""
+                        width="50px"
+                        height="50px"
+                      />
+                      <Link
+                        onClick={(e, product) => handleEdit(e, item)}
+                        to="/product/edit"
+                        className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
+                      >
+                        {item.title}
+                      </Link>
+                    </td>
+                    <td
+                      dangerouslySetInnerHTML={{ __html: item.description }}
+                    ></td>
+                    <td>
+                      {Intl.NumberFormat().format(Number(item.price))} VNĐ
+                    </td>
+
+                    <td>
+                      <ButtonSwitch
+                        id={item.id}
+                        name={item.display}
+                        handleChange={(e, product) => handleDisplay(e, item)}
+                      />
+                    </td>
+                    {/* End switched display */}
+
+                    <td>{item.position}</td>
+                    {dataCategory?.map((cate) =>
+                      item.category_id == cate.id ? (
+                        <td key={cate.id}>{cate.title}</td>
+                      ) : (
+                        ""
+                      )
+                    )}
+
+                    {/* Button delete */}
+                    <td>
+                      <ButtonActions
+                        handleSeen={(id) => handleOpen(item.id)}
+                        HandleDelete={(id) => handleRemove(item.id)}
+                        handleEdit={(e, product) => handleEdit(e, item)}
+                      />
+                    </td>
+
+                    {/* End button delete */}
+                  </tr>
+                ))}
+            </tbody>
+          ) : (
+            <SkeletonTable rows={10} columns={5} image={true} />
+          )}
+
           <tfoot>
             <tr className="shadow-none">
               <td colSpan="7">
@@ -367,51 +397,57 @@ if (check) {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <Box sx={style}>
-            <div className="flex flex-col px-10 py-16 h-[600px] overflow-y-scroll gap-5">
-              <div className="flex flex-row gap-5 ">
-                <div className="w-[40%]">
-                  <img
-                    src={urlImg + productById[0]?.photo}
-                    alt=""
-                    className="w-full h-[200px] border-[1px] border-[#333]"
-                  />
-                </div>
-                <div className="w-[60%] flex flex-col gap-3">
-                  <div>
-                    <h2 className="text-2xl font-medium">
-                      {productById[0]?.title}
-                    </h2>
-                    <span
+          {productById ? (
+            <Box sx={style}>
+              <div className="flex flex-col px-10 py-16 h-[600px] overflow-y-scroll gap-5">
+                <div className="flex flex-row gap-5 ">
+                  <div className="w-[40%]">
+                    <img
+                      src={urlImg + productById?.photo}
+                      alt=""
+                      className="w-full h-[200px] border-[1px] border-[#333]"
+                    />
+                  </div>
+                  <div className="w-[60%] flex flex-col gap-3">
+                    <div>
+                      <h2 className="text-2xl font-medium">
+                        {productById?.title}
+                      </h2>
+                      <span
+                        dangerouslySetInnerHTML={{
+                          __html: productById?.description,
+                        }}
+                        className="text-md font-normal italic text-[#777]"
+                      ></span>
+                    </div>
+                    <div>
+                      <span>Giá: </span>
+                      <strong className="text-[#ff6363] text-xl font-medium">
+                        {Intl.NumberFormat().format(Number(productById?.price))}{" "}
+                        VNĐ
+                      </strong>
+                    </div>
+                    <div
+                      className="text-[13px] font-light"
                       dangerouslySetInnerHTML={{
-                        __html: productById[0]?.description,
+                        __html: productById?.detail,
                       }}
-                      className="text-md font-normal italic text-[#777]"
-                    ></span>
+                    ></div>
                   </div>
-                  <div>
-                    <span>Giá: </span>
-                    <strong className="text-[#ff6363] text-xl font-medium">
-                      {Intl.NumberFormat().format(
-                        Number(productById[0]?.price)
-                      )}{" "}
-                      VNĐ
-                    </strong>
-                  </div>
-                  <div
-                    className="text-[13px] font-light"
-                    dangerouslySetInnerHTML={{ __html: productById[0]?.detail }}
-                  ></div>
+                </div>
+                <div>
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: productById?.content,
+                    }}
+                    className="text-md font-normal text-[#000]"
+                  ></p>
                 </div>
               </div>
-              <div>
-                <p
-                  dangerouslySetInnerHTML={{ __html: productById[0]?.content }}
-                  className="text-md font-normal text-[#000]"
-                ></p>
-              </div>
-            </div>
-          </Box>
+            </Box>
+          ) : (
+            <SkeletonDetailProduct style={style} />
+          )}
         </Modal>
 
         {/*End Show Detail Blog */}

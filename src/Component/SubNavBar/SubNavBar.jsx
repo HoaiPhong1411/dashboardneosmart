@@ -6,7 +6,7 @@ import {
   getProductByCategory,
 } from "../../app/apiRequest";
 import { getCategoryCurrentSuccess } from "../../app/productSlice/categorySlice";
-import { getCurrentBlogSuccess } from "../../app/blogSlice/blogByBlogListIdSlice";
+import { getCurrentBlogSuccess } from "../../app/blogSlice/blogsSlice";
 
 const SubNavBar = (props) => {
   const { dataCate, name } = props;
@@ -36,10 +36,10 @@ const SubNavBar = (props) => {
   return (
     <>
       {dataCate?.map((item) => (
-        <Link to={`/${name}`} key={item.id}>
+        <Link to={`/${name}/${item.id}`} key={item.id}>
           <li
             onClick={(e, data) => handleActive(e, item)}
-            className="sub-menu flex flex-row items-center text-[0.8rem] pl-8 py-2  w-full rounded-br-3xl rounded-tr-3xl text-[#777] hover:text-bgButton border-l-4 border-[#fefce8] dark:border-[black] cursor-pointer"
+            className="sub-menu flex flex-row items-center text-[0.8rem] pl-8 py-2 w-full rounded-br-3xl rounded-tr-3xl text-[#777] hover:text-bgButton border-l-4 border-[#fefce8] dark:border-[black] cursor-pointer"
           >
             {item.title}
           </li>

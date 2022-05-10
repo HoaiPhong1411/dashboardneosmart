@@ -19,6 +19,7 @@ import {
     getAllProductSuccess,
     getAllProductFailed,
     getProductByIdSuccess,
+    getProductByCategorySuccess
 } from "./productSlice/productsSlice";
 import {
     getCategoryFailed,
@@ -34,9 +35,7 @@ import {
     getBlogByBlogListIdStart,
     getBlogByBlogListIdSuccess,
     getBlogByBlogListIdFailed,
-} from "./blogSlice/blogByBlogListIdSlice";
-import { getProductByCategorySuccess } from "./productSlice/productByCateIdSlice";
-import { useDispatch } from "react-redux";
+} from "./blogSlice/blogsSlice";
 import {
     getListBlogFailed,
     getListBlogStart,
@@ -46,7 +45,6 @@ import {
     getMenuStart,
     getMenuFailed,
     getMenuSuccess,
-    getMenuByIdSuccess,
 } from "./menuSlice/menuSlice";
 import { clientApi } from "../api/api";
 import {

@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,16 +6,20 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { LinearProgress } from "@mui/material";
 
 // Component Button
-import { urlImg } from "../../../Component/Variable";
-import InputSearch from "../../../Component/Input/InputSearch";
-import ButtonActions from "../../../Component/Button/ButtonActions";
-import ButtonSwitch from "../../../Component/Button/ButtonSwitch";
-import ButtonAdd from "../../../Component/Button/ButtonAdd";
-import { getAllBlog } from "../../../app/apiRequest";
-import { addBlogSuccess } from "../../../app/blogSlice/blogsSlice";
-import { clientApi } from "../../../api/api";
+import { urlImg } from "../../../../Component/Variable";
+import InputSearch from "../../../../Component/Input/InputSearch";
+import ButtonActions from "../../../../Component/Button/ButtonActions";
+import ButtonSwitch from "../../../../Component/Button/ButtonSwitch";
+import ButtonAdd from "../../../../Component/Button/ButtonAdd";
+import { getAllBlog } from "../../../../app/apiRequest";
+import { addBlogSuccess } from "../../../../app/blogSlice/blogsSlice";
+import { clientApi } from "../../../../api/api";
+import ClientPagination from "../../../../Component/Pagination/ClientPagination";
+import SkeletonTable from "../../../../Component/Skeleton/SkeletonTable";
+import SkeletonDetailBlog from "../../../../Component/Skeleton/SkeletonDetailBlog";
 
 // Style Modal show detail
 const style = {
@@ -44,6 +47,21 @@ const ClientBlog = () => {
   const [open, setOpen] = useState(false);
   const [blogById, setBlogById] = useState([]);
 
+  const [getBlog, setGetBlog] = useState(null);
+  // pagination
+  const [pagination, setPagination] = useState({
+    current_page: 0,
+    to: 10,
+    totalRows: 10,
+    totalPages: 1,
+  });
+  //  End pagination
+
+  const [filter, setFilter] = useState({
+    current_page: 0,
+    to: 10,
+  });
+
   const dispath = useDispatch();
   const navigate = useNavigate();
   const listBlog = useSelector((state) => state.listBlog.listBlog.listBlog);
@@ -53,6 +71,36 @@ const ClientBlog = () => {
     type = "error",
     content = "Cập nhật hiển thị không thành công!"
   ) => toast[type](content);
+
+  useEffect(() => {
+    const getBlogsPagination = async () => {
+      try {
+        const res = await clientApi.blogPagination(
+          filter.current_page,
+          filter.to
+        );
+        const result = res.data.result;
+        setGetBlog(result.data);
+        setPagination({
+          ...pagination,
+          to: result.to,
+          totalRows: result.total,
+          totalPages: result.last_page,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getBlogsPagination();
+  }, [filter]);
+
+  const handlePageChange = (newPage, rowsPerPage) => {
+    setFilter({
+      ...filter,
+      current_page: newPage,
+      to: rowsPerPage,
+    });
+  };
 
   // show Detail
   const handleOpen = (id) => {
@@ -67,7 +115,10 @@ const ClientBlog = () => {
     getBlogById();
     setOpen(true);
   };
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setBlogById(null);
+    setOpen(false);
+  };
   // End show Detail
 
   useEffect(() => {
@@ -199,57 +250,9 @@ const ClientBlog = () => {
             </tr>
           </thead>
           {/* show data Blog */}
-          <tbody className="text-[#333] dark:text-[#fff] font-light">
-            {dataNew?.map((item) => (
-              <tr key={item.id} className="dark:hover:bg-hoverButton">
-                <td className="flex flex-row justify-start gap-2 items-center">
-                  <img
-                    src={urlImg + item.photo}
-                    alt=""
-                    width="50px"
-                    height="50px"
-                  />
-                  <Link
-                    onClick={(e, blog) => handleEdit(e, item)}
-                    to="/blog/edit"
-                    className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
-                  >
-                    {item.title}
-                  </Link>
-                </td>
-                <td dangerouslySetInnerHTML={{ __html: item.description }}></td>
-
-                <td>
-                  <ButtonSwitch
-                    id={item.id}
-                    name={item.display}
-                    handleChange={(e, blog) => handleDisplay(e, item)}
-                  />
-                </td>
-                {/* End switched display */}
-
-                <td>{item.position}</td>
-                {listBlog?.map((blog) =>
-                  item.listblog_id == blog.id ? (
-                    <td key={blog.id}>{blog.title}</td>
-                  ) : (
-                    ""
-                  )
-                )}
-
-                {/* Button delete */}
-                <td>
-                  <ButtonActions
-                    handleSeen={(id) => handleOpen(item.id)}
-                    HandleDelete={(id) => handleRemove(item.id)}
-                    handleEdit={(e, blog) => handleEdit(e, item)}
-                  />
-                </td>
-
-                {/* End button delete */}
-              </tr>
-            )) ??
-              dataBlog?.map((item) => (
+          {getBlog ? (
+            <tbody className="text-[#333] dark:text-[#fff] font-light">
+              {dataNew?.map((item) => (
                 <tr key={item.id} className="dark:hover:bg-hoverButton">
                   <td className="flex flex-row justify-start gap-2 items-center">
                     <img
@@ -299,8 +302,75 @@ const ClientBlog = () => {
 
                   {/* End button delete */}
                 </tr>
-              ))}
-          </tbody>
+              )) ??
+                getBlog?.map((item) => (
+                  <tr key={item.id} className="dark:hover:bg-hoverButton">
+                    <td className="flex flex-row justify-start gap-2 items-center">
+                      <img
+                        src={urlImg + item.photo}
+                        alt=""
+                        width="50px"
+                        height="50px"
+                      />
+                      <Link
+                        onClick={(e, blog) => handleEdit(e, item)}
+                        to="/blog/edit"
+                        className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
+                      >
+                        {item.title}
+                      </Link>
+                    </td>
+                    <td
+                      dangerouslySetInnerHTML={{ __html: item.description }}
+                    ></td>
+
+                    <td>
+                      <ButtonSwitch
+                        id={item.id}
+                        name={item.display}
+                        handleChange={(e, blog) => handleDisplay(e, item)}
+                      />
+                    </td>
+                    {/* End switched display */}
+
+                    <td>{item.position}</td>
+                    {listBlog?.map((blog) =>
+                      item.listblog_id == blog.id ? (
+                        <td key={blog.id}>{blog.title}</td>
+                      ) : (
+                        ""
+                      )
+                    )}
+
+                    {/* Button delete */}
+                    <td>
+                      <ButtonActions
+                        handleSeen={(id) => handleOpen(item.id)}
+                        HandleDelete={(id) => handleRemove(item.id)}
+                        handleEdit={(e, blog) => handleEdit(e, item)}
+                      />
+                    </td>
+
+                    {/* End button delete */}
+                  </tr>
+                ))}
+            </tbody>
+          ) : (
+            <SkeletonTable rows={10} columns={5} image={true} />
+          )}
+
+          <tfoot>
+            <tr className="shadow-none">
+              <td colSpan="7">
+                <div className="flex flex-row justify-end">
+                  <ClientPagination
+                    pagination={pagination}
+                    onPageChange={handlePageChange}
+                  />
+                </div>
+              </td>
+            </tr>
+          </tfoot>
           {/* End show data Blog */}
         </table>
 
@@ -313,48 +383,56 @@ const ClientBlog = () => {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <Box sx={style}>
-            <div className="flex flex-col px-10 py-16 gap-5 h-[600px] overflow-y-scroll">
-              <div className="flex flex-col gap-5 ">
-                <div className="w-full flex justify-center items-center">
-                  <img
-                    src={urlImg + blogById?.photo}
-                    alt=""
-                    className="w-[80%] h-[250px] border-[1px] border-[#333]"
-                  />
-                </div>
-                <div className="w-full flex flex-row gap-3 justify-between items-center">
-                  <div className="flex flex-col gap-1">
-                    <h2 className="text-4xl font-normal">{blogById?.title}</h2>
+          {blogById ? (
+            <Box sx={style}>
+              <div className="flex flex-col px-10 py-16 gap-5 h-[600px] overflow-y-scroll">
+                <div className="flex flex-col gap-5 ">
+                  <div className="w-full flex justify-center items-center">
+                    <img
+                      src={urlImg + blogById?.photo}
+                      alt=""
+                      className="w-[80%] h-[250px] border-[1px] border-[#333]"
+                    />
                   </div>
-                  <div className="flex flex-col items-end">
-                    <p>
-                      {new Date(blogById?.created_at).toLocaleDateString(
-                        "vi-VI"
-                      )}
-                    </p>
-                    <p className="text-[#666] text-md font-light">
-                      {new Date(blogById?.created_at).toLocaleTimeString(
-                        "vi-VI"
-                      )}
-                    </p>
+                  <div className="w-full flex flex-row gap-3 justify-between items-center">
+                    <div className="flex flex-col gap-1">
+                      <h2 className="text-4xl font-normal">
+                        {blogById?.title}
+                      </h2>
+                    </div>
+                    <div className="flex flex-col items-end">
+                      <p>
+                        {new Date(blogById?.created_at).toLocaleDateString(
+                          "vi-VI"
+                        )}
+                      </p>
+                      <p className="text-[#666] text-md font-light">
+                        {new Date(blogById?.created_at).toLocaleTimeString(
+                          "vi-VI"
+                        )}
+                      </p>
+                    </div>
                   </div>
                 </div>
+                <div>
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: blogById?.description,
+                    }}
+                    className="text-md font-normal italic"
+                  ></span>
+                </div>
+                <div
+                  dangerouslySetInnerHTML={{ __html: blogById?.detail }}
+                ></div>
+                <div
+                  dangerouslySetInnerHTML={{ __html: blogById?.content }}
+                ></div>
               </div>
-              <div>
-                <span
-                  dangerouslySetInnerHTML={{
-                    __html: blogById?.description,
-                  }}
-                  className="text-md font-normal italic"
-                ></span>
-              </div>
-              <div dangerouslySetInnerHTML={{ __html: blogById?.detail }}></div>
-              <div
-                dangerouslySetInnerHTML={{ __html: blogById?.content }}
-              ></div>
-            </div>
-          </Box>
+            </Box>
+          ) : (
+            <SkeletonDetailBlog style={style} />
+          )}
         </Modal>
 
         {/* End show Detail Blog */}

@@ -7,7 +7,9 @@ const blogsSlice = createSlice({
             blogs: [],
             blog: [],
             isFetching: false,
-            failed: false
+            failed: false,
+            blogByBlogListId: [],
+            currentBlog: [],
         },
     },
     reducers: {
@@ -24,6 +26,20 @@ const blogsSlice = createSlice({
         },
         addBlogSuccess: (state, action) => {
             state.blogs.blog = [action.payload];
+        },
+        getBlogByBlogListIdStart: (state) => {
+            state.blogs.isFetching = true;
+        },
+        getBlogByBlogListIdSuccess: (state, action) => {
+            state.blogs.isFetching = false;
+            state.blogs.blogByBlogListId = [action.payload];
+            state.blogs.failed = false;
+        },
+        getBlogByBlogListIdFailed: (state) => {
+            state.blogs.failed = true;
+        },
+        getCurrentBlogSuccess: (state, action) => {
+            state.blogs.currentBlog = [action.payload]
         }
         
     }
@@ -33,7 +49,11 @@ export const {
     getAllBlogStart,
     getAllBlogSuccess,
     getAllBlogFailed,
-    addBlogSuccess
+    addBlogSuccess,
+    getBlogByBlogListIdStart,
+    getBlogByBlogListIdSuccess,
+    getBlogByBlogListIdFailed,
+    getCurrentBlogSuccess
 } = blogsSlice.actions
 
 export default blogsSlice.reducer

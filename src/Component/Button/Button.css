@@ -2,3 +2,19 @@
 .show-drop-actions{
     display: block;
 }
+.fade-cross {
+    transition: ease-in;
+    animation: anim 0.25s ease-in-out  forwards;
+}
+
+
+@keyframes anim {
+    from {
+        opacity: 0.5;
+        width: 20px;
+    }
+    to {
+        opacity: 1 ;
+        width: 100%;
+    }
+}

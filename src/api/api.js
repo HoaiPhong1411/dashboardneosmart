@@ -30,6 +30,9 @@ export const clientApi = {
     productPagination(page, limit) {
         return callApi(`http://localhost:8000/api/product/paginate/${limit}?page=${page}`)
     },
+    productPaginationByCategoryId(id, page, limit) {
+        return callApi(`http://localhost:8000/api/product/category/${id}/paginate-${limit}?page=${page}`)
+    },
 
     // End Api Product
 
@@ -92,6 +95,9 @@ export const clientApi = {
     },
     blogDelete(id) {
         return callApi(`http://localhost:8000/api/blog/delete/${id}`, "DELETE");
+    },
+    blogPagination(page, limit) {
+        return callApi(`http://localhost:8000/api/blog/paginate/limit-${limit}?page=${page}`)
     },
 
     // End Api Blog

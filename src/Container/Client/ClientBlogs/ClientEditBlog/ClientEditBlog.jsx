@@ -8,11 +8,11 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { TiArrowBack } from "react-icons/ti";
 
-import { urlImg } from "../../../Component/Variable";
-import "../ClientEditProduct/ClientEditProduct.css";
-import ButtonCheck from "../../../Component/Button/ButtonCheck";
-import ButtonUpload from "../../../Component/Button/ButtonUpload";
-import { clientApi } from "../../../api/api";
+import { urlImg } from "../../../../Component/Variable";
+import "../../ClientProducts/ClientEditProduct/ClientEditProduct.css";
+import ButtonCheck from "../../../../Component/Button/ButtonCheck";
+import ButtonUpload from "../../../../Component/Button/ButtonUpload";
+import { clientApi } from "../../../../api/api";
 
 const ClientEditBlog = () => {
   // getApi
@@ -270,7 +270,7 @@ const ClientEditBlog = () => {
                     {/* === Image === */}
                     <div className="w-full flex flex-col gap-5 justify-between items-center text-[#fff]">
                       <div
-                        className="flex flex-col w-full justify-between items-center
+                        className="relative group flex flex-col w-full justify-between items-center
                    gap-2"
                       >
                         <img

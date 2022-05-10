@@ -6,12 +6,12 @@ import { TiArrowBack } from "react-icons/ti";
 import { Editor } from "@tinymce/tinymce-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ButtonUpload from "../../../../Component/Button/ButtonUpload";
 
-import { clientApi } from "../../../api/api";
-import { getAllProductSuccess } from "../../../app/productSlice/productSlice";
-import { urlImg } from "../../../Component/Variable";
-import ButtonCheck from "../../../Component/Button/ButtonCheck";
-import ButtonUpload from "../../../Component/Button/ButtonUpload";
+import { clientApi } from "../../../../api/api";
+import { getProductSuccess } from "../../../../app/productSlice/productsSlice";
+import { urlImg } from "../../../../Component/Variable";
+import ButtonCheck from "../../../../Component/Button/ButtonCheck";
 import "./ClientEditProduct.css";
 
 const ClientEditProduct = () => {
@@ -21,7 +21,7 @@ const ClientEditProduct = () => {
   const [load, setLoad] = useState(false);
   // get File Image
   const [file, setFile] = useState();
-  const [img, setImg] = useState();
+  const [img, setImg] = useState(null);
   // get data edited
   const [stateValue, setStateValue] = useState({
     title: null,
@@ -36,14 +36,14 @@ const ClientEditProduct = () => {
 
   const [editPro, setEditPro] = useState([]);
   const dispath = useDispatch();
-  const getEdit = useSelector((state) => state.product.product.product);
+  const getEdit = useSelector((state) => state.products.product.product);
   const [getTheme, setGetTheme] = useState();
   const navigate = useNavigate();
   const notify = (type = "success", content = "Sửa sản phẩm thành công!") =>
     toast[type](content);
   const getChangeTheme = async () => {
     try {
-      await window.addEventListener("click", (e) => {
+      window.addEventListener("click", (e) => {
         setGetTheme(localStorage.getItem("theme"));
       });
     } catch (error) {
@@ -133,7 +133,7 @@ const ClientEditProduct = () => {
       dataUpdate.append("position", 0);
     }
     updateProduct(id, dataUpdate);
-    dispath(getAllProductSuccess([]));
+    dispath(getProductSuccess([]));
     setEditPro([]);
     setLoad(!load);
   };
@@ -171,7 +171,10 @@ const ClientEditProduct = () => {
       <div className="flex flex-row gap-5 w-full dark:bg-nightSecondary bg-lightSecondary shadow-lg py-5 px-10 rounded-xl ">
         <form className="w-full" action="" onSubmit={(e) => handleSubmit(e)}>
           {editPro?.map((item) => (
-            <table className="w-full text-secondary flex flex-col justify-between gap-5">
+            <table
+              key={item.id}
+              className="w-full text-secondary flex flex-col justify-between gap-5"
+            >
               {/* === Input === */}
               <div className="flex flex-row justify-between gap-5">
                 {/* === Left Table === */}
@@ -291,14 +294,20 @@ const ClientEditProduct = () => {
                   {/* === Image === */}
                   <div className="w-full flex flex-col gap-5 justify-between items-center text-[#fff]">
                     <div
-                      className="flex flex-col w-full justify-between items-center
+                      className="group flex flex-col w-full justify-between items-center relative
                    gap-2"
                     >
                       <img
                         src={img ?? urlImg + item.photo}
                         alt=""
-                        className="w-full h-[250px] bg-cover border-2 border-secondary"
+                        className=" w-full h-[250px] bg-cover border-2 border-secondary"
                       />
+                      {/* <label
+                        htmlFor="photo"
+                        className="absolute hidden group-hover:flex justify-center items-center w-full h-[250px] bg-[#33333366] cursor-pointer "
+                      > */}
+                      <ButtonUpload htmlFor="photo" />
+                      {/* </label> */}
                       <input
                         type="file"
                         name="photo"
@@ -307,7 +316,6 @@ const ClientEditProduct = () => {
                         className="hidden"
                         onChange={(e) => handleChangeImage(e)}
                       />
-                      <ButtonUpload htmlFor="photo" />
                     </div>
                   </div>
                   {/* === End Image === */}

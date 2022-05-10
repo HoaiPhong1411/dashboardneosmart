@@ -1,16 +1,19 @@
-import ClientAddBlog from "../Container/Client/ClientAddBlog/ClientAddBlog";
-import ClientAddProduct from "../Container/Client/ClientAddProduct/ClientAddProduct";
-import ClientBlog from "../Container/Client/ClientBlog/ClientBlog";
-import ClientEditBlog from "../Container/Client/ClientEditBlog/ClientEditBlog";
-import ClientEditProduct from "../Container/Client/ClientEditProduct/ClientEditProduct";
+import ClientAddBlog from "../Container/Client/ClientBlogs/ClientAddBlog/ClientAddBlog";
+import ClientAddProduct from "../Container/Client/ClientProducts/ClientAddProduct/ClientAddProduct";
+import ClientBlog from "../Container/Client/ClientBlogs/ClientBlog/ClientBlog";
+import ClientEditBlog from "../Container/Client/ClientBlogs/ClientEditBlog/ClientEditBlog";
+import ClientEditProduct from "../Container/Client/ClientProducts/ClientEditProduct/ClientEditProduct";
 import ClientHome from "../Container/Client/ClientHome/ClientHome";
-import ClientProduct from "../Container/Client/ClientProduct/ClientProduct";
-import ClientCategory from "../Container/Client/ClientCategory/ClientCategory";
+import ClientProduct from "../Container/Client/ClientProducts/ClientProduct/ClientProduct";
+import ClientCategory from "../Container/Client/ClientProducts/ClientCategory/ClientCategory";
 import ClientUser from "../Container/Client/ClientUser/ClientUser";
 import ClientMenu from "../Container/Client/ClientMenu/ClientMenu";
 import ClientAddMenu from "../Container/Client/ClientMenu/ClientAddMenu";
-import ClientBlogList from "../Container/Client/ClientBlogList/ClientBlogList";
+import ClientBlogList from "../Container/Client/ClientBlogs/ClientBlogList/ClientBlogList";
 import ClientMail from "../Container/Client/ClientMail/ClientMail";
+import ClientShowCategory from "../Container/Client/ClientCategorys/ClientShowCategory/ClientShowCategory";
+import ClientAddCategory from "../Container/Client/ClientCategorys/ClientAddCategory/ClientAddCategory";
+import ClientEditCategory from "../Container/Client/ClientCategorys/ClientEditCategory/ClientEditCategory";
 
 export const ClientRoutes = [
     {
@@ -36,7 +39,22 @@ export const ClientRoutes = [
     {
         index: true,
         element: <ClientCategory />,
+        path: "/category/:id",
+    },
+    {
+        index: true,
+        element: <ClientShowCategory />,
         path: "/category",
+    },
+    {
+        index: true,
+        element: <ClientAddCategory />,
+        path: "/category/add",
+    },
+    {
+        index: true,
+        element: <ClientEditCategory />,
+        path: "/category/edit/:id",
     },
     {
         index: true,
@@ -55,6 +73,11 @@ export const ClientRoutes = [
     },
     {
         index: true,
+        element: <ClientBlogList />,
+        path: "/bloglist/:id",
+    },
+    {
+        index: true,
         element: <ClientUser />,
         path: "/user",
     },
@@ -63,13 +86,7 @@ export const ClientRoutes = [
         element: <ClientMenu />,
         path: "/menu",
     },
-    {
-        index: true,
-        element: <ClientAddMenu />,
-        path: "/menu/add",
-        element: <ClientBlogList />,
-        path: "/bloglist",
-    },
+    
     {
         index: true,
         element: <ClientMail />,
