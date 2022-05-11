@@ -15,7 +15,7 @@ import ButtonUpload from "../../../../Component/Button/ButtonUpload";
 import { clientApi } from "../../../../api/api";
 import { urlImg } from "../../../../Component/Variable";
 import "../../ClientProducts/ClientEditProduct/ClientEditProduct.css";
-import SkeletonEditCate from "../../../../Component/Skeleton/SkeletonEditCate";
+import SkeletonEdit from "../../../../Component/Skeleton/SkeletonEdit";
 
 const ClientEditCategory = () => {
   // getApi
@@ -292,7 +292,7 @@ const ClientEditCategory = () => {
               {/* === End Button Save === */}
             </table>
           ) : (
-            <SkeletonEditCate />
+            <SkeletonEdit />
           )}
           {/* End pick from product */}
         </form>

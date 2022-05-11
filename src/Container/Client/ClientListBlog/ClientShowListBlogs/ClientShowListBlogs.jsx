@@ -13,7 +13,7 @@ import { urlImg } from "../../../../Component/Variable";
 import "react-toastify/dist/ReactToastify.css";
 import "../../ClientProducts/ClientProduct/ClientProduct.css";
 import SkeletonTable from "../../../../Component/Skeleton/SkeletonTable";
-import SkeletonDetailListBlog from "../../../../Component/Skeleton/SkeletonDetailListBlog";
+import SkeletonDetail from "../../../../Component/Skeleton/SkeletonDetail";
 
 // Style Modal show detail
 const style = {
@@ -144,9 +144,9 @@ const ClientShowListBlogs = () => {
         <InputSearch handleChange={(e) => handleChange(e)} value={value} />
         {/* End Input search */}
       </div>
-      <div className="w-full bg-lightSecondary p-3 dark:bg-nightSecondary shadow-lg rounded-xl my-7">
+      <div className=" w-full bg-lightSecondary p-3 dark:bg-nightSecondary shadow-lg rounded-xl my-7">
         {/* Table show category */}
-        <table className="w-full text-bgButton font-medium ">
+        <table className="w-full text-bgButton font-semibold ">
           <thead>
             <tr>
               <td>Title</td>
@@ -270,7 +270,7 @@ const ClientShowListBlogs = () => {
               </div>
             </Box>
           ) : (
-            <SkeletonDetailListBlog style={style} />
+            <SkeletonDetail style={style} />
           )}
         </Modal>
 

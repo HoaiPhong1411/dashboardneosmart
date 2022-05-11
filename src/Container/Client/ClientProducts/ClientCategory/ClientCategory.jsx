@@ -265,7 +265,7 @@ const ClientCategory = () => {
       </div>
       <div className="w-full bg-lightSecondary p-3 dark:bg-nightSecondary shadow-lg rounded-xl my-7 ">
         {/* Table show product */}
-        <table className="w-full text-bgButton font-medium">
+        <table className="w-full text-bgButton font-semibold">
           <thead>
             <tr>
               <td>Title</td>
@@ -293,7 +293,7 @@ const ClientCategory = () => {
                         <Link
                           onClick={(e, product) => handleEdit(e, item)}
                           to="/product/edit"
-                          className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
+                          className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal tb:text-xs dt:text-base"
                         >
                           {item.title}
                         </Link>

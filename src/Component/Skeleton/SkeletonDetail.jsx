@@ -1,7 +1,7 @@
 import Skeleton from "@mui/material/Skeleton";
 import Box from "@mui/material/Box";
 
-const SkeletonDetailCategory = (props) => {
+const SkeletonDetail = (props) => {
   const { style } = props;
   return (
     <>
@@ -24,4 +24,4 @@ const SkeletonDetailCategory = (props) => {
   );
 };
 
-export default SkeletonDetailCategory;
+export default SkeletonDetail;

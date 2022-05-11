@@ -15,7 +15,7 @@ import ButtonUpload from "../../../../Component/Button/ButtonUpload";
 import { clientApi } from "../../../../api/api";
 import { urlImg } from "../../../../Component/Variable";
 import "../../ClientProducts/ClientEditProduct/ClientEditProduct.css";
-import SkeletonEditListBlog from "../../../../Component/Skeleton/SkeletonEditListBlog";
+import SkeletonEdit from "../../../../Component/Skeleton/SkeletonEdit";
 
 const ClientEditListBlog = () => {
   // getApi
@@ -292,7 +292,7 @@ const ClientEditListBlog = () => {
               {/* === End Button Save === */}
             </table>
           ) : (
-            <SkeletonEditListBlog />
+            <SkeletonEdit />
           )}
           {/* End pick from list blog */}
         </form>

@@ -75,7 +75,7 @@ const ClientMenu = () => {
           <ButtonAdd link="/menu/add" title="Add Menu" />
         </div>
         <div className="w-full bg-lightSecondary p-3 dark:bg-nightSecondary shadow-lg rounded-xl my-7 ">
-          <table className="w-full text-bgButton font-medium">
+          <table className="w-full text-bgButton font-semibold">
             <thead>
               <tr>
                 <td>ID</td>

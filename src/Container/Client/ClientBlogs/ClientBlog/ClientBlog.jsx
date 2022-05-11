@@ -19,7 +19,7 @@ import { addBlogSuccess } from "../../../../app/blogSlice/blogsSlice";
 import { clientApi } from "../../../../api/api";
 import ClientPagination from "../../../../Component/Pagination/ClientPagination";
 import SkeletonTable from "../../../../Component/Skeleton/SkeletonTable";
-import SkeletonDetailBlog from "../../../../Component/Skeleton/SkeletonDetailBlog";
+import SkeletonDetail from "../../../../Component/Skeleton/SkeletonDetail";
 
 // Style Modal show detail
 const style = {
@@ -236,9 +236,9 @@ const ClientBlog = () => {
         <InputSearch handleChange={(e) => handleChange(e)} value={value} />
         {/* End Input search */}
       </div>
-      <div className="tb:text-xs tb:overflow-x-scroll w-full bg-lightSecondary p-3 dark:bg-nightSecondary shadow-lg rounded-xl my-7 ">
+      <div className="tb:overflow-x-scroll w-full bg-lightSecondary p-3 dark:bg-nightSecondary shadow-lg rounded-xl my-7 ">
         {/* Table show product */}
-        <table className="tb:w-[1000px] dt:w-full text-bgButton font-medium">
+        <table className="tb:w-[1000px] dt:w-full text-bgButton font-semibold">
           <thead>
             <tr>
               <td>Title</td>
@@ -264,7 +264,7 @@ const ClientBlog = () => {
                     <Link
                       onClick={(e, blog) => handleEdit(e, item)}
                       to="/blog/edit"
-                      className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
+                      className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal tb:text-xs dt:text-base"
                     >
                       {item.title}
                     </Link>
@@ -431,7 +431,7 @@ const ClientBlog = () => {
               </div>
             </Box>
           ) : (
-            <SkeletonDetailBlog style={style} />
+            <SkeletonDetail style={style} />
           )}
         </Modal>
 

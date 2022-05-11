@@ -14,7 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "../../ClientProducts/ClientProduct/ClientProduct.css";
 import ClientPagination from "../../../../Component/Pagination/ClientPagination";
 import SkeletonTable from "../../../../Component/Skeleton/SkeletonTable";
-import SkeletonDetailCategory from "../../../../Component/Skeleton/SkeletonDetailCategory";
+import SkeletonDetail from "../../../../Component/Skeleton/SkeletonDetail";
 
 // Style Modal show detail
 const style = {
@@ -147,7 +147,7 @@ const ClientShowCategory = () => {
       </div>
       <div className="w-full bg-lightSecondary p-3 dark:bg-nightSecondary shadow-lg rounded-xl my-7">
         {/* Table show category */}
-        <table className="w-full text-bgButton font-medium ">
+        <table className="w-full text-bgButton font-semibold ">
           <thead>
             <tr>
               <td>Title</td>
@@ -284,7 +284,7 @@ const ClientShowCategory = () => {
               </div>
             </Box>
           ) : (
-            <SkeletonDetailCategory style={style} />
+            <SkeletonDetail style={style} />
           )}
         </Modal>
 
