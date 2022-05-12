@@ -15,6 +15,7 @@ import { clientApi } from "../../../../api/api";
 import { urlImg } from "../../../../Component/Variable";
 import "../../ClientProducts/ClientEditProduct/ClientEditProduct.css";
 import SkeletonEditCate from "../../../../Component/Skeleton/SkeletonEditCate";
+import BackButton from "../../../../Component/Button/BackButton";
 
 const ClientEditCategory = () => {
   // getApi
@@ -150,15 +151,7 @@ const ClientEditCategory = () => {
     <>
       <ToastContainer />
 
-      <div className="ml-3 hover:text-hoverButton">
-        <div
-          className=" cursor-pointer flex flex-row gap-1 items-center"
-          onClick={() => handleNavigate()}
-        >
-          <span>Back</span>
-          <TiArrowBack />
-        </div>
-      </div>
+      <BackButton />
 
       <div className="flex flex-row gap-5 w-full dark:bg-nightSecondary bg-lightSecondary shadow-lg py-5 px-10 rounded-xl ">
         <form className="w-full" action="" onSubmit={(e) => handleSubmit(e)}>

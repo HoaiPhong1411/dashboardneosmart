@@ -16,6 +16,7 @@ import ButtonUpload from "../../../../Component/Button/ButtonUpload";
 
 import notimg from "../../../../assets/images/No-image-found.jpg";
 import "./ClientAddProduct.css";
+import BackButton from "../../../../Component/Button/BackButton";
 
 const ClientAddProduct = () => {
   const [image, setImage] = useState();
@@ -165,15 +166,7 @@ const ClientAddProduct = () => {
   return (
     <>
       <ToastContainer />
-      <div className="flex justify-start items-center hover:text-hoverButton">
-        <span
-          onClick={() => navigate(-1)}
-          className=" px-5 py-1 cursor-pointer text-center"
-        >
-          Back
-          <TiArrowBack className="float-right translate-y-1" />
-        </span>
-      </div>
+      <BackButton />
       <div
         onSubmit={formik.handleSubmit}
         className=" gap-5 w-full dark:bg-nightSecondary bg-lightSecondary shadow-lg py-5 px-10 rounded-xl"

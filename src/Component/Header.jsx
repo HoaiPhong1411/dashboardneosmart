@@ -1,14 +1,23 @@
 import { IoMdArrowDropdown } from "react-icons/io";
 import { IoNotificationsSharp } from "react-icons/io5";
-import { FiAlignJustify } from "react-icons/fi"
+import { FiAlignJustify } from "react-icons/fi";
 import { MdOutlineLogout } from "react-icons/md";
 import { BsSunFill, BsMoonStarsFill } from "react-icons/bs";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import useDark from "../useDark";
+import { io } from "socket.io-client";
+import { clientApi } from "../api/api";
 
-const Header = ({handleShowRespon}) => {
+const socket = io("http://localhost:6001", {
+  transports: ["websocket", "polling", "flashsocket"],
+});
+
+const Header = ({ handleShowRespon }) => {
+  const [noti, setNoti] = useState();
+  const [notification, setNotification] = useState([]);
+  const [newMessage, setNewMessage] = useState([]);
   const [isDarkMode, toggleDarkMode] = useDark();
   const user = useSelector((state) => state.auth.login.currentUser);
   // const dispath = useDispatch();
@@ -16,6 +25,31 @@ const Header = ({handleShowRespon}) => {
   // const accessToken = user?.access_token;
   const [inputValue, setInputValue] = useState();
   const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    socket.on("message", (data) => {
+      setTimeout(() => {
+        setNoti(!noti);
+      }, 600);
+    });
+  });
+  useEffect(() => {
+    const getNotification = async () => {
+      try {
+        const res = await clientApi.messageShow();
+        setNotification(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getNotification();
+  }, [noti]);
+
+  useEffect(() => {
+    const newNoti = notification.filter((mess) => mess.status == 0);
+    setNewMessage(newNoti);
+  }, [notification]);
+
   const handleChange = (e) => {
     setInputValue(e.target.value);
   };
@@ -27,12 +61,20 @@ const Header = ({handleShowRespon}) => {
     window.location.href = "/signin";
   };
 
-
   return (
     <>
       <div className="flex items-center justify-between">
-      <a href="/"><img src={require('../assets/images/logo.png')} alt="#" className="h-full dt:w-[150px] tb:w-[120px] "/></a>
-        <FiAlignJustify className="tb:block dt:hidden p-[2px] text-[38px] cursor-pointer translate-x-[-0.5rem] mr-[20px] dark:text-[#fff]" onClick={(e)=>handleShowRespon(e)}/>
+        <Link to="/">
+          <img
+            src={require("../assets/images/logo.png")}
+            alt="#"
+            className="h-full dt:w-[150px] tb:w-[120px] "
+          />
+        </Link>
+        <FiAlignJustify
+          className="tb:block dt:hidden p-[2px] text-[38px] cursor-pointer translate-x-[-0.5rem] mr-[20px] dark:text-[#fff]"
+          onClick={(e) => handleShowRespon(e)}
+        />
         <input
           onChange={(e) => handleChange(e)}
           type="text"
@@ -60,8 +102,11 @@ const Header = ({handleShowRespon}) => {
 
         <div className="flex flex-row justify-center gap-5 items-center cursor-pointer">
           <div className="flex justify-center items-center">
-            <span className="p-2 bg-lightPrimary dark:bg-hoverButton dark:text-[#fff] dark:hover:bg-bgButton shadow-md hover:bg-[#e8dd97be] cursor-pointer rounded-[50%] ">
-              <IoNotificationsSharp />
+            <span className="relative p-2 bg-[#e8dd97be] dark:bg-hoverButton dark:text-[#fff] dark:hover:bg-bgButton shadow-md hover:bg-lightPrimary cursor-pointer rounded-[50%] ">
+              <IoNotificationsSharp className="text-2xl" />
+              <label className="absolute inline-flex h-[21px] min-w-[19px] justify-center items-center top-[-10px] left-[22px] bg-[red] rounded-[50%] text-xs text-[#fff] font-medium">
+                <div className="pl-1 pr-1 ">{newMessage.length}</div>
+              </label>
             </span>
           </div>
           <img

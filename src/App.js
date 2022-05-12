@@ -9,6 +9,7 @@ import {
     Routes,
     Route,
     useNavigate,
+    MemoryRouter,
 } from "react-router-dom";
 import Login from "./Container/Auth/SignIn";
 function App() {
@@ -30,8 +31,9 @@ function App() {
     
 
     return (
-        <>
-            <Router> 
+        <>  
+            <Router forceRefresh={true}> 
+        
                 <Routes>
                     <Route path="/" element={user ? <ClientLayout /> : <Login />}>
                         {renderLayout(ClientRoutes)}
@@ -50,6 +52,7 @@ function App() {
                         }
                     />
                 </Routes>
+     
             </Router>
         </>
     );

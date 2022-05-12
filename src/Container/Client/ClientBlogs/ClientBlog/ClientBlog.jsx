@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { LinearProgress } from "@mui/material";
 
 // Component Button
-import { urlImg } from "../../../../Component/Variable";
+import { convertViToEn, urlImg } from "../../../../Component/Variable";
 import InputSearch from "../../../../Component/Input/InputSearch";
 import ButtonActions from "../../../../Component/Button/ButtonActions";
 import ButtonSwitch from "../../../../Component/Button/ButtonSwitch";
@@ -210,9 +210,7 @@ const ClientBlog = () => {
       try {
         let dataSearch = [];
         const res = dataBlog?.forEach((item, i) => {
-          if (
-            item.title.toLowerCase().includes(value.trim().toLowerCase(), 0)
-          ) {
+          if (convertViToEn(item.title).includes(convertViToEn(value), 0)) {
             return dataSearch.push(item);
           }
         });

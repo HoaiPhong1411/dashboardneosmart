@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useLocation,
+  useSearchParams,
+} from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 import { getAllMessage } from "../../../app/apiRequest";
@@ -15,6 +20,7 @@ import { clientApi } from "../../../api/api";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import SkeletonTable from "../../../Component/Skeleton/SkeletonTable";
+import { convertViToEn } from "../../../Component/Variable";
 
 const style = {
   position: "absolute",
@@ -79,14 +85,13 @@ const ClientMail = () => {
     const handleSearch = async () => {
       try {
         let dataSearch = [];
-        const convertValue = value.trim().toLowerCase();
-        if (convertValue !== "") {
-          getMail?.forEach((item, i) => {
-            if (item.email.toLowerCase().includes(convertValue, 0)) {
-              return dataSearch.push(item);
-            }
-          });
-        }
+
+        getMail?.forEach((item, i) => {
+          if (convertViToEn(item.email).includes(convertViToEn(value), 0)) {
+            return dataSearch.push(item);
+          }
+        });
+
         setDataNew(dataSearch);
       } catch (error) {
         console.log(error);
@@ -137,13 +142,7 @@ const ClientMail = () => {
                 // Check value search
                 dataNew != "" ? (
                   dataNew?.map((item) => (
-                    <tr
-                      style={
-                        item.status == 0 ? { backgroundColor: "#f5eec8" } : {}
-                      }
-                      key={item.id}
-                      className="dark:hover:bg-hoverButton"
-                    >
+                    <tr key={item.id} className="dark:hover:bg-hoverButton">
                       <td className="flex flex-row justify-start gap-2 items-center">
                         <div className="flex flex-col">
                           <span className="text-xl font-normal">
@@ -183,9 +182,10 @@ const ClientMail = () => {
                 // Show List Message
                 mess?.map((item) => (
                   <tr
-                    style={
-                      item.status == 0 ? { backgroundColor: "#f5eec8" } : {}
-                    }
+                    // style={
+                    //   item.status == 0 ? { backgroundColor: "#f5eec8" } : {}
+                    // }
+
                     key={item.id}
                     className="dark:hover:bg-hoverButton"
                   >

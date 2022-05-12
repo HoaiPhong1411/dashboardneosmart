@@ -15,6 +15,7 @@ import ButtonUpload from "../../../../Component/Button/ButtonUpload";
 
 import notimg from "../../../../assets/images/No-image-found.jpg";
 import "../../ClientProducts/ClientAddProduct/ClientAddProduct.css";
+import BackButton from "../../../../Component/Button/BackButton";
 
 const ClientAddCategory = () => {
   const [image, setImage] = useState();
@@ -106,22 +107,11 @@ const ClientAddCategory = () => {
 
   // End formik handle
   // ---------------------------------------
-  const handleNavigate = () => {
-    navigate(-1);
-  };
 
   return (
     <>
       <ToastContainer />
-      <div className="ml-3 hover:text-hoverButton">
-        <div
-          className="cursor-pointer flex flex-row gap-1 items-center"
-          onClick={() => handleNavigate()}
-        >
-          <span>Back</span>
-          <TiArrowBack />
-        </div>
-      </div>
+      <BackButton />
       <div
         onSubmit={formik.handleSubmit}
         className=" gap-5 w-full dark:bg-nightSecondary bg-lightSecondary shadow-lg py-5 px-10 rounded-xl"

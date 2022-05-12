@@ -17,6 +17,7 @@ import SkeletonEditProduct from "../../../../Component/Skeleton/SkeletonEditProd
 import { IoSave } from "react-icons/io5";
 import { Button, CircularProgress } from "@mui/material";
 import { green } from "@mui/material/colors";
+import BackButton from "../../../../Component/Button/BackButton";
 
 const ClientEditBlog = () => {
   const { id } = useParams();
@@ -182,15 +183,7 @@ const ClientEditBlog = () => {
   return (
     <>
       <ToastContainer />
-      <div className="flex justify-start items-center hover:text-hoverButton">
-        <span
-          onClick={() => navigate(-1)}
-          className=" px-5 py-1 cursor-pointer text-center"
-        >
-          Back
-          <TiArrowBack className="float-right translate-y-1" />
-        </span>
-      </div>
+      <BackButton />
 
       <div className="flex flex-row gap-5 w-full dark:bg-nightSecondary bg-lightSecondary shadow-lg py-5 px-10 rounded-xl ">
         <form className="w-full" action="" onSubmit={(e) => handleSubmit(e)}>

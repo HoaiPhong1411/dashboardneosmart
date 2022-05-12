@@ -8,7 +8,6 @@ const ClientPagination = (props) => {
   const [page, setPage] = useState(current_page);
   const [rowsPerPage, setRowsPerPage] = useState(to);
   const [currentId, setCurrentId] = useState(id);
-  console.log("render", page);
   useEffect(() => {
     setCurrentId(id);
     if (currentId != id) {

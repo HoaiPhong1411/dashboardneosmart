@@ -1,6 +1,6 @@
 import Footer from "../Component/Footer";
 import Header from "../Component/Header";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation, useSearchParams } from "react-router-dom";
 import React, { useRef, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -18,24 +18,41 @@ export default function ClientLayout() {
   const dispath = useDispatch();
   const navigate = useNavigate();
   const containerNav = useRef();
-  const container = useRef()
+  const container = useRef();
   const [show, setShow] = useState(false);
+
+  const location = useLocation();
+  useEffect(() => {
+    const setUrl = async () => {
+      try {
+        const currentUrl = await sessionStorage.getItem("currentUrl");
+        navigate(currentUrl);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    setUrl();
+  }, []);
+  useEffect(() => {
+    sessionStorage.setItem("currentUrl", location.pathname);
+  }, [location]);
+
   const handleShow = () => {
     setShow(!show);
   };
 
   // handle responsive navBar
-  const handleShowRespon = (e) =>{
-      containerNav.current.classList.add('show')
-      container.current.classList.add('backgound')
-  }
-  const handleHideRespon = (e) =>{
-    if (e.target == e.currentTarget){
-      containerNav.current.classList.remove('show')
-      container.current.classList.remove('backgound')
+  const handleShowRespon = (e) => {
+    containerNav.current.classList.add("show");
+    container.current.classList.add("backgound");
+  };
+  const handleHideRespon = (e) => {
+    if (e.target == e.currentTarget) {
+      containerNav.current.classList.remove("show");
+      container.current.classList.remove("backgound");
     }
-  }
-// end
+  };
+  // end
   const refreshToken = async () => {
     try {
       const urlRefresh = "http://localhost:8000/api/auth/refresh";
@@ -81,8 +98,17 @@ export default function ClientLayout() {
   return (
     <>
       <div className="overflow-x-hidden w-full flex flex-row transition-all dark:bg-nightSecondary bg-lightSecondary">
-        <div className="z-[9999] dt:static tb:fixed dt:bg-local" ref={container} onClick = {(e)=>{handleHideRespon(e)}}>
-          <div className=" flex min-h-full tb:hidden dt:flex bg-lightSecondary" ref={containerNav}>
+        <div
+          className="z-[9999] dt:static tb:fixed dt:bg-local"
+          ref={container}
+          onClick={(e) => {
+            handleHideRespon(e);
+          }}
+        >
+          <div
+            className=" flex min-h-full tb:hidden dt:flex bg-lightSecondary"
+            ref={containerNav}
+          >
             <div className="transition-all ">
               {!show ? <NavBar /> : <NavBarClose />}
             </div>
@@ -104,7 +130,7 @@ export default function ClientLayout() {
 
         <div className="w-full  flex flex-col">
           <div className=" py-[1.25rem] px-[1.5rem] dark:bg-nightSecondary bg-lightSecondary">
-            <Header handleShowRespon ={handleShowRespon}/>
+            <Header handleShowRespon={handleShowRespon} />
           </div>
           <div className=" min-h-screen p-7 dark:bg-[black] dark:border-[1px] bg-lightPrimary">
             <Outlet />

@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 //
 import { addBlogSuccess } from "../../../../app/blogSlice/blogsSlice";
 import InputSearch from "../../../../Component/Input/InputSearch";
-import { urlImg } from "../../../../Component/Variable";
+import { convertViToEn, urlImg } from "../../../../Component/Variable";
 import ButtonAdd from "../../../../Component/Button/ButtonAdd";
 import ButtonSwitch from "../../../../Component/Button/ButtonSwitch";
 import ButtonActions from "../../../../Component/Button/ButtonActions";
@@ -97,7 +97,6 @@ const ClientBlogList = () => {
       current_page: newPage,
       to: rowsPerPage,
     });
-    console.log("pagenew", newPage);
   };
 
   // show Detail
@@ -177,9 +176,7 @@ const ClientBlogList = () => {
       try {
         let dataSearch = [];
         blogByListBlog?.forEach((item, i) => {
-          if (
-            item.title.toLowerCase().includes(value.trim().toLowerCase(), 0)
-          ) {
+          if (convertViToEn(item.title).includes(convertViToEn(value), 0)) {
             return dataSearch.push(item);
           }
         });

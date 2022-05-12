@@ -15,6 +15,7 @@ import notimg from "../../../../assets/images/No-image-found.jpg";
 import { clientApi } from "../../../../api/api";
 import { Button, CircularProgress } from "@mui/material";
 import { green } from "@mui/material/colors";
+import BackButton from "../../../../Component/Button/BackButton";
 
 // config upload img
 const init = {
@@ -174,15 +175,7 @@ const ClientAddBlog = () => {
   return (
     <>
       <ToastContainer />
-      <div className="ml-3 hover:text-hoverButton">
-        <div
-          className="cursor-pointer flex flex-row gap-1 items-center"
-          onClick={() => handleNavigate()}
-        >
-          <span>Back</span>
-          <TiArrowBack />
-        </div>
-      </div>
+      <BackButton />
       <div
         onSubmit={formik.handleSubmit}
         className=" gap-5 w-full dark:bg-nightSecondary bg-lightSecondary shadow-lg py-5 px-10 rounded-xl"

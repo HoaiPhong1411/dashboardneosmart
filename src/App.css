@@ -23,7 +23,7 @@ body{
 
 /* Toast */
 
-#error {
+/* #error {
     border-left: 0.5rem solid #e64141;
 }
 
@@ -53,9 +53,9 @@ body{
 .toast{
     opacity: 0;
     animation: toastIn 2s ease forwards, fadeOut linear 1.5s 3s forwards;
-}
+} */
 
-@keyframes toastIn {
+/* @keyframes toastIn {
     0% {
         transform: translateX(100%);
         opacity: 0.4;
@@ -87,6 +87,11 @@ body{
     to{
         opacity: 0;
     }
-}
+} */
 
 /* End Toast */
+
+
+/* .label-notification {
+    
+} */

@@ -13,7 +13,7 @@ import {
   getProductById,
 } from "../../../../app/apiRequest";
 import { getAllProductSuccess } from "../../../../app/productSlice/productsSlice";
-import { urlImg } from "../../../../Component/Variable";
+import { convertViToEn, urlImg } from "../../../../Component/Variable";
 import ButtonAdd from "../../../../Component/Button/ButtonAdd";
 import InputSearch from "../../../../Component/Input/InputSearch";
 import ButtonSwitch from "../../../../Component/Button/ButtonSwitch";
@@ -212,9 +212,7 @@ const ClientCategory = () => {
       try {
         let dataSearch = [];
         const res = productByCateId[0]?.forEach((item, i) => {
-          if (
-            item.title.toLowerCase().includes(value.trim().toLowerCase(), 0)
-          ) {
+          if (convertViToEn(item.title).includes(convertViToEn(value), 0)) {
             return dataSearch.push(item);
           }
         });

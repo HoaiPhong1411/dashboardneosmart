@@ -9,7 +9,7 @@ import { clientApi } from "../../../../api/api";
 import InputSearch from "../../../../Component/Input/InputSearch";
 import ButtonActions from "../../../../Component/Button/ButtonActions";
 import ButtonAdd from "../../../../Component/Button/ButtonAdd";
-import { urlImg } from "../../../../Component/Variable";
+import { convertViToEn, urlImg } from "../../../../Component/Variable";
 import "react-toastify/dist/ReactToastify.css";
 import "../../ClientProducts/ClientProduct/ClientProduct.css";
 import ClientPagination from "../../../../Component/Pagination/ClientPagination";
@@ -116,9 +116,7 @@ const ClientShowCategory = () => {
         if (getCategory) {
           await getCategory?.forEach((item, i) => {
             if (value !== "") {
-              if (
-                item.title.toLowerCase().includes(value.trim().toLowerCase(), 0)
-              ) {
+              if (convertViToEn(item.title).includes(convertViToEn(value), 0)) {
                 return dataSearch.push(item);
               }
               setDataNew(dataSearch);
