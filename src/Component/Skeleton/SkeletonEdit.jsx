@@ -1,6 +1,6 @@
 import Skeleton from "@mui/material/Skeleton";
 
-const SkeletonEditCate = () => {
+const SkeletonEdit = () => {
   return (
     <>
       <table className="w-full text-secondary flex flex-col justify-between gap-5">
@@ -74,4 +74,4 @@ const SkeletonEditCate = () => {
   );
 };
 
-export default SkeletonEditCate;
+export default SkeletonEdit;

@@ -8,7 +8,7 @@ const InputSearch = (props) => {
         type="text"
         value={value}
         className="w-full outline-none py-[0.4rem] text-sm rounded-md dark:bg-primary bg-[#fcfbf3] px-4 dark:text-[#fff] text-[#333] border-[1px] dark:border-[#fff] border-primary"
-        placeholder="Search product"
+        placeholder="Search..."
       />
       {/* End input */}
     </div>

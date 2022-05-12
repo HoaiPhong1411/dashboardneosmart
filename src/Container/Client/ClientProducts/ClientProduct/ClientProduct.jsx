@@ -239,9 +239,9 @@ const ClientProduct = () => {
         <InputSearch handleChange={(e) => handleChange(e)} value={value} />
         {/* End Input search */}
       </div>
-      <div className="tb:text-xs tb:overflow-x-scroll w-full bg-lightSecondary p-3 dark:bg-nightSecondary shadow-lg rounded-xl my-7">
+      <div className=" tb:overflow-x-scroll w-full bg-lightSecondary p-3 dark:bg-nightSecondary shadow-lg rounded-xl my-7">
         {/* Table show product */}
-        <table className="tb:w-[1000px] dt:w-full text-bgButton font-medium ">
+        <table className="tb:w-[1000px] dt:w-full text-bgButton font-semibold ">
           <thead>
             <tr>
               <td>Title</td>

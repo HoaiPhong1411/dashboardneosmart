@@ -9,10 +9,9 @@ import { clientApi } from "../../../../api/api";
 import InputSearch from "../../../../Component/Input/InputSearch";
 import ButtonActions from "../../../../Component/Button/ButtonActions";
 import ButtonAdd from "../../../../Component/Button/ButtonAdd";
-import { convertViToEn, urlImg } from "../../../../Component/Variable";
+import { urlImg } from "../../../../Component/Variable";
 import "react-toastify/dist/ReactToastify.css";
 import "../../ClientProducts/ClientProduct/ClientProduct.css";
-import ClientPagination from "../../../../Component/Pagination/ClientPagination";
 import SkeletonTable from "../../../../Component/Skeleton/SkeletonTable";
 import SkeletonDetail from "../../../../Component/Skeleton/SkeletonDetail";
 
@@ -29,13 +28,13 @@ const style = {
 };
 // End Style Modal show detail
 
-const ClientShowCategory = () => {
+const ClientShowListBlogs = () => {
   const [render, setRender] = useState(false);
   // input search
   const [open, setOpen] = useState(false);
   const [dataNew, setDataNew] = useState(null);
-  const [categoryById, setCategoryById] = useState(null);
-  const [getCategory, setGetCategory] = useState(null);
+  const [listBlogById, setListBlogById] = useState(null);
+  const [getListBlog, setGetListBlog] = useState(null);
   //  value input search
   const [value, setValue] = useState();
   const dispath = useDispatch();
@@ -46,49 +45,49 @@ const ClientShowCategory = () => {
   // -----------------------
 
   const handleEdit = (e, id) => {
-    navigate(`/category/edit/${id}`);
+    navigate(`/listblog/edit/${id}`);
   };
 
   // show Detail
   const handleOpen = (id) => {
-    const getCategoryDetail = async () => {
+    const getListBlogDetail = async () => {
       try {
-        const res = await clientApi.categoryShowById(id);
-        setCategoryById(res.data);
+        const res = await clientApi.listBlogShowById(id);
+        setListBlogById(res.data);
       } catch (error) {
         console.log(error);
       }
     };
-    getCategoryDetail();
+    getListBlogDetail();
     setOpen(true);
   };
   const handleClose = () => {
-    setCategoryById(null);
+    setListBlogById(null);
     setOpen(false);
   };
   // End show Detail
 
-  // get data category
+  // get data list blog
 
   useEffect(() => {
-    const getCategory = async () => {
+    const getListBlog = async () => {
       try {
-        const res = await clientApi.categoryShow();
-        setGetCategory(res.data);
+        const res = await clientApi.listBlogShow();
+        setGetListBlog(res.data);
       } catch (error) {
         console.log(error);
       }
     };
-    getCategory();
+    getListBlog();
   }, [render]);
-  // End data category
+  // End data list blog
 
-  // delete category
+  // delete list blog
 
   const handleRemove = (id) => {
     const remove = async () => {
       try {
-        await clientApi.categoryDelete(id);
+        await clientApi.listBlogDelete(id);
         notify("success", "Xóa danh mục thành công!");
         setRender(!render);
       } catch (error) {
@@ -97,7 +96,7 @@ const ClientShowCategory = () => {
     };
     remove();
   };
-  // End delete category
+  // End delete list blog
 
   // -------
 
@@ -108,15 +107,17 @@ const ClientShowCategory = () => {
     setValue(e.target.value);
   };
 
-  //    search category
+  //    search list 
   useEffect(() => {
     const handleSearch = async () => {
       try {
         let dataSearch = [];
-        if (getCategory) {
-          await getCategory?.forEach((item, i) => {
+        if (getListBlog) {
+          await getListBlog?.forEach((item, i) => {
             if (value !== "") {
-              if (convertViToEn(item.title).includes(convertViToEn(value), 0)) {
+              if (
+                item.title.toLowerCase().includes(value.trim().toLowerCase(), 0)
+              ) {
                 return dataSearch.push(item);
               }
               setDataNew(dataSearch);
@@ -135,7 +136,7 @@ const ClientShowCategory = () => {
     <>
       <div className="flex flex-row items-center gap-5 w-full dark:bg-nightSecondary bg-lightSecondary shadow-lg py-3 px-5 rounded-xl">
         {/* button add */}
-        <ButtonAdd link="/category/add" title="Add New" />
+        <ButtonAdd link="/listblog/add" title="Add New" />
         {/* End button add */}
 
         {/* Input search */}
@@ -143,7 +144,7 @@ const ClientShowCategory = () => {
         <InputSearch handleChange={(e) => handleChange(e)} value={value} />
         {/* End Input search */}
       </div>
-      <div className="w-full bg-lightSecondary p-3 dark:bg-nightSecondary shadow-lg rounded-xl my-7">
+      <div className=" w-full bg-lightSecondary p-3 dark:bg-nightSecondary shadow-lg rounded-xl my-7">
         {/* Table show category */}
         <table className="w-full text-bgButton font-semibold ">
           <thead>
@@ -154,8 +155,8 @@ const ClientShowCategory = () => {
             </tr>
           </thead>
 
-          {/* show data Category */}
-          {getCategory ? (
+          {/* show data list blog */}
+          {getListBlog ? (
             <tbody className="text-[#333] dark:text-[#fff] font-light overflow-y-auto ">
               {dataNew?.map((item) => (
                 <tr key={item.id} className="dark:hover:bg-hoverButton">
@@ -168,7 +169,7 @@ const ClientShowCategory = () => {
                     />
                     <Link
                       onClick={(e, id) => handleEdit(e, item.id)}
-                      to={`/category/edit/${item.id}`}
+                      to={`/listblog/edit/${item.id}`}
                       className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
                     >
                       {item.title}
@@ -190,7 +191,7 @@ const ClientShowCategory = () => {
                   {/* End button delete */}
                 </tr>
               )) ??
-                getCategory?.map((item) => (
+              getListBlog?.map((item) => (
                   <tr key={item.id} className="dark:hover:bg-hoverButton">
                     <td className="flex flex-row justify-start gap-2 items-center">
                       <img
@@ -201,7 +202,7 @@ const ClientShowCategory = () => {
                       />
                       <Link
                         onClick={(e, id) => handleEdit(e, item.id)}
-                        to={`/category/edit/${item.id}`}
+                        to={`/listblog/edit/${item.id}`}
                         className="break-words hover:text-bgButton dark:hover:text-lightPrimary font-normal text-base"
                       >
                         {item.title}
@@ -228,22 +229,9 @@ const ClientShowCategory = () => {
             <SkeletonTable rows={10} columns={5} image={true} />
           )}
 
-          {/* <tfoot>
-            <tr className="shadow-none">
-              <td colSpan="7">
-                <div className="flex flex-row justify-end">
-                  <ClientPagination
-                    pagination={pagination}
-                    onPageChange={handlePageChange}
-                  />
-                </div>
-              </td>
-            </tr>
-          </tfoot> */}
-          {/* End show data category */}
         </table>
 
-        {/* End table show category */}
+        {/* End table show ListBlog */}
 
         {/* Show Detail Blog */}
       </div>
@@ -254,13 +242,13 @@ const ClientShowCategory = () => {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          {categoryById ? (
+          {listBlogById ? (
             <Box sx={style}>
               <div className="flex flex-col px-10 py-16 h-[600px] overflow-y-scroll gap-5">
                 <div className="flex flex-row gap-5 ">
                   <div className="w-[40%]">
                     <img
-                      src={urlImg + categoryById?.photo}
+                      src={urlImg + listBlogById?.photo}
                       alt=""
                       className="w-full h-[200px] border-[1px] border-[#333]"
                     />
@@ -268,11 +256,11 @@ const ClientShowCategory = () => {
                   <div className="w-[60%] flex flex-col gap-3">
                     <div>
                       <h2 className="text-2xl font-medium">
-                        {categoryById?.title}
+                        {listBlogById?.title}
                       </h2>
                       <span
                         dangerouslySetInnerHTML={{
-                          __html: categoryById?.description,
+                          __html: listBlogById?.description,
                         }}
                         className="text-md font-normal italic text-[#777]"
                       ></span>
@@ -286,11 +274,11 @@ const ClientShowCategory = () => {
           )}
         </Modal>
 
-        {/*End Show Detail Category */}
+        {/*End Show Detail listBlog */}
       </div>
       <ToastContainer />
     </>
   );
 };
 
-export default ClientShowCategory;
+export default ClientShowListBlogs;

@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { FiSave } from "react-icons/fi";
 import { TiArrowBack } from "react-icons/ti";
 import { Editor } from "@tinymce/tinymce-react";
 import { ToastContainer, toast } from "react-toastify";
@@ -15,9 +16,8 @@ import { clientApi } from "../../../../api/api";
 import { urlImg } from "../../../../Component/Variable";
 import "../../ClientProducts/ClientEditProduct/ClientEditProduct.css";
 import SkeletonEdit from "../../../../Component/Skeleton/SkeletonEdit";
-import BackButton from "../../../../Component/Button/BackButton";
 
-const ClientEditCategory = () => {
+const ClientEditListBlog = () => {
   // getApi
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
@@ -38,7 +38,7 @@ const ClientEditCategory = () => {
           },
         }),
   };
-  // show Product Choose
+  // show list Choose
   const [load, setLoad] = useState(false);
   // get File Image
   const [file, setFile] = useState();
@@ -51,14 +51,13 @@ const ClientEditCategory = () => {
 
   const editorRef = useRef(null);
 
-  const [editCategory, setEditCategory] = useState(null);
+  const [editListBlog, setEditListBlog] = useState(null);
   const dispath = useDispatch();
 
   const [getTheme, setGetTheme] = useState();
   const navigate = useNavigate();
   const notify = (type = "success", content = "Sửa danh mục thành công!") =>
     toast[type](content);
-
   const getChangeTheme = async () => {
     try {
       window.addEventListener("click", (e) => {
@@ -73,15 +72,16 @@ const ClientEditCategory = () => {
   // --------------------------------
 
   useEffect(() => {
-    const getEditCategory = async () => {
+    const getEditListBlog = async () => {
       try {
-        const res = await clientApi.categoryShowById(id);
-        setEditCategory(res.data);
+        const res = await clientApi.listBlogShowById(id);
+        setEditListBlog(res.data);
+        console.log(res.data);
       } catch (error) {
         console.log(error);
       }
     };
-    getEditCategory();
+    getEditListBlog();
   }, []);
 
   // Change title và price
@@ -116,24 +116,26 @@ const ClientEditCategory = () => {
     const dataUpdate = new FormData();
 
     // update
-    dataUpdate.append("title", stateValue.title ?? editCategory.title);
-    dataUpdate.append("description", des ?? editCategory.description);
-    dataUpdate.append("photo", file ?? editCategory.photo);
+    dataUpdate.append("title", stateValue.title ?? editListBlog.title);
+    dataUpdate.append("description", des ?? editListBlog.description);
+    dataUpdate.append("photo", file ?? editListBlog.photo);
 
-    updateProduct(idElement, dataUpdate);
-    setEditCategory([]);
+    updateList(idElement, dataUpdate);
+    setEditListBlog([]);
     setLoad(!load);
   };
 
-  const updateProduct = async (idElement, data) => {
+  const updateList = async (idElement, data) => {
     try {
-      const res = await clientApi.categoryEdit(idElement, data);
+      setSuccess(false);
+      setLoading(true);
+      const res = await clientApi.listBlogEdit(idElement, data);
       if (res) {
         setSuccess(true);
         setLoading(false);
         notify();
         setTimeout(() => {
-          navigate("/category");
+          navigate("/listblog");
         }, 2000);
       }
     } catch (error) {
@@ -144,18 +146,26 @@ const ClientEditCategory = () => {
   };
 
   const handleNavigate = () => {
-    navigate(-2);
+    navigate(-1);
   };
 
   return (
     <>
       <ToastContainer />
 
-      <BackButton />
+      <div className="ml-3 hover:text-hoverButton">
+        <div
+          className="cursor-pointer flex flex-row gap-1 items-center"
+          onClick={() => handleNavigate()}
+        >
+          <span>Back</span>
+          <TiArrowBack />
+        </div>
+      </div>
 
       <div className="flex flex-row gap-5 w-full dark:bg-nightSecondary bg-lightSecondary shadow-lg py-5 px-10 rounded-xl ">
         <form className="w-full" action="" onSubmit={(e) => handleSubmit(e)}>
-          {editCategory ? (
+          {editListBlog ? (
             <table className="w-full text-secondary flex flex-col justify-between gap-5">
               {/* === Input === */}
               <div className="flex flex-row justify-between gap-5">
@@ -164,7 +174,7 @@ const ClientEditCategory = () => {
                   {/* === Id === */}
 
                   <div className="hidden">
-                    <label className="id">{editCategory.id}</label>
+                    <label className="id">{editListBlog.id}</label>
                   </div>
                   {/* === End Id === */}
 
@@ -175,7 +185,7 @@ const ClientEditCategory = () => {
                     <input
                       name="title"
                       type="text"
-                      value={stateValue.title ?? editCategory.title}
+                      value={stateValue.title ?? editListBlog.title}
                       className="w-full border-[1px] border-secondary dark:bg-primary dark:text-[#fff] focus:border-[#e0ed2e] font-light"
                       onChange={(e) => handleChanges(e)}
                     />
@@ -191,7 +201,7 @@ const ClientEditCategory = () => {
                     <Editor
                       apiKey="9ksw8tn5zsdmdzj74e4l69xoewcxuqnmdgy3uf06wunsn404"
                       onInit={(evt, editor) => (editorRef.current = editor)}
-                      initialValue={editCategory.description}
+                      initialValue={editListBlog.description}
                       onEditorChange={(newText) => setDes(newText)}
                       init={{
                         height: 250,
@@ -219,9 +229,9 @@ const ClientEditCategory = () => {
                    gap-2"
                     >
                       <img
-                        src={img ?? urlImg + editCategory.photo}
+                        src={img ?? urlImg + editListBlog.photo}
                         alt=""
-                        className=" w-full h-[250px] bg-cover shadow-lg rounded-md"
+                        className=" w-full h-[250px] bg-cover border-2 border-secondary"
                       />
                       {/* <label
                         htmlFor="photo"
@@ -284,11 +294,11 @@ const ClientEditCategory = () => {
           ) : (
             <SkeletonEdit />
           )}
-          {/* End pick from product */}
+          {/* End pick from list blog */}
         </form>
       </div>
     </>
   );
 };
 
-export default ClientEditCategory;
+export default ClientEditListBlog;

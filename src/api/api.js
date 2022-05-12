@@ -112,6 +112,13 @@ export const clientApi = {
     },
     listBlogShowById(id) {
         return callApi(`http://localhost:8000/api/listblog/show/${id}`);
+    },    
+    listBlogAdd(data) {
+        return callApi(
+            "http://localhost:8000/api/listblog/store",
+            "POST",
+            data
+        );
     },
     listBlogEdit(id, data) {
         return callApi(
