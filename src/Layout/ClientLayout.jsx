@@ -128,8 +128,8 @@ export default function ClientLayout() {
           </div>
         </div>
 
-        <div className="w-full  flex flex-col">
-          <div className=" py-[1.25rem] px-[1.5rem] dark:bg-nightSecondary bg-lightSecondary">
+        <div className="w-full flex flex-col">
+          <div className="py-[1.25rem] px-[1.5rem] dark:bg-nightSecondary bg-lightSecondary">
             <Header handleShowRespon={handleShowRespon} />
           </div>
           <div className=" min-h-screen p-7 dark:bg-[black] dark:border-[1px] bg-lightPrimary">
