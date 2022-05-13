@@ -21,6 +21,8 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import SkeletonTable from "../../../Component/Skeleton/SkeletonTable";
 import { convertViToEn } from "../../../Component/Variable";
+import ClientPagination from "../../../Component/Pagination/ClientPagination";
+
 
 const style = {
   position: "absolute",
@@ -37,13 +39,12 @@ const ClientMail = () => {
   const [open, setOpen] = useState(false);
   const dispath = useDispatch();
   const navigate = useNavigate();
-  const getMail = useSelector((state) => state.message.message.message);
   const getMailDetail = useSelector(
     (state) => state.message.message.messageById
   );
   const [render, setRender] = useState(false);
   // -------------------
-  const [mess, setMess] = useState(null);
+  const [getMessage, setGetMessage] = useState(null)
   const [dataNew, setDataNew] = useState(null);
   //  value input search
   const [value, setValue] = useState("");
@@ -56,23 +57,53 @@ const ClientMail = () => {
   const handleClose = () => {
     setOpen(false);
   };
-
-  // useEffect(() => {
-  //   getAllMessage(dispath);
-  // }, [render]);
+  // pagination
+  const [pagination, setPagination] = useState({
+    current_page: 0,
+    to: 10,
+    totalRows: 18,
+    totalPages: 2,
+  });
+  const [filter, setFilter] = useState({
+    current_page: 1,
+    to: 10,
+  });
 
   useEffect(() => {
-    const fetch = async () => {
+    const getMessagePagination = async () => {
       try {
-        const res = await clientApi.messageShow();
-        setMess(res.data);
+        const res = await clientApi.messagePagination(
+          filter.current_page,
+          filter.to
+        );
+        const result = res.data;
+        setGetMessage(result.data);
+        console.log('message',setGetMessage);
+        setPagination({
+          ...pagination,
+          to: result.to,
+          totalRows: result.total,
+          totalPages: result.last_page,
+        });
       } catch (error) {
         console.log(error);
       }
     };
-    fetch();
-  }, [render]);
+    getMessagePagination();
+  }, [filter]);
 
+  const handlePageChange = (newPage, rowsPerPage) => {
+    setFilter({
+      ...filter,
+      current_page: newPage,
+      to: rowsPerPage,
+    });
+  };
+  //  End pagination
+
+  // useEffect(() => {
+  //   getAllMessage(dispath);
+  // }, [render]);
   // ---------------------------------------------
 
   //   onChange Input
@@ -86,7 +117,7 @@ const ClientMail = () => {
       try {
         let dataSearch = [];
 
-        getMail?.forEach((item, i) => {
+        getMessage?.forEach((item, i) => {
           if (convertViToEn(item.email).includes(convertViToEn(value), 0)) {
             return dataSearch.push(item);
           }
@@ -136,7 +167,7 @@ const ClientMail = () => {
           </thead>
 
           {/* show data Product */}
-          {mess ? (
+          {getMessage ? (
             <tbody className="text-[#333] dark:text-[#fff] font-light">
               {value != "" ? (
                 // Check value search
@@ -180,7 +211,7 @@ const ClientMail = () => {
                 )
               ) : (
                 // Show List Message
-                mess?.map((item) => (
+                getMessage?.map((item) => (
                   <tr
                     // style={
                     //   item.status == 0 ? { backgroundColor: "#f5eec8" } : {}
@@ -228,6 +259,19 @@ const ClientMail = () => {
           ) : (
             <SkeletonTable rows={4} columns={3} />
           )}
+          
+          <tfoot>
+            <tr className="shadow-none">
+              <td colSpan="7">
+                <div className="flex flex-row justify-end">
+                  <ClientPagination
+                    pagination={pagination}
+                    onPageChange={handlePageChange}
+                  />
+                </div>
+              </td>
+            </tr>
+          </tfoot>
 
           {/* End show data product */}
         </table>
