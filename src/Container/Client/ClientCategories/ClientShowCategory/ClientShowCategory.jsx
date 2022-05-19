@@ -207,7 +207,7 @@ const ClientShowCategory = () => {
                         {item.title}
                       </Link>
                     </td>
-                    <td
+                    <td className="w-[70%] break-words"
                       dangerouslySetInnerHTML={{ __html: item.description }}
                     ></td>
 
@@ -274,7 +274,7 @@ const ClientShowCategory = () => {
                         dangerouslySetInnerHTML={{
                           __html: categoryById?.description,
                         }}
-                        className="text-md font-normal italic text-[#777]"
+                        className="text-md font-normal italic text-[#777] "
                       ></span>
                     </div>
                   </div>

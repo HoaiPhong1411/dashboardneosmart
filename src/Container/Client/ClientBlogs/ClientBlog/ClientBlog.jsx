@@ -44,7 +44,7 @@ const ClientBlog = () => {
 
   const [dataNew, setDataNew] = useState(null);
   //  value input search
-  const [value, setValue] = useState();
+  const [value, setValue] = useState('');
   // -----------------------
   const [open, setOpen] = useState(false);
   const [blogById, setBlogById] = useState([]);
@@ -74,6 +74,7 @@ const ClientBlog = () => {
     content = "Cập nhật hiển thị không thành công!"
   ) => toast[type](content);
 
+
   useEffect(() => {
     const getBlogsPagination = async () => {
       try {
@@ -94,7 +95,7 @@ const ClientBlog = () => {
       }
     };
     getBlogsPagination();
-  }, [filter]);
+  }, [filter, render]);
 
   const handlePageChange = (newPage, rowsPerPage) => {
     setFilter({
@@ -123,9 +124,7 @@ const ClientBlog = () => {
   };
   // End show Detail
 
-  useEffect(() => {
-    getAllBlog(dispath);
-  }, [render]);
+  
 
   const handleEdit = (e, id) => {
     navigate(`/blog/edit/id=${id}`);
@@ -160,6 +159,7 @@ const ClientBlog = () => {
   const handleDisplay = (e, blog) => {
     // On off button display
     const check = e.target.checked;
+    console.log(check);
     const spanElement = e.target.parentElement;
     const btn = document.querySelectorAll(".btn-display");
     btn.forEach((item) => {
@@ -209,12 +209,18 @@ const ClientBlog = () => {
     const handleSearch = async () => {
       try {
         let dataSearch = [];
-        const res = dataBlog?.forEach((item, i) => {
-          if (convertViToEn(item.title).includes(convertViToEn(value), 0)) {
-            return dataSearch.push(item);
-          }
-        });
-        setDataNew(dataSearch);
+        if (getBlog) {
+          await getBlog?.forEach((item, i) => {
+            if (value !== "") {
+              if (convertViToEn(item.title).includes(convertViToEn(value), 0)) {
+                return dataSearch.push(item);
+              }
+              setDataNew(dataSearch);
+            } else {
+              setDataNew(null);
+            }
+          });
+        }
       } catch (error) {
         console.log(error);
       }

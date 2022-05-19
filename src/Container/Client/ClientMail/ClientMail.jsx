@@ -90,7 +90,7 @@ const ClientMail = () => {
       }
     };
     getMessagePagination();
-  }, [filter]);
+  }, [filter, render]);
 
   const handlePageChange = (newPage, rowsPerPage) => {
     setFilter({
@@ -130,6 +130,14 @@ const ClientMail = () => {
 
   // Update status
 
+  useEffect(() => {
+    socket.on("message", (data) => {
+      setTimeout(() => {
+       setRender(!render)
+      }, 600);
+    });
+  });
+
   const updateStatus = async (id, status) => {
     try {
       await clientApi.messageUpdateStatus(id, status);
@@ -145,7 +153,7 @@ const ClientMail = () => {
 
   const handleSeen = (id) => {
     updateStatus(id, { status: 1 });
-    getAllMessage(dispath);
+   
   };
   return (
     <>

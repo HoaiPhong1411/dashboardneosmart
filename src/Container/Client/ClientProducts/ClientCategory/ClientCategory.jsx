@@ -49,6 +49,8 @@ const ClientCategory = () => {
   const dispath = useDispatch();
   const [dataNew, setDataNew] = useState(null);
   const [productById, setProductById] = useState(null);
+  const  [dataCategory, setDateCategory] = useState([])
+
   // pagination
   const [pagination, setPagination] = useState({
     current_page: 0,
@@ -66,15 +68,26 @@ const ClientCategory = () => {
     type = "success",
     content = "Cập nhật hiển thị thành công!"
   ) => toast[type](content);
-  const dataCategory = useSelector(
-    (state) => state.category.category.category[0]
-  );
+  
   const currentCategory = useSelector(
     (state) => state.category.category.currentCategory
   );
   const productByCateId = useSelector(
     (state) => state.products.product.productByCateId
   );
+
+  useEffect(() => {
+    const getDataCategory = async () => {
+      try {
+        const res = await clientApi.categoryShow()
+        setDateCategory(res.data)
+      } catch (error) {
+        console.log(error);
+      }
+      
+    }
+    getDataCategory()
+  }, [render])
 
   // show Detail
   const handleOpen = (id) => {

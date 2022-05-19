@@ -46,7 +46,7 @@ const ClientProduct = () => {
   const dispath = useDispatch();
   const navigate = useNavigate();
   const [productById, setProductById] = useState(null);
-
+  const  [dataCategory, setDateCategory] = useState([])
   // pagination
   const [pagination, setPagination] = useState({
     current_page: 0,
@@ -66,9 +66,18 @@ const ClientProduct = () => {
     toast[type](content);
   // -----------------------
 
-  const dataCategory = useSelector(
-    (state) => state.category.category.category[0]
-  );
+  useEffect(() => {
+    const getDataCategory = async () => {
+      try {
+        const res = await clientApi.categoryShow()
+        setDateCategory(res.data)
+      } catch (error) {
+        console.log(error);
+      }
+      
+    }
+    getDataCategory()
+  }, [render])
 
   useEffect(() => {
     const getProductPagination = async () => {
@@ -90,7 +99,7 @@ const ClientProduct = () => {
       }
     };
     getProductPagination();
-  }, [filter]);
+  }, [filter, render]);
 
   const handlePageChange = (newPage, rowsPerPage) => {
     setFilter({
@@ -123,12 +132,7 @@ const ClientProduct = () => {
   };
   // End show Detail
 
-  // get data Product
-
-  useEffect(() => {
-    getAllProduct(dispath);
-  }, [render]);
-  // End data Product
+  
 
   // delete Product
 
@@ -273,7 +277,7 @@ const ClientProduct = () => {
                       {item.title}
                     </Link>
                   </td>
-                  <td
+                  <td className="w-48 truncate"
                     dangerouslySetInnerHTML={{ __html: item.description }}
                   ></td>
                   <td>{Intl.NumberFormat().format(Number(item.price))} VNĐ</td>

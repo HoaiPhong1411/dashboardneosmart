@@ -15,33 +15,33 @@ const Signin = () => {
       password: "",
       password_confirmation: "",
     },
-    // validationSchema: Yup.object({
-    //     name: Yup.string()
-    //         .required("Bắt buộc")
-    //         .min(4, "Tên người dùng phải hơn 4 kí tự"),
-    //     email: Yup.string()
-    //         .required("Bắt buộc")
-    //         .matches(
-    //             /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
-    //             "Email không hợp lệ"
-    //         ),
-    //     password: Yup.string()
-    //         .required("Bắt buộc")
-    //         .matches(
-    //             /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d][A-Za-z\d!@#$%^&*()_+]{7,19}$/,
-    //             "Mật khẩu phải trên 8 kí tự, bao  gồm chữ in hoa và kí tự đặc biệt"
-    //         ),
-    //     c_password: Yup.string()
-    //         .required("Bắt buộc")
-    //         .oneOf([
-    //             Yup.ref("password"),
-    //             null,
-    //             "Mật khẩu không khớp, vui lòng nhập lại",
-    //         ]),
-    // onSubmit: (values) => {
-    //   alert("adsdasd");
-    //   registerUser(values, dispath, navigate);
-    // },
+    validationSchema: Yup.object({
+        name: Yup.string()
+            .required("Bắt buộc")
+            .min(4, "Tên người dùng phải hơn 4 kí tự"),
+        email: Yup.string()
+            .required("Bắt buộc")
+            .matches(
+                /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                "Email không hợp lệ"
+            ),
+        password: Yup.string()
+            .required("Bắt buộc")
+            .matches(
+                /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d][A-Za-z\d!@#$%^&*()_+]{7,19}$/,
+                "Mật khẩu phải trên 8 kí tự, bao  gồm chữ in hoa và kí tự đặc biệt"
+            ),
+        c_password: Yup.string()
+            .required("Bắt buộc")
+            .oneOf([
+                Yup.ref("password"),
+                null,
+                "Mật khẩu không khớp, vui lòng nhập lại",
+            ]),
+    onSubmit: (values) => {
+      alert("adsdasd");
+      registerUser(values, dispath, navigate);
+    }})
   });
   return (
     <div>

@@ -4,13 +4,7 @@ import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 import {
-  getAllProduct,
   loginUser,
-  getAllBlog,
-  getAllListBlog,
-  getAllCategory,
-  getAllMessage,
-  getAllMenu,
 } from "../../app/apiRequest";
 
 import logo from "../../assets/images/logo.png";
@@ -19,14 +13,6 @@ const Signin = () => {
   const dispath = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    getAllBlog(dispath);
-    getAllProduct(dispath);
-    getAllListBlog(dispath);
-    getAllCategory(dispath);
-    getAllMessage(dispath);
-    getAllMenu(dispath);
-  }, []);
 
   const formik = useFormik({
     initialValues: {
