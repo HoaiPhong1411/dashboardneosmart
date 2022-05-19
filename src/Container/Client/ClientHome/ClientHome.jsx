@@ -14,11 +14,7 @@ const ClientHome = () => {
         >
           <h3 className="text-2xl">Xin chào - {item.name}</h3>
           <p>Email : {item.email}</p>
-          {item.role == 1 ? (
-            <p className="text-xl">Mày là admin trang này</p>
-          ) : (
-            <p>Mày là con gà</p>
-          )}
+          {item.role == 1 ? <p className="text-xl">admin</p> : <p>user</p>}
           <p>
             Ngày tạo tài khoản :{" "}
             {new Date(item.created_at).toLocaleDateString("vi-VI")}

@@ -178,7 +178,7 @@ export const clientApi = {
         );
     }, 
     messagePagination(page, limit) {
-        return callApi(`http://localhost:8000/api/client-message/paginate/${limit}?page=${page}`)
+        return callApi(`http://localhost:8000/api/client-message/paginate/limit/${limit}?page=${page}`)
     },
 
     // End Api Message

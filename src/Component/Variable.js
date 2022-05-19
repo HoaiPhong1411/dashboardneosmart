@@ -1,5 +1,9 @@
+import { io } from "socket.io-client";
+
 export const urlImg = 'http://localhost:8000/images/'
+
 export const  location = "folder/sub-folder/new-location.png" 
+
 export const convertViToEn = (str, toUpperCase = false) => {
     str = str.toLowerCase();
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
@@ -15,3 +19,7 @@ export const convertViToEn = (str, toUpperCase = false) => {
 
     return toUpperCase ? str.toUpperCase() : str;
 }
+
+export const socket = io("http://localhost:6001", {
+    transports: ["websocket", "polling", "flashsocket"],
+  });

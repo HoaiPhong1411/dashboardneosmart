@@ -22,7 +22,7 @@ import Box from "@mui/material/Box";
 import SkeletonTable from "../../../Component/Skeleton/SkeletonTable";
 import { convertViToEn } from "../../../Component/Variable";
 import ClientPagination from "../../../Component/Pagination/ClientPagination";
-
+import { socket } from "../../../Component/Variable";
 
 const style = {
   position: "absolute",
@@ -44,7 +44,8 @@ const ClientMail = () => {
   );
   const [render, setRender] = useState(false);
   // -------------------
-  const [getMessage, setGetMessage] = useState(null)
+  const [getMessage, setGetMessage] = useState(null);
+
   const [dataNew, setDataNew] = useState(null);
   //  value input search
   const [value, setValue] = useState("");
@@ -78,7 +79,6 @@ const ClientMail = () => {
         );
         const result = res.data;
         setGetMessage(result.data);
-        console.log('message',setGetMessage);
         setPagination({
           ...pagination,
           to: result.to,
@@ -101,9 +101,6 @@ const ClientMail = () => {
   };
   //  End pagination
 
-  // useEffect(() => {
-  //   getAllMessage(dispath);
-  // }, [render]);
   // ---------------------------------------------
 
   //   onChange Input
@@ -131,15 +128,20 @@ const ClientMail = () => {
     handleSearch();
   }, [value]);
 
+  // Update status
+
   const updateStatus = async (id, status) => {
     try {
       await clientApi.messageUpdateStatus(id, status);
+      socket.emit("message", "update");
       notify();
       setRender(!render);
     } catch (error) {
       console.log(error);
     }
   };
+
+  // End Update status
 
   const handleSeen = (id) => {
     updateStatus(id, { status: 1 });
@@ -166,7 +168,7 @@ const ClientMail = () => {
             </tr>
           </thead>
 
-          {/* show data Product */}
+          {/* show data Mail */}
           {getMessage ? (
             <tbody className="text-[#333] dark:text-[#fff] font-light">
               {value != "" ? (
@@ -259,7 +261,7 @@ const ClientMail = () => {
           ) : (
             <SkeletonTable rows={4} columns={3} />
           )}
-          
+
           <tfoot>
             <tr className="shadow-none">
               <td colSpan="7">

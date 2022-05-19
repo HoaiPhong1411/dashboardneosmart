@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { MdOutlineSmartToy } from "react-icons/md";
-import { BiCategoryAlt, BiMailSend,BiListOl } from "react-icons/bi";
+import { BiCategoryAlt, BiMailSend, BiListOl } from "react-icons/bi";
 import { FaMicroblog } from "react-icons/fa";
 import { HiOutlineUserGroup } from "react-icons/hi";
 import { useSelector } from "react-redux";
@@ -13,7 +13,7 @@ const NavBar = ({ show }) => {
   // get User from redux
   const user = useSelector((state) => state.auth.login.currentUser);
   // const getListBlog = useSelector((state) => state.listBlog.listBlog.listBlog);
-  const [getListBlog,setGetListBlog] = useState([])
+  const [getListBlog, setGetListBlog] = useState([]);
   const [dataCate, setDataCate] = useState();
 
   // Active NavBar
@@ -29,19 +29,19 @@ const NavBar = ({ show }) => {
 
   // End Active NavBar
 
-//Get list Blog
-    const getList = async () => {
-      try {
-        const res = await clientApi.listBlogShow();
-        setGetListBlog(res.data);
-      } catch (error) {
-        console.log(error);
-      }
+  //Get list Blog
+  const getList = async () => {
+    try {
+      const res = await clientApi.listBlogShow();
+      setGetListBlog(res.data);
+    } catch (error) {
+      console.log(error);
     }
-    useEffect(()=>{
-      getList()
-    },[])
-//end list Blog
+  };
+  useEffect(() => {
+    getList();
+  }, []);
+  //end list Blog
 
   // Get Category
   useEffect(() => {
@@ -59,12 +59,12 @@ const NavBar = ({ show }) => {
 
   // Data NavBar
   const nav = [
-    {
-      name: "Menu",
-      path: "/menu",
-      icon: <HiOutlineUserGroup />,
-      cate: "",
-    },
+    // {
+    //   name: "Menu",
+    //   path: "/menu",
+    //   icon: <HiOutlineUserGroup />,
+    //   cate: "",
+    // },
     {
       name: "User",
       path: "/",

@@ -1,18 +1,42 @@
 import { IoMdArrowDropdown } from "react-icons/io";
-import { IoNotificationsSharp } from "react-icons/io5";
+import { HiMail } from "react-icons/hi";
 import { FiAlignJustify } from "react-icons/fi";
 import { MdOutlineLogout } from "react-icons/md";
 import { BsSunFill, BsMoonStarsFill } from "react-icons/bs";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useDark from "../useDark";
-import { io } from "socket.io-client";
 import { clientApi } from "../api/api";
+import Badge from "@mui/material/Badge";
+import { styled } from "@mui/material/styles";
+import IconButton from "@mui/material/IconButton";
+import { socket } from "./Variable";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Button from "@mui/material/Button";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { BiLogOut } from "react-icons/bi";
+import "./Button/Button.css";
 
-const socket = io("http://localhost:6001", {
-  transports: ["websocket", "polling", "flashsocket"],
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#ffee58",
+    },
+  },
 });
+
+const StyledBadge = styled(Badge)(({ theme }) => ({
+  "& .MuiBadge-badge": {
+    right: -1,
+    top: 3,
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: "0 4px",
+    backgroundColor: "red",
+    color: "#fff",
+  },
+}));
 
 const Header = ({ handleShowRespon }) => {
   const [noti, setNoti] = useState();
@@ -21,10 +45,20 @@ const Header = ({ handleShowRespon }) => {
   const [isDarkMode, toggleDarkMode] = useDark();
   const user = useSelector((state) => state.auth.login.currentUser);
   // const dispath = useDispatch();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   // const accessToken = user?.access_token;
   const [inputValue, setInputValue] = useState();
   const [show, setShow] = useState(false);
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = (e) => {
+    setAnchorEl(null);
+  };
 
   useEffect(() => {
     socket.on("message", (data) => {
@@ -58,19 +92,12 @@ const Header = ({ handleShowRespon }) => {
   };
   const handleLogOut = () => {
     localStorage.clear();
-    window.location.href = "/signin";
+    navigate("/login");
   };
 
   return (
     <>
       <div className="flex items-center justify-between">
-        <Link to="/">
-          <img
-            src={require("../assets/images/logo.png")}
-            alt="#"
-            className="h-full dt:w-[150px] tb:w-[120px] "
-          />
-        </Link>
         <FiAlignJustify
           className="tb:block dt:hidden p-[2px] text-[38px] cursor-pointer translate-x-[-0.5rem] mr-[20px] dark:text-[#fff]"
           onClick={(e) => handleShowRespon(e)}
@@ -82,7 +109,7 @@ const Header = ({ handleShowRespon }) => {
           value={inputValue}
           className="px-5 py-1 dark:bg-primary shadow-lg bg-[#fcfbf3] border-[1px] dark:text-[#fff] text-[black] outline-none placeholder:text-sm w-[40%] rounded-lg "
         />
-        <div className="s">
+        {/* <div className="s">
           {isDarkMode ? (
             <div
               className="bg-gradient-to-b from-[#146910] to-[#bfda29] rounded-md  p-2 flex justify-between items-center cursor-pointer transition-all "
@@ -98,43 +125,71 @@ const Header = ({ handleShowRespon }) => {
               <BsSunFill className="text-[#f5eec8be]" />
             </div>
           )}
-        </div>
+        </div> */}
 
         <div className="flex flex-row justify-center gap-5 items-center cursor-pointer">
-          <div className="flex justify-center items-center">
-            <span className="relative p-2 bg-[#e8dd97be] dark:bg-hoverButton dark:text-[#fff] dark:hover:bg-bgButton shadow-md hover:bg-lightPrimary cursor-pointer rounded-[50%] ">
-              <IoNotificationsSharp className="text-2xl" />
-              <label className="absolute inline-flex h-[21px] min-w-[19px] justify-center items-center top-[-10px] left-[22px] bg-[red] rounded-[50%] text-xs text-[#fff] font-medium">
-                <div className="pl-1 pr-1 ">{newMessage.length}</div>
-              </label>
-            </span>
-          </div>
-          <img
-            onClick={(e) => handleShowProfile(e)}
-            src="https://www.bootstrapdash.com/demo/corona-react-free/template/demo_1/preview/static/media/face15.736ec0d9.jpg"
-            alt=""
-            className="w-[2.25rem] h-[2.25rem] rounded-[50%]"
-          />
+          <IconButton onClick={() => navigate("/mail")} aria-label="cart">
+            <StyledBadge badgeContent={newMessage.length}>
+              <HiMail className="text-3xl text-[#000]" />
+            </StyledBadge>
+          </IconButton>
+          <ThemeProvider theme={theme}>
+            <Button variant="text" onClick={handleClick}>
+              <img
+                onClick={(e) => handleShowProfile(e)}
+                src="https://www.bootstrapdash.com/demo/corona-react-free/template/demo_1/preview/static/media/face15.736ec0d9.jpg"
+                alt=""
+                className="w-[2.25rem] h-[2.25rem] rounded-[50%] mr-2"
+              />
 
-          <div
-            onClick={(e) => handleShowProfile(e)}
-            className="flex flex-row justify-center items-center text-[#fff] relative"
-          >
-            {user ? (
-              <>
-                <div className="text-sm dark:text-[white] text-[black] ">
-                  {" "}
-                  Hi,{user.user.name}
-                </div>
-                <IoMdArrowDropdown className="dark:text-[white] text-[black] text text-lg" />
-              </>
-            ) : (
-              <Link to="/signin">Login</Link>
-            )}
-          </div>
+              <div
+                onClick={(e) => handleShowProfile(e)}
+                className="flex flex-row justify-center items-center text-[#fff] relative"
+              >
+                {user ? (
+                  <>
+                    <div className="text-sm dark:text-[white] text-[black] lowercase ">
+                      {" "}
+                      Hi,{user.user.name}
+                    </div>
+                    <IoMdArrowDropdown className="dark:text-[white] text-[black] text text-lg" />
+                  </>
+                ) : (
+                  <Link to="/login">Login</Link>
+                )}
+              </div>
+            </Button>
+          </ThemeProvider>
         </div>
+        <Menu
+          id="long-menu"
+          MenuListProps={{
+            "aria-labelledby": "long-button",
+          }}
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          PaperProps={{
+            style: { backgroundColor: "#f5eec8" },
+          }}
+        >
+          <MenuItem
+            style={{
+              width: "130px",
+              padding: "8px 5px",
+              fontSize: "14px",
+              fontWeight: "600",
+              display: "flex",
+              justifyContent: "space-around",
+              alignItems: "center",
+            }}
+            onClick={handleLogOut}
+          >
+            <BiLogOut className="text-xl mr-2" /> Logout
+          </MenuItem>
+        </Menu>
 
-        <div
+        {/* <div
           style={show ? { display: "block" } : { display: "none" }}
           className="profile absolute top-[11%] w-[180px] rounded-[4px] right-[1rem] shadow-md shadow-primary dark:bg-[black] bg-[#f5eec8] dark:text-[#fff] text-[black] z-[1000]"
         >
@@ -150,7 +205,7 @@ const Header = ({ handleShowRespon }) => {
             </span>
             <button> Log Out</button>
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );
