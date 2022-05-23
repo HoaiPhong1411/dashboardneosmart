@@ -101,6 +101,12 @@ const NavBar = ({ show }) => {
       icon: <BiMailSend />,
       cate: "",
     },
+    {
+      name: "News",
+      path: "/news",
+      icon: <BiMailSend />,
+      cate: "",
+    },
   ];
   // End Data NavBar
   return (

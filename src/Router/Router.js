@@ -16,6 +16,7 @@ import ClientBlogList from "../Container/Client/ClientBlogs/ClientBlogList/Clien
 import ClientShowListBlogs from "../Container/Client/ClientListBlog/ClientShowListBlogs/ClientShowListBlogs";
 import ClientAddListBlog from "../Container/Client/ClientListBlog/ClientAddListBlog/ClientAddListBlog";
 import ClientEditListBlog from "../Container/Client/ClientListBlog/ClientEditListBlog/ClientEditListBlog";
+import ClientNewsAdd from "../Container/Client/ClientNews/ClientNewsAdd/ClientNewsAdd";
 
 export const ClientRoutes = [
     {
@@ -118,6 +119,11 @@ export const ClientRoutes = [
         index: true,
         element: <ClientMail />,
         path: "/mail",
+    },
+    {
+        index: true,
+        element: <ClientNewsAdd />,
+        path: "/news",
     },
 ];
 

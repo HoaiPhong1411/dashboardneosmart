@@ -51,7 +51,7 @@ const init = {
 
 // End config upload img
 
-const ClientAddBlog = () => {
+const ClientNewsAdd = () => {
   const [image, setImage] = useState();
 
   const [display, setDisplay] = useState(true);
@@ -445,4 +445,4 @@ const ClientAddBlog = () => {
   );
 };
 
-export default ClientAddBlog;
+export default ClientNewsAdd;

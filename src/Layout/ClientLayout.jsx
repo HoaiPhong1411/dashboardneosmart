@@ -14,6 +14,7 @@ import NavBarClose from "../Component/NavBarClose";
 
 export default function ClientLayout() {
   const user = useSelector((state) => state.auth.login?.currentUser);
+
   let axiosJWT = axios.create();
   const dispath = useDispatch();
   const navigate = useNavigate();
@@ -85,13 +86,13 @@ export default function ClientLayout() {
   );
   useEffect(() => {
     if (!user) {
-      navigate("/signin");
+      navigate("/login");
     }
     if (user.user.role == 1) {
       navigate("/");
     } else {
-      navigate("/signin");
       alert("you are dont permision");
+      navigate("/login");
     }
   }, []);
 

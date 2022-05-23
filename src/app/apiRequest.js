@@ -60,8 +60,7 @@ export const loginUser = async (user, dispath, navigate) => {
         const url = "http://localhost:8000/api/auth/login";
         const res = await axios.post(url, user);
         dispath(loginSuccess(res.data));
-
-        navigate("/");
+        
     } catch (error) {
         dispath(loginFailed());
     }

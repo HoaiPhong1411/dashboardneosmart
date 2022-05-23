@@ -44,6 +44,7 @@ const Header = ({ handleShowRespon }) => {
   const [newMessage, setNewMessage] = useState([]);
   const [isDarkMode, toggleDarkMode] = useDark();
   const user = useSelector((state) => state.auth.login.currentUser);
+
   // const dispath = useDispatch();
   const navigate = useNavigate();
   // const accessToken = user?.access_token;
